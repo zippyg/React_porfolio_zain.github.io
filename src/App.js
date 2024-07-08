@@ -18,7 +18,7 @@ const App = () => {
 
   return (
     <Router basename={process.env.PUBLIC_URL}>
-      <ScrollToTop />
+      
       <div id="top" className={`${themeName} app`}>
         <Header />
         <main>
@@ -43,6 +43,7 @@ const App = () => {
               />
             ))}
           </Routes>
+          <ScrollToTop />
         </main>
         <Footer />
       </div>
