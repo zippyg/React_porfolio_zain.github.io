@@ -17,8 +17,8 @@ const App = () => {
   const [{ themeName }] = useContext(ThemeContext);
 
   return (
-    <Router>
-      
+    <Router basename={process.env.PUBLIC_URL}>
+      <ScrollToTop />
       <div id="top" className={`${themeName} app`}>
         <Header />
         <main>
@@ -44,7 +44,6 @@ const App = () => {
             ))}
           </Routes>
         </main>
-        <ScrollToTop />
         <Footer />
       </div>
     </Router>
