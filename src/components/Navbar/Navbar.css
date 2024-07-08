@@ -23,7 +23,7 @@
     position: fixed;
     top: 0;
     right: 0;
-    width: 35%; /* Adjust the width as needed */
+    width: 40%; /* Adjust the width as needed */
     height: 100%;
     background-color: var(--clr-bg-alt); /* Background color for the nav overlay */
     box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
@@ -33,7 +33,7 @@
   }
 
   .nav__list.show {
-    transform: translateX(18%);
+    transform: translateX(15%);
   }
 
   .nav__list-item {
