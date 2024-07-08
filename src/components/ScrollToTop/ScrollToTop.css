@@ -1,0 +1,25 @@
+.scroll-top {
+  position: fixed;
+  bottom: 2em;
+  right: 4em;
+  background-color: transparent;
+}
+
+.scroll-top .link--icon {
+  color: var(--clr-primary);
+}
+
+.scroll-top .link--icon::before {
+  background-color: var(--clr-primary);
+}
+
+.scroll-top .link--icon:hover,
+.scroll-top .link--icon:focus {
+  color: var(--clr-primary);
+}
+
+@media (max-width: 900px) {
+  .scroll-top {
+    display: none;
+  }
+}

@@ -1,0 +1,114 @@
+.contact {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 40px 20px;
+  background-color: var(--clr-bg-alt); /* Match the alternative background color */
+  color: var(--clr-fg);
+  border-radius: 10px;
+  box-shadow: var(--shadow); /* Use the shadow defined in app.css */
+  max-width: 60%;
+  margin: auto;
+}
+
+.contact .section__title {
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: var(--clr-primary);
+}
+
+.contact .contact__form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.contact .form-group {
+  margin-bottom: 1.5em;
+}
+
+.contact .form-group label {
+  display: block;
+  margin-bottom: 0.5em;
+  font-weight: bold;
+  color: var(--clr-primary);
+}
+
+.contact .form-group input,
+.contact .form-group textarea {
+  width: 100%;
+  padding: 0.75em;
+  border-radius: 5px;
+  font-size: 1em;
+  margin-bottom: 10px;
+  background-color: var(--clr-bg); /* Use the main background color */
+  color: var(--clr-fg); /* Use the foreground color */
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle inset shadow */
+  transition: box-shadow 0.3s;
+}
+
+.contact .form-group input:focus,
+.contact .form-group textarea:focus {
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.contact .form-group textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.contact .btn {
+  align-self: center;
+  padding: 0.75em 1.5em;
+  border: 2px solid var(--clr-primary);
+  background-color: transparent;
+  color: var(--clr-primary);
+  font-size: 1em;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+.contact .btn:hover {
+  background-color: var(--clr-primary);
+  color: var(--clr-bg);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.contact .success-message {
+  margin-top: 20px;
+  color: var(--clr-primary);
+  font-weight: bold;
+  text-align: center;
+}
+
+.light {
+  --clr-bg: #fcfcfc;
+  --clr-bg-alt: #fff;
+  --clr-fg: #555;
+  --clr-fg-alt: #444;
+  --clr-primary: #2978b5;
+  --shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+  --clr-success: green;
+}
+
+.dark {
+  --clr-bg: #23283e;
+  --clr-bg-alt: #2a2f4c;
+  --clr-fg: #bdbddd;
+  --clr-fg-alt: #cdcdff;
+  --clr-primary: #90a0d9;
+  --shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  --clr-success: lightgreen;
+}
+
+@media (max-width: 600px) {
+  .contact {
+    max-width: 90%;
+  }
+}

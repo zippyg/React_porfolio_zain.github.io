@@ -1,0 +1,196 @@
+.project-detail {
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  max-width: 1000px;
+  margin: auto;
+  color: var(--clr-fg);
+  text-align: center;
+}
+
+.project-detail h1 {
+  color: var(--clr-primary);
+  text-align: center;
+  position: relative;
+  margin-bottom: 30px;
+}
+
+.project-detail .status-indicator {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 40px;
+  width: 100%;
+}
+
+.project-detail .status-indicator::before,
+.project-detail .status-indicator::after {
+  content: '';
+  position: absolute;
+  height: 2px;
+  width: 43%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 0;
+}
+
+.project-detail .status-indicator.completed::before {
+  background: linear-gradient(to left, var(--clr-primary), transparent);
+}
+
+.project-detail .status-indicator.completed::after {
+  background: linear-gradient(to right, var(--clr-primary), transparent);
+}
+
+.project-detail .status-indicator.in-progress::before {
+  background: linear-gradient(to left, #FFC107, transparent);
+}
+
+.project-detail .status-indicator.in-progress::after {
+  background: linear-gradient(to right, #FFC107, transparent);
+}
+
+.project-detail .status-indicator::before {
+  left: 0;
+}
+
+.project-detail .status-indicator::after {
+  right: 0;
+}
+
+.project-detail .status-text {
+  font-weight: bold;
+  background-color: transparent;
+  padding: 0 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  z-index: 1;
+  position: relative;
+  white-space: nowrap; /* Ensure the text does not wrap */
+}
+
+.project-detail .status-text.completed {
+  color: var(--clr-primary);
+}
+
+.project-detail .status-text.in-progress {
+  color: #FFC107;
+}
+
+.project-detail h2 {
+  color: var(--clr-primary);
+  text-align: center;
+  border-bottom: 2px solid var(--clr-bg-alt);
+  padding-bottom: 10px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+
+.project-detail p,
+.project-detail ol,
+.project-detail ul {
+  line-height: 1.6;
+  color: var(--clr-fg);
+  font-size: 1.05em;
+  margin-bottom: 15px;
+}
+
+.project-detail ol,
+.project-detail ul {
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+.project-detail li {
+  margin-bottom: 10px;
+}
+
+.project-detail a {
+  text-decoration: none;
+  color: var(--clr-primary);
+}
+
+.project-detail a:hover {
+  text-decoration: underline;
+}
+
+.project-detail .technologies {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.project-detail .technology-item {
+  background-color: var(--clr-bg-alt);
+  color: var(--clr-fg);
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin: 5px;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-detail .technology-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.project-detail .source-code-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--clr-primary);
+  margin-top: 30px;
+  font-size: 1.2em;
+}
+
+.project-detail .source-code-link svg {
+  margin-right: 8px;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.5em;
+  color: var(--clr-primary);
+  text-decoration: none;
+  font-size: 1.2em;
+  transition: color 0.3s ease, transform 0.3s ease;
+  background: transparent;
+}
+
+.project-link svg {
+  margin-right: 8px;
+}
+
+.project-link:hover {
+  color: var(--clr-primary-hover);
+  transform: scale(1.2);
+  text-decoration: underline;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .project-detail .status-indicator::before,
+  .project-detail .status-indicator::after {
+    width: 35%; /* Adjust width for smaller screens */
+  }
+
+  .project-detail .status-text {
+    padding: 0 5px; /* Adjust padding for smaller screens */
+    font-size: 1em; /* Adjust font size for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .project-detail .status-indicator::before,
+  .project-detail .status-indicator::after {
+    width: 30%; /* Further adjust width for very small screens */
+  }
+
+  .project-detail .status-text {
+    padding: 0 3px; /* Further adjust padding for very small screens */
+    font-size: 0.9em; /* Further adjust font size for very small screens */
+  }
+}

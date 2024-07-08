@@ -1,0 +1,85 @@
+.project {
+  padding: 2em;
+  margin: 0 auto;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.project:hover {
+  transform: translateY(-15px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.project:active {
+  transform: translateY(-5px);
+}
+
+.project__description {
+  margin-top: 1em;
+}
+
+.project__stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 1.2em 0;
+}
+
+.project__stack-item {
+  margin: 0.5em;
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--clr-fg-alt);
+}
+
+.project .link--icon {
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+  align-items: center;
+}
+
+.project h3 {
+  color: var(--clr-primary); /* Change the project name title color to the primary color */
+}
+
+.project__status {
+  display: block;
+  height: 1px;
+  width: 100%;
+  margin-top: 5px;
+  background: linear-gradient(to right, transparent, var(--clr-primary) 10%, var(--clr-primary) 90%, transparent);
+}
+
+.project__status.in-progress {
+  background: linear-gradient(to right, transparent, #FFC107 10%, #FFC107 90%, transparent);
+}
+
+/* New styles for project links */
+.project-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1em;
+}
+
+.project-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.5em;
+  color: var(--clr-primary);
+  transition: color 0.3s ease, transform 0.3s ease;
+  margin-left: 0.25em;
+  margin-right: 0.25em;
+}
+
+.project-link svg {
+  font-size: 2rem; /* Adjust the icon size as needed */
+}
+
+.project-link:hover {
+  color: var(--clr-primary-hover);
+  transform: scale(1.5);
+  transform: translateY(-5px);
+}

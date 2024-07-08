@@ -1,0 +1,132 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 3em;
+}
+
+.about__header {
+  display: flex;
+  align-items: center;
+}
+
+.about__name {
+  color: var(--clr-primary);
+  margin-left: 0em; /* Space between headshot and name */
+}
+
+.about__headshot {
+  width: 50px; /* Small size by default */
+  height: 64px; /* Small size by default */
+  border-radius: 10%;
+  margin-right: 0.5em;
+  transition: transform 0.3s ease-in-out;
+  background-color: transparent; /* Ensure background is transparent */
+  margin-top: -1%;
+}
+
+.about__headshot:hover {
+  transform: scale(8); /* Enlarge on hover */
+}
+
+.about__role {
+  margin-top: 1.2em;
+}
+
+.about__desc {
+  font-size: 1rem;
+  max-width: 900px;
+  text-align: center;
+  margin-top: 3%;
+}
+
+.about__resume {
+  margin-top: 2.4em; /* Increased spacing */
+}
+
+.about__socials {
+  margin-top: -0.4em; /* Increased spacing */
+}
+
+.about .link--icon {
+  margin-right: 0.em;
+  margin-left: 0.3em;
+  display: flex; /* Ensure icons are aligned correctly */
+  justify-content: center;
+}
+
+.about .btn--outline {
+  padding: 0.5em 1em;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.4em; /* Additional space to icons beneath */
+}
+
+@media (max-width: 1200px) {
+  .about__headshot:hover {
+    transform: scale(6); /* Slightly smaller enlargement on large tablets */
+  }
+}
+
+@media (max-width: 992px) {
+  .about__headshot:hover {
+    transform: scale(5); /* Smaller enlargement on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .about__headshot:hover {
+    transform: scale(4); /* Smaller enlargement on small tablets */
+  }
+}
+
+@media (max-width: 600px) {
+  .about {
+    align-items: center; /* Center alignment in mobile view */
+  }
+
+  .about__header {
+    flex-direction: row-reverse; /* Place image and text horizontally with headshot to the left */
+    justify-content: center;
+  }
+
+  .about__name {
+    margin-left: 0.5em; /* Add left margin to space from the headshot */
+  }
+
+  .about__headshot {
+    width: 40%; /* Make the headshot take up 40% of the page width */
+    height: auto; /* Maintain aspect ratio */
+    margin-right: 0; /* Remove right margin for mobile */
+    transition: none; /* Remove hover effect for mobile */
+  }
+
+  .about__headshot:hover {
+    transform: none; /* Remove hover effect for mobile */
+  }
+
+  .about .link--icon {
+    margin: 0.4em; /* Adjust margins for mobile view */
+  }
+}
+
+@media (max-width: 480px) {
+  .about__headshot {
+    width: 40%; /* Make the headshot take up 40% of the page width */
+    height: auto; /* Maintain aspect ratio */
+    margin-top: -10%;
+    
+  }
+
+  .about__header {
+    flex-direction: row-reverse; /* Place image and text horizontally with headshot to the left */
+    justify-content: center;
+    margin-top: -10%;
+  }
+
+  .about__name {
+    margin-left: 0.5em; /* Add left margin to space from the headshot */
+  }
+}

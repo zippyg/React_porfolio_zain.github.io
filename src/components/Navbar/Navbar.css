@@ -1,0 +1,48 @@
+.nav__list {
+  margin-right: 1.5em;
+  display: flex;
+}
+.nav__list-item {
+  margin-left: 1.5em;
+}
+
+.app .nav__hamburger {
+  display: none;
+}
+
+.nav__theme {
+  margin-top: 0.4em;
+}
+
+@media (max-width: 600px) {
+  .nav__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 35%; /* Adjust the width as needed */
+    height: 100%;
+    background-color: var(--clr-bg-alt); /* Background color for the nav overlay */
+    box-shadow: -4px 0 8px rgba(0, 0, 0, 0.2);
+    z-index: 2;
+    transform: translateX(120%); /* This line ensures the menu starts off-screen */
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .nav__list.show {
+    transform: translateX(10%);
+  }
+
+  .nav__list-item {
+    margin: 1em 0; /* Adjust spacing as needed */
+  }
+
+  .app .nav__hamburger {
+    display: flex;
+    z-index: 3;
+    margin-left: 0.8em;
+  }
+}

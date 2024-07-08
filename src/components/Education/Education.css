@@ -1,0 +1,43 @@
+.education {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the items horizontally */
+    margin-top: 3em;
+    text-align: center; /* Centers text inside the elements */
+  }
+  
+  .education__title {
+    color: var(--clr-primary);
+    margin-bottom: 1em;
+  }
+  
+  .education__item {
+    margin-top: 1.2em;
+  }
+  
+  .education__institution {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .education__degree {
+    margin-top: 0.5em;
+    font-size: 1rem;
+    color: var(--clr-secondary);
+  }
+  
+  .education__description {
+    margin-top: 0.5em;
+    font-size: 0.9rem;
+    max-width: 800px;
+    white-space: pre-line; /* This will handle newlines properly */
+  }
+  
+  
+  @media (max-width: 600px) {
+    .education {
+      align-items: center; /* Ensure centering on smaller screens */
+      margin-top: 2em;
+    }
+  }
+  
