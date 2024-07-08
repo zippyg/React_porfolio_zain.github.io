@@ -17,11 +17,11 @@ const App = () => {
   const [{ themeName }] = useContext(ThemeContext);
 
   return (
-    <Router basename={process.env.PUBLIC_URL}>
-      
+    <Router basename="/React_porfolio_zain.github.io">
       <div id="top" className={`${themeName} app`}>
         <Header />
         <main>
+          <ScrollToTop />
           <Routes>
             <Route
               path="/"
@@ -43,7 +43,6 @@ const App = () => {
               />
             ))}
           </Routes>
-          <ScrollToTop />
         </main>
         <Footer />
       </div>
