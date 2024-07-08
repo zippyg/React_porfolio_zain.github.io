@@ -24,7 +24,7 @@ const ScrollToTop = () => {
 
   return isVisible ? (
     <div className='scroll-top'>
-      <a href='#top' className='link link--icon'>
+      <a href={`${process.env.PUBLIC_URL}/#top`} className='link link--icon'>
         <ArrowUpwardIcon fontSize='large' />
       </a>
     </div>

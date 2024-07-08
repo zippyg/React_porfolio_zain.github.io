@@ -9,7 +9,6 @@ import MovieIcon from '@mui/icons-material/Movie';
 import MenuBookIcon from '@mui/icons-material/MenuBook';
 import './ProjectContainer.css';
 
-
 const ProjectContainer = ({ project }) => {
   const navigate = useNavigate();
 
@@ -21,7 +20,7 @@ const ProjectContainer = ({ project }) => {
     switch (proj.id) {
       case 1: // Higgs Boson Statistical Analysis
         return (
-          <a href="/assets/Higgs paper.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+          <a href={`${process.env.PUBLIC_URL}/assets/Higgs paper.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
             <DescriptionIcon />
           </a>
         );
@@ -48,7 +47,7 @@ const ProjectContainer = ({ project }) => {
             <a href="https://github.com/zippyg/Zain_Projects/tree/main/Projectile%20Motion%20Simulation%20Game" target="_blank" rel="noopener noreferrer" className="project-link">
               <GitHubIcon />
             </a>
-            <a href="/assets/porj motion documentation.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+            <a href={`${process.env.PUBLIC_URL}/assets/porj motion documentation.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
               <DescriptionIcon />
             </a>
           </>
@@ -59,10 +58,10 @@ const ProjectContainer = ({ project }) => {
             <a href="https://github.com/zippyg/Zain_Projects/tree/main/Thermodynamics%20Snookered" target="_blank" rel="noopener noreferrer" className="project-link">
               <GitHubIcon />
             </a>
-            <a href="/assets/screen rec mbs - thermosnooker.mov" target="_blank" rel="noopener noreferrer" className="project-link">
+            <a href={`${process.env.PUBLIC_URL}/assets/screen rec mbs - thermosnooker.mov`} target="_blank" rel="noopener noreferrer" className="project-link">
               <MovieIcon />
             </a>
-            <a href="/assets/Thermo paper.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+            <a href={`${process.env.PUBLIC_URL}/assets/Thermo paper.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
               <DescriptionIcon />
             </a>
           </>
@@ -70,21 +69,19 @@ const ProjectContainer = ({ project }) => {
       case 6: // Advanced Gyroscopic Stabilization Systems
         return (
           <>
-            <a href="/assets/stabilization theory.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+            <a href={`${process.env.PUBLIC_URL}/assets/stabilization theory.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
               <MenuBookIcon />
             </a>
-            <a href="/assets/stabilization script.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+            <a href={`${process.env.PUBLIC_URL}/assets/stabilization script.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
               <DescriptionIcon />
             </a>
           </>
         );
       case 7: // Spotify YouTube Downloader
         return (
-          <>
-            <a href="https://github.com/zippyg/Zain_Projects/tree/main/Spotify%20YouTube%20Downloader" target="_blank" rel="noopener noreferrer" className="project-link">
-              <GitHubIcon />
-            </a>
-          </>
+          <a href="https://github.com/zippyg/Zain_Projects/tree/main/Spotify%20YouTube%20Downloader" target="_blank" rel="noopener noreferrer" className="project-link">
+            <GitHubIcon />
+          </a>
         );
       case 8: // MarketSeer
         return (

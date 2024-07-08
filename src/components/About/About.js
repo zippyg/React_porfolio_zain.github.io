@@ -12,7 +12,7 @@ const About = () => {
   return (
     <div className='about center'>
       <div className='about__header'>
-        <img src='/assets/curl_headshot.png' alt='Headshot' className='about__headshot' />
+        <img src={`${process.env.PUBLIC_URL}/assets/curl_headshot.png`} alt='Headshot' className='about__headshot' />
         {name && (
           <h1>
             Hi, I am <span className='about__name'>{name}</span>.

@@ -12,7 +12,7 @@ const renderProjectLinks = (project) => {
   switch (project.id) {
     case 1: // Higgs Boson Statistical Analysis
       return (
-        <a href="/assets/Higgs paper.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+        <a href={`${process.env.PUBLIC_URL}/assets/Higgs paper.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
           <DescriptionIcon /> Research Paper
         </a>
       );
@@ -39,9 +39,9 @@ const renderProjectLinks = (project) => {
           <a href="https://github.com/zippyg/Zain_Projects/tree/main/Projectile%20Motion%20Simulation%20Game" target="_blank" rel="noopener noreferrer" className="project-link">
             <GitHubIcon /> Source Code
           </a>
-          <a href="/assets/porj motion documentation.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
-              <DescriptionIcon /> Coding Documentation
-            </a>
+          <a href={`${process.env.PUBLIC_URL}/assets/porj motion documentation.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
+            <DescriptionIcon /> Coding Documentation
+          </a>
         </>
       );
     case 5: // Thermodynamics Snookered
@@ -50,42 +50,40 @@ const renderProjectLinks = (project) => {
           <a href="https://github.com/zippyg/Zain_Projects/tree/main/Thermodynamics%20Snookered" target="_blank" rel="noopener noreferrer" className="project-link">
             <GitHubIcon /> Source Code
           </a>
-          <a href="/assets/screen rec mbs - thermosnooker.mov" target="_blank" rel="noopener noreferrer" className="project-link">
+          <a href={`${process.env.PUBLIC_URL}/assets/screen rec mbs - thermosnooker.mov`} target="_blank" rel="noopener noreferrer" className="project-link">
             <MovieIcon /> Simulation Demo Recording
           </a>
-          <a href="/assets/Thermo paper.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
-              <DescriptionIcon /> Research Paper
-            </a>
+          <a href={`${process.env.PUBLIC_URL}/assets/Thermo paper.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
+            <DescriptionIcon /> Research Paper
+          </a>
         </>
       );
     case 6: // Advanced Gyroscopic Stabilization Systems
       return (
         <>
-          <a href="/assets/stabilization theory.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
-            <MenuBookIcon/> Theory Paper
+          <a href={`${process.env.PUBLIC_URL}/assets/stabilization theory.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
+            <MenuBookIcon /> Theory Paper
           </a>
-          <a href="/assets/stabilization script.pdf" target="_blank" rel="noopener noreferrer" className="project-link">
+          <a href={`${process.env.PUBLIC_URL}/assets/stabilization script.pdf`} target="_blank" rel="noopener noreferrer" className="project-link">
             <DescriptionIcon /> Project Script
           </a>
         </>
       );
     case 7: // Spotify YouTube Downloader
       return (
-        <>
-          <a href="https://github.com/zippyg/Zain_Projects/tree/main/Spotify%20YouTube%20Downloader" target="_blank" rel="noopener noreferrer" className="project-link">
-            <GitHubIcon /> Source Code
-          </a>
-        </>
+        <a href="https://github.com/zippyg/Zain_Projects/tree/main/Spotify%20YouTube%20Downloader" target="_blank" rel="noopener noreferrer" className="project-link">
+          <GitHubIcon /> Source Code
+        </a>
       );
     case 8: // MarketSeer
       return (
-        <a href="mailto:your-email@example.com" className="project-link">
+        <a href="mailto:zainmughal77@outlook.com" className="project-link">
           <MailIcon /> Request an Update/Code
         </a>
       );
     case 9: // Portfolio Risk Management System
       return (
-        <a href="mailto:your-email@example.com" className="project-link">
+        <a href="mailto:zainmughal77@outlook.com" className="project-link">
           <MailIcon /> Request an Update/Code
         </a>
       );
@@ -107,8 +105,6 @@ const ProjectDetail = ({ project }) => {
         )}
       </p>
     ));
-
-  
 
   const renderSection = (title, content) =>
     content && content.length > 0 ? (
@@ -161,7 +157,6 @@ const ProjectDetail = ({ project }) => {
       </div>
     </>
   );
-  
 
   return <div className="project-detail">{renderDetailedContent()}</div>;
 };
