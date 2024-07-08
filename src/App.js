@@ -11,13 +11,14 @@ import Contact from './components/Contact/Contact';
 import Footer from './components/Footer/Footer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop'; // Import the new ScrollToTop component
 import { education, projects } from './portfolio';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 
 const App = () => {
   const [{ themeName }] = useContext(ThemeContext);
 
   return (
-    <Router>
+    <Router basename="/React_porfolio_zain.github.io">
       
       <div id="top" className={`${themeName} app`}>
         <Header />
