@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Brightness2Icon from '@material-ui/icons/Brightness2';
 import WbSunnyRoundedIcon from '@material-ui/icons/WbSunnyRounded';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -13,8 +13,40 @@ const Navbar = () => {
 
   const toggleNavList = () => setShowNavList(!showNavList);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showNavList && !event.target.closest('.nav') && !event.target.closest('.nav__hamburger')) {
+        setShowNavList(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showNavList]);
+
   return (
     <nav className='center nav'>
+      <button
+        type='button'
+        onClick={toggleTheme}
+        className='btn btn--icon nav__theme'
+        aria-label='toggle theme'
+      >
+        {themeName === 'dark' ? <WbSunnyRoundedIcon /> : <Brightness2Icon />}
+      </button>
+
+      <button
+        type='button'
+        onClick={toggleNavList}
+        className={`btn btn--icon nav__hamburger ${showNavList ? 'nav__close-icon' : ''}`}
+        aria-label='toggle navigation'
+      >
+        {showNavList ? <CloseIcon /> : <MenuIcon />}
+      </button>
+
       <ul
         className={`nav__list ${showNavList ? 'show' : ''}`}
       >
@@ -54,24 +86,6 @@ const Navbar = () => {
           </li>
         ) : null}
       </ul>
-
-      <button
-        type='button'
-        onClick={toggleTheme}
-        className='btn btn--icon nav__theme'
-        aria-label='toggle theme'
-      >
-        {themeName === 'dark' ? <WbSunnyRoundedIcon /> : <Brightness2Icon />}
-      </button>
-
-      <button
-        type='button'
-        onClick={toggleNavList}
-        className='btn btn--icon nav__hamburger'
-        aria-label='toggle navigation'
-      >
-        {showNavList ? <CloseIcon /> : <MenuIcon />}
-      </button>
     </nav>
   );
 }
