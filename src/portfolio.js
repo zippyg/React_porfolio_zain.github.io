@@ -1,6 +1,6 @@
 const header = {
   // all the properties are optional - can be left empty or deleted
-  homepage: 'https://zippyg.github.io/React_porfolio_zain.github.io/',
+  homepage: 'https://zippyg.github.io/React_porfolio_zain.github.io',
   title: '(Mohammed) Zain Mughal.',
 };
 

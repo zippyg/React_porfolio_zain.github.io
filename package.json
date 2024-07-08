@@ -2,7 +2,7 @@
   "name": "cleanfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://zippyg.github.io/React_porfolio_zain.github.io/",
+  "homepage": "https://zippyg.github.io/React_porfolio_zain.github.io",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
