@@ -1,3 +1,4 @@
+"homepage": "https://zippyg.github.io/React_porfolio_zain.github.io",
 {
   "name": "cleanfolio",
   "version": "0.1.0",
@@ -31,6 +32,7 @@
     "eject": "react-scripts eject --openssl-legacy-provider",
     "lint": "eslint .",
     "format": "prettier --write \"**/*.+(js|jsx|json|css|md)\"",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
   "browserslist": {
