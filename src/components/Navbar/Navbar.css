@@ -33,7 +33,7 @@
   }
 
   .nav__list.show {
-    transform: translateX(10%);
+    transform: translateX(18%);
   }
 
   .nav__list-item {
@@ -44,5 +44,6 @@
     display: flex;
     z-index: 3;
     margin-left: 0.8em;
+    background-color: transparent;
   }
 }
