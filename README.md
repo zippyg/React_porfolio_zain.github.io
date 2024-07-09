@@ -61,3 +61,6 @@ Feel free to reach out to me through the following platforms:
 - **LinkedIn**: [My LinkedIn Profile](https://www.linkedin.com/feed/)
 - **GitHub**: [My GitHub Profile](https://github.com/zippyg)
 
+## License
+
+This project is licensed under the Creative Commons Attribution 4.0 International License - see the [LICENSE.md](LICENSE.md) file for details.
