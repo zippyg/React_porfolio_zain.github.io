@@ -42,6 +42,7 @@
 
 .about__resume {
   margin-top: 2.4em; /* Increased spacing */
+  text-transform: capitalize;
 }
 
 .about__socials {
