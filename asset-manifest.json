@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/React_porfolio_zain.github.io/static/css/main.32e5e0f6.css",
-    "main.js": "/React_porfolio_zain.github.io/static/js/main.1c7f3cb8.js",
+    "main.js": "/React_porfolio_zain.github.io/static/js/main.bb180d20.js",
     "index.html": "/React_porfolio_zain.github.io/index.html",
     "main.32e5e0f6.css.map": "/React_porfolio_zain.github.io/static/css/main.32e5e0f6.css.map",
-    "main.1c7f3cb8.js.map": "/React_porfolio_zain.github.io/static/js/main.1c7f3cb8.js.map"
+    "main.bb180d20.js.map": "/React_porfolio_zain.github.io/static/js/main.bb180d20.js.map"
   },
   "entrypoints": [
     "static/css/main.32e5e0f6.css",
-    "static/js/main.1c7f3cb8.js"
+    "static/js/main.bb180d20.js"
   ]
 }
