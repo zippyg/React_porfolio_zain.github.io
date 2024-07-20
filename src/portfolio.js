@@ -23,7 +23,7 @@ const education = [
     degree: 'Physics MSci',
     from: 'Oct 2022',
     to: 'Jun 2026',
-    description: "Expected first-class honors with a focus is on mathematical and statistical methods with applications in Quantum Mechanics, sharpening my analytical skills. I've also completed a module in Accounting and Finance and am an active member of the Imperial Investment and Finance Society.",
+    description: "Expected first-class honors with a focus is on mathematical and statistical methods with applications in Data Science and Machine Learning, sharpening my analytical skills. I've also completed a module in Accounting and Finance and am an active member of the Imperial Investment and Finance Society.",
   },
   {
     institution: 'Bishopshalt School',
