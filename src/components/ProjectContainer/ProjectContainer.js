@@ -95,6 +95,12 @@ const ProjectContainer = ({ project }) => {
             <MailIcon />
           </a>
         );
+        case 10: // BSM 
+        return (
+          <a href="mailto:zainmughal77@outlook.com" className="project-link">
+            <MailIcon />
+          </a>
+        );
       default:
         return null;
     }

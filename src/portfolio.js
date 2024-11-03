@@ -8,7 +8,7 @@ const about = {
   name: 'Zain Mughal',
   role: "Harnessing Physics for Data Mastery: Innovator and Technologist",
   description: `Welcome to my portfolio. As a Physics enthusiast and student (Imperial College London – MSci), I enjoy diving into complex datasets and turning them into some set of not so complex numbers and visions. My academic and personal journey has been a mix of stress followed by the relief of each eureka moment. All arming me with skills in Python, C/C++, JavaScript, machine learning and the deep seated theory behind it all. Here, you'll find a slight peek into my brain through my projects that not only showcase my technical abilities, but also my ability to tackle real-world challenges in any demanding sector. Take a look around, and see how my curiosity mixes with my ever evolving skillset. Please get in touch if you are even slightly curious.`,
-  resume: `${process.env.PUBLIC_URL}/assets/Zain Mughal Resume SWE.pdf`, // Adjusted path
+  resume: `${process.env.PUBLIC_URL}/assets/Zain Mughal resume Quant.pdf`, // Adjusted path
   social: {
     linkedin: 'https://www.linkedin.com/feed/',
     github: 'https://github.com/zippyg',
@@ -23,7 +23,12 @@ const education = [
     degree: 'Physics MSci',
     from: 'Oct 2022',
     to: 'Jun 2026',
-    description: "Expected 2:1 with a focus is on mathematical and statistical methods with applications in Data Science and Machine Learning, sharpening my analytical skills. I've also completed a module in Accounting and Finance and am an active member of the Imperial Investment and Finance Society.",
+    description: "Expected 2:1 (Upper Seconds Class Honours)\n" +
+                 "  Comprehensive study of Differential Equations, Probability Analysis and Distributions, Monte Carlo methods, Regression Analysis, Multivariate Statistical methods, Data Science and Machine Learning.\n" +
+                 "  Imperial BPES modules: Accounting & Finance completed; Business Economics ongoing\n" +
+                 "  Investment Society (Securities Education Certificate course, based on CFA levels 1 & 2)\n" + 
+                 "  Finance Society (Investment Banking Training Programme)\n" + 
+                 "  AlgoTrading Society (AlgoCourse)"
   },
   {
     institution: 'Bishopshalt School',
@@ -37,9 +42,11 @@ const education = [
     degree: 'GCSE',
     from: 'Sep 2015',
     to: 'Aug 2020',
-    description: 'Achieved 13 GCSEs with grades 9 to 8, including Maths and English, and 2 distinctions',
+    description: "Achieved 13 GCSEs with grades 9 to 8, including Maths and English, and 2 distinctions\n" +
+                 "Valedictorian, recognised for academic excellence and leadership qualities"
   }
 ];
+
 
 const projects = [
   {
@@ -459,63 +466,66 @@ const projects = [
     id: 9,
     name: 'Portfolio Risk Management System',
     description: 'A high-performance C++ application designed to quantify, monitor, and mitigate risks associated with diversified financial portfolios.',
-    detailedDescription: `The Portfolio Risk Management System (PRMS) aims to be a high-performance C++ application designed to quantify, monitor, and mitigate risks associated with diversified financial portfolios. The system will calculate key risk metrics such as Value at Risk (VaR), Conditional Value at Risk (CVaR), and perform stress testing to evaluate potential losses in extreme market conditions.`,
+    detailedDescription: `The Portfolio Risk Management System (PRMS) is designed to be a high-performance C++ application, built to quantify, monitor, and mitigate risks associated with diversified financial portfolios. It evaluates financial risk exposure by calculating key metrics such as Value at Risk (VaR) and Conditional Value at Risk (CVaR), along with performing stress testing to assess potential losses under extreme market conditions. By incorporating advanced statistical methods, machine learning for predictive insights, and robust data handling, PRMS aims to set new standards in the field of financial risk management.`,
+    
     technicalComplexity: [
       {
         title: "Data Acquisition",
-        detail: `**Financial Market Data APIs:** Will utilize Bloomberg API or Thomson Reuters Eikon for real-time financial data, including prices, volumes, and historical data.\n**Boost.Asio for Asynchronous Networking:** To efficiently handle real-time data feeds.`
+        detail: `**Financial Market Data APIs:** Integrates Bloomberg API or Thomson Reuters Eikon for real-time data feeds, supporting complex data types like prices, volumes, and historical records.\n**Boost.Asio for Asynchronous Networking:** Implements asynchronous networking to handle large volumes of incoming data with minimal latency, crucial for real-time monitoring.`
       },
       {
         title: "Risk Calculation Techniques",
-        detail: `**QuantLib Library:** For pricing derivatives and calculating risk metrics, implementing features for day count conventions, interest rate instruments, and derivatives modeling.\n**Monte Carlo Simulation:** Custom C++ implementations leveraging modern C++ standards for performance optimization.\n**Statistical Tools:** Using Armadillo for matrix operations essential in risk computation.`
+        detail: `**QuantLib Library:** Uses QuantLib for precise pricing of complex financial instruments and risk metric computation, supporting features like day count conventions and multiple derivative types.\n**Monte Carlo Simulation:** Custom C++ Monte Carlo simulations optimized with the latest C++ standards to efficiently generate price path scenarios.\n**Statistical Tools:** Integrates the Armadillo library for high-speed matrix operations essential to computing multi-asset risk.`
       },
       {
         title: "Machine Learning for Predictive Analytics",
-        detail: `**TensorFlow C++ API:** For integrating deep learning models to forecast market trends affecting portfolio risks.\n**Machine Learning Models:** Regression models to predict risk factors, clustering for strategy analysis, and decision trees for analyzing potential scenarios and their impacts.`
+        detail: `**TensorFlow C++ API:** Integrates deep learning models for predicting market trends that affect portfolio risk.\n**Machine Learning Models:** Employs regression models to predict risk factors, clustering for market segmentation, and decision trees for scenario analysis and impact assessment.`
       },
       {
         title: "Concurrency and Multithreading",
-        detail: `**Modern C++ Concurrency:** Utilizes \`std::thread\` and \`std::async\` to manage concurrent operations, crucial for real-time risk assessment.`
+        detail: `**Modern C++ Concurrency:** Utilizes \`std::thread\` and \`std::async\` for parallel computation, ensuring simultaneous processing of multiple tasks like data ingestion and risk calculation in real-time.`
       },
       {
         title: "Database and Storage",
-        detail: `**SQL/NoSQL Databases:** Depending on the need for structured or unstructured data storage, integrating with PostgreSQL or MongoDB using respective C++ drivers.`
+        detail: `**SQL/NoSQL Databases:** Offers flexibility to store structured or unstructured data, using PostgreSQL for relational data and MongoDB for unstructured financial datasets.\n**C++ Database Drivers:** Integrates with C++ drivers to seamlessly manage financial data retrieval and updates.`
       },
       {
         title: "User Interface and Reporting",
-        detail: `**Qt Framework:** For building robust user interfaces to display real-time data, risk metrics, and allow users to customize parameters.\n**Reporting Tools:** Development of detailed risk reports and dashboards using C++ integrated with Python for advanced graphical capabilities.`
+        detail: `**Qt Framework:** Provides a robust user interface, enabling users to view risk metrics and control parameters.\n**Reporting Tools:** C++ integrated with Python to generate dynamic risk reports and dashboards, providing comprehensive data visualization.`
       }
     ],
+    
     keyComponents: [
       {
-        title: "Data Acquisition",
-        detail: `**Financial Market Data APIs:** Will utilize Bloomberg API or Thomson Reuters Eikon for real-time financial data, including prices, volumes, and historical data.\n**Boost.Asio for Asynchronous Networking:** To efficiently handle real-time data feeds.`
+        title: "Real-Time Data Integration",
+        detail: `**Market Feed Management:** Manages high-volume, real-time data streams and ensures error-free handling of diverse data sources.\n**Data Aggregation:** Consolidates data from different sources, smoothing and interpolating where necessary to maintain data integrity for accurate risk calculation.`
       },
       {
-        title: "Risk Calculation Techniques",
-        detail: `**QuantLib Library:** For pricing derivatives and calculating risk metrics, implementing features for day count conventions, interest rate instruments, and derivatives modeling.\n**Monte Carlo Simulation:** Custom C++ implementations leveraging modern C++ standards for performance optimization.\n**Statistical Tools:** Using Armadillo for matrix operations essential in risk computation.`
+        title: "Advanced Analytical Models",
+        detail: `**Dynamic VaR and CVaR Calculation:** Implements dynamic Value at Risk and Conditional Value at Risk using high-performance algorithms to assess both short-term and long-term risk with low latency.\n**Scenario and Sensitivity Analysis:** Provides tools for stress testing, scenario analysis, and sensitivity testing of risk parameters under different market conditions.`
       },
       {
-        title: "Machine Learning for Predictive Analytics",
-        detail: `**TensorFlow C++ API:** For integrating deep learning models to forecast market trends affecting portfolio risks.\n**Machine Learning Models:** Regression models to predict risk factors, clustering for strategy analysis, and decision trees for analyzing potential scenarios and their impacts.`
+        title: "Predictive Analytics Engine",
+        detail: `**Risk Prediction Models:** Develops proprietary algorithms that monitor evolving market trends and assess their likely impacts on portfolio risks, using unsupervised learning techniques to enhance model adaptability.\n**Anomaly Detection:** Detects irregular trading patterns or anomalies that could signify risk spikes, using threshold-based alerts and statistical outlier analysis.`
       },
       {
-        title: "Concurrency and Multithreading",
-        detail: `**Modern C++ Concurrency:** Utilizes \`std::thread\` and \`std::async\` to manage concurrent operations, crucial for real-time risk assessment.`
+        title: "Efficient Multi-Threaded Processing",
+        detail: `**Thread Pooling and Task Scheduling:** Uses an optimized thread pool to manage task scheduling, balancing between CPU load and latency.\n**Parallel Processing:** Runs risk assessments, model updates, and data fetching concurrently to enhance the application’s responsiveness.`
       },
       {
-        title: "Database and Storage",
-        detail: `**SQL/NoSQL Databases:** Depending on the need for structured or unstructured data storage, integrating with PostgreSQL or MongoDB using respective C++ drivers.`
+        title: "Data Management and Security",
+        detail: `**Data Encryption:** Implements secure data encryption for sensitive financial data stored in both SQL and NoSQL databases.\n**Redundancy and Backup:** Ensures data reliability and recovery with redundancy across storage systems, avoiding data loss in case of system failures.`
       },
       {
-        title: "User Interface and Reporting",
-        detail: `**Qt Framework:** For building robust user interfaces to display real-time data, risk metrics, and allow users to customize parameters.\n**Reporting Tools:** Development of detailed risk reports and dashboards using C++ integrated with Python for advanced graphical capabilities.`
+        title: "User Dashboard and Risk Visualization",
+        detail: `**Interactive Dashboard:** A user-friendly, interactive dashboard that allows users to set custom risk thresholds, view real-time risk metrics, and simulate risk exposure scenarios.\n**Dynamic Reporting:** Automated report generation based on current portfolio metrics, risk scores, and prediction outcomes, using built-in data visualizations and charts for easy interpretation.`
       }
     ],
+    
     developmentPhases: [
       {
         title: "Phase 1: Setup Data Ingestion",
-        detail: `**Establish Financial API Integration:** Connect to Bloomberg or Thomson Reuters Eikon for real-time data acquisition.\n**Database Schema:** Design and implement the database schema for efficient data storage.`
+        detail: `**Establish Financial API Integration:** Connect to Bloomberg or Thomson Reuters Eikon for real-time data acquisition.\n**Database Schema:** Design and implement the database schema for efficient data storage and retrieval.`
       },
       {
         title: "Phase 2: Implement Risk Calculation Models",
@@ -534,16 +544,124 @@ const projects = [
         detail: `**Comprehensive Testing:** Perform extensive testing to ensure accuracy and reliability.\n**Deployment:** Deploy the system and establish post-deployment monitoring for continuous performance evaluation and updates.`
       }
     ],
+    
     predictedOutcomes: [
       {
         title: "Predicted Outcomes",
         detail: `The Portfolio Risk Management System is expected to deliver a robust and high-performance solution for quantifying, monitoring, and mitigating financial portfolio risks. By integrating advanced computational methods, machine learning models, and real-time data processing, the system aims to provide accurate and actionable insights. The user-friendly interface and detailed reporting tools will empower users to make informed decisions, enhancing their ability to manage financial risks effectively. The project aims to set a new standard in portfolio risk management by leveraging cutting-edge technologies and methodologies.`
       }
     ],
+    
     stack: ['C++', 'QuantLib', 'TensorFlow C++ API', 'Armadillo', 'Boost.Asio', 'Qt Framework', 'PostgreSQL', 'MongoDB'],
 
     status: 'In Progress'
-  },
+},
+{
+  id: 10,
+  name: 'Enhanced Black-Scholes Model with Adaptive Volatility',
+  description: 'An advanced options pricing model integrating stochastic volatility methods and machine learning for dynamic volatility, improving pricing accuracy and adaptability in varied market conditions.',
+  detailedDescription: `This project builds on the traditional Black-Scholes Model (BSM) for options pricing by incorporating adaptive volatility predictions through stochastic volatility models (GARCH, Heston, SABR, Lévy) and machine learning techniques (LSTM, GRU, GAN hybrid, ARIMA). By capturing dynamic market conditions, this approach aims to improve accuracy and adaptability in options pricing. The project includes Monte Carlo simulations for stress-testing, evaluating each model's robustness under extreme market conditions and ability to capture collective market behaviors.`,
+  
+  technicalComplexity: [
+    {
+      title: "Volatility Modeling",
+      detail: `**Stochastic Models:** Implements advanced volatility models (GARCH, Heston, SABR, Lévy) to capture market volatility more realistically, each contributing unique features like volatility clustering, mean reversion, or jump diffusion.\n**Machine Learning Models:** Uses LSTM, GRU, GAN hybrid, and ARIMA to predict volatility based on past data patterns, dynamically adapting to market trends.`
+    },
+    {
+      title: "Enhanced Black-Scholes Calculations",
+      detail: `**Dynamic Volatility Substitution:** Replaces constant volatility in the BSM with dynamic predictions from stochastic and ML models, adjusting for market shifts.\n**Monte Carlo Simulations:** Performs stress testing of the enhanced BSM using MC simulations to evaluate model robustness under extreme conditions and collective market behavior.`
+    },
+    {
+      title: "Predictive Analytics and Model Integration",
+      detail: `**TensorFlow and Python Integration:** Utilizes TensorFlow for implementing LSTM and GAN models in Python to process volatility predictions in real-time.\n**QuantLib for Financial Modeling:** Uses QuantLib for option pricing and financial calculations, including complex derivative instruments that need adaptive volatility input.`
+    },
+    {
+      title: "Evaluation Metrics and Testing Framework",
+      detail: `**Comprehensive Evaluation Metrics:** Includes RMSE, MAE, and R² for accuracy, as well as Precision Score for ML models, and specialized metrics like Path Stability and Event Frequency in stress tests.\n**Data Logging and Visualization:** Logs each model's performance over time with statistical visualization tools, comparing their effectiveness in different market scenarios.`
+    }
+  ],
+  
+  keyComponents: [
+    {
+      title: "Dynamic Volatility Adaptation",
+      detail: `**Adaptive Volatility Predictions:** Incorporates multiple volatility models that can adjust dynamically based on real-time market conditions.\n**Data Integration:** Ensures that each volatility model adapts to live financial data, continually updating the model’s view of volatility trends.`
+    },
+    {
+      title: "Multi-Layered Risk Analysis",
+      detail: `**Sequential and Parallel Analysis Layers:** Analyzes risk at different levels by combining short- and long-term predictions from stochastic and ML models.\n**Quantitative and Qualitative Risk Assessment:** Uses both data-driven models and market sentiment analysis to provide a comprehensive view of potential risks.`
+    },
+    {
+      title: "Efficient Computation Framework",
+      detail: `**Optimized Python Codebase:** Utilizes optimized Python and TensorFlow code to handle large-scale simulations and real-time calculations efficiently.\n**Concurrency and Parallel Processing:** Implements multithreading to run simulations and updates concurrently, ensuring fast and scalable performance.`
+    },
+    {
+      title: "Stress Testing for Robustness",
+      detail: `**Monte Carlo Path Simulation:** Generates diverse market scenarios to test the resilience of each model, focusing on extreme market events.\n**Event-Based Monitoring:** Tracks rare, high-impact events to evaluate how each model variant manages volatility spikes and abrupt market changes.`
+    },
+    {
+      title: "Predictive Model Evaluation and Refinement",
+      detail: `**Precision Tracking and Adjustment:** Continuously monitors prediction precision to make model refinements, adjusting parameters to enhance accuracy.\n**Real-Time Predictive Adjustments:** Allows models to self-correct in response to live data trends, adapting predictions for better accuracy.`
+    },
+    {
+      title: "Comprehensive Data Output and Visualization",
+      detail: `**Error Distributions and Evaluation Plots:** Visualizes model errors and prediction accuracy with tools like KDE plots and RMSE charts.\n**Comparative Volatility Plots:** Allows side-by-side comparisons of stochastic and ML predictions against actual market data for immediate insight.`
+    }
+  ],
+  
+  developmentPhases: [
+    {
+      title: "Phase 1: Volatility Model Setup",
+      detail: `**Implement Stochastic Models:** Integrate GARCH, Heston, SABR, and Lévy for volatility predictions.\n**Machine Learning Model Preparation:** Set up LSTM, GRU, GAN hybrid, and ARIMA models, configuring them for time-series data.`
+    },
+    {
+      title: "Phase 2: BSM and Volatility Integration",
+      detail: `**Dynamic Volatility Application:** Replace constant volatility in BSM with outputs from stochastic and ML models.\n**Monte Carlo Stress Testing:** Apply MC simulations to test volatility models under various extreme conditions.`
+    },
+    {
+      title: "Phase 3: Testing and Model Evaluation",
+      detail: `**Accuracy Metrics Analysis:** Assess models with RMSE, MAE, and R² for prediction accuracy.\n**Stress Test Analysis:** Track model stability under high-stress scenarios using MC simulations and event-based metrics.`
+    },
+    {
+      title: "Phase 4: Real-Time Implementation",
+      detail: `**Live Data Integration:** Connect models to real-time financial data feeds.\n**Adaptive Volatility Adjustment:** Continuously update models in response to changing market data for real-time predictions.`
+    },
+    {
+      title: "Phase 5: Dashboard and Reporting",
+      detail: `**Data Visualization Dashboard:** Create a comprehensive dashboard to visualize prediction metrics, volatility trends, and error distributions.\n**Detailed Reports:** Generate performance reports, summarizing evaluation metrics, model comparison, and stress-testing results.`
+    }
+  ],
+  
+  predictedOutcomes: [
+    {
+      title: "Predicted Outcomes",
+      detail: `The Enhanced Black-Scholes Model is expected to improve options pricing accuracy by integrating adaptive volatility predictions that reflect real-time market conditions. By combining stochastic models with machine learning, the project aims to achieve superior predictive performance, with resilience demonstrated through Monte Carlo simulations. This approach is anticipated to provide more realistic pricing under volatile conditions, especially during market stress events, making it a valuable tool for options pricing and financial risk management.`
+    }
+  ],
+  
+  stack: [
+    'Python', 
+    'QuantLib', 
+    'TensorFlow', 
+    'LSTM', 
+    'GRU', 
+    'GAN hybrid', 
+    'ARIMA', 
+    'GARCH', 
+    'Heston Model', 
+    'SABR', 
+    'Lévy Process', 
+    'Monte Carlo Simulations', 
+    'Optuna',  
+    'yfinance', 
+    'pandas', 
+    'NumPy', 
+    'scikit-learn', 
+    'Matplotlib', 
+    'Plotly'
+  ],
+
+  status: 'In Progress'
+}
 ];
 
 
@@ -553,6 +671,20 @@ const skills = [
   'Data Analysis',
   'Research Methodologies',
   'Scientific Computing',
+  'Stochastic Processes',
+  'Statistical Analysis',
+
+  // Financial Modeling and Quantitative Skills
+  'QuantLib',
+  'Monte Carlo Simulations',
+  'Value at Risk (VaR)',
+  'Conditional Value at Risk (CVaR)',
+  'Options Pricing',
+  'Risk Management',
+  'GARCH Models',
+  'Heston Model',
+  'SABR Model',
+  'Lévy Processes',
 
   // Frontend Development
   'HTML5',
@@ -573,34 +705,39 @@ const skills = [
   'Scikit-Learn',
   'Pandas',
   'Machine Learning',
-
+  'LSTM',
+  'GRU',
+  'ARIMA',
+  'GANs',
+  'Optuna (Hyperparameter Tuning)',
+  'Time-Series Analysis',
+  
   // Databases
   'PostgreSQL',
   'MongoDB',
   'SQL',
 
+  // Networking and Asynchronous Programming
+  'Boost.Asio',
+  'Asynchronous Networking',
+  'API Integration',
+  
   // Version Control and CI/CD
   'Git',
-  'CI/CD',
-
-  // Testing
-  'Jest',
+  'Continuous Integration (CI)',
+  'Continuous Deployment (CD)',
 
   // Software and Tools
   'Arduino',
-  'QuantLib',
   'Google API Client',
-
-  // Development and Prototyping
-  '3D Modeling and Printing',
-  'Rapid Prototyping',
-
+  'Bloomberg API',
+  'Thomson Reuters Eikon API',
+  
   // Project Management and Development Practices
   'Agile Methodologies',
-  'API Integration',
   'Multithreading and Concurrency',
-  'Algorithm Development',
-
+  'Data Visualization',
+  
   // Soft Skills
   'Problem-Solving',
   'Analytical Thinking',
@@ -611,6 +748,7 @@ const skills = [
   'Attention to Detail',
   'Time Management'
 ];
+
 
 
 
