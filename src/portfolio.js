@@ -10,7 +10,7 @@ const about = {
   description: `Welcome to my portfolio. As a Physics enthusiast and student (Imperial College London – MSci), I enjoy diving into complex datasets and turning them into some set of not so complex numbers and visions. My academic and personal journey has been a mix of stress followed by the relief of each eureka moment. All arming me with skills in Python, C/C++, JavaScript, machine learning and the deep seated theory behind it all. Here, you'll find a slight peek into my brain through my projects that not only showcase my technical abilities, but also my ability to tackle real-world challenges in any demanding sector. Take a look around, and see how my curiosity mixes with my ever evolving skillset. Please get in touch if you are even slightly curious.`,
   resume: `${process.env.PUBLIC_URL}/assets/Zain Mughal resume Quant.pdf`, // Adjusted path
   social: {
-    linkedin: 'https://www.linkedin.com/feed/',
+    linkedin: 'https://www.linkedin.com/in/mughalzain/',
     github: 'https://github.com/zippyg',
     email: 'zainmughal77@outlook.com'
   },
