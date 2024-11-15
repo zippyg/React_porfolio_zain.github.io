@@ -23,7 +23,7 @@ const education = [
     degree: 'Physics MSci',
     from: 'Oct 2022',
     to: 'Jun 2026',
-    description: "Expected 2:1 (Upper Seconds Class Honours)\n" +
+    description: "Predicted 1:1 (First Class Honours)\n" +
                  "  Comprehensive study of Differential Equations, Probability Analysis and Distributions, Monte Carlo methods, Regression Analysis, Multivariate Statistical methods, Data Science and Machine Learning.\n" +
                  "  Imperial BPES modules: Accounting & Finance completed; Business Economics ongoing\n" +
                  "  Investment Society (Securities Education Certificate course, based on CFA levels 1 & 2)\n" + 
