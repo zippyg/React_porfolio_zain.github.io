@@ -101,6 +101,29 @@ const ProjectContainer = ({ project }) => {
             <MailIcon />
           </a>
         );
+        case 11: // Extraction of Neutrino Oscillation Parameters
+        return (
+          <a 
+            href={`${process.env.PUBLIC_URL}/assets/comp_phys_NLL_minimisations.pdf`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="project-link"
+          >
+            <DescriptionIcon />
+          </a>
+        );
+      
+      case 12: // Detecting Market Data Feed Issues
+        return (
+          <a 
+            href={`${process.env.PUBLIC_URL}/assets/feed_data_report.pdf`} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="project-link"
+          >
+            <DescriptionIcon />
+          </a>
+        );
       default:
         return null;
     }

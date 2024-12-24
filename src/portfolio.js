@@ -661,6 +661,100 @@ const projects = [
   ],
 
   status: 'In Progress'
+},
+
+{
+  id: 11,
+  name: 'Extraction of Neutrino Oscillation Parameters',
+  description: 'A computational study to extract key neutrino oscillation parameters using advanced optimization techniques.',
+  detailedDescription: `
+    This project delves into the extraction of neutrino oscillation parameters θ23 and ∆m²23 using computational methods. By minimizing the Negative Log-Likelihood (NLL) function with optimization techniques (Grid Search, Simulated Annealing, and Nelder-Mead), I was able to achieve precise parameter fits. Detector resolution effects were modeled with Gaussian smearing, and cross-section normalization uncertainties were integrated into the fit using a scaling factor. The Nelder-Mead method emerged as the most efficient algorithm, achieving θ23 = 0.685 ± 0.02 and ∆m²23 = 0.0022378 ± 0.01 eV². 
+    
+    This work demonstrates a blend of theoretical physics, statistical modeling, and computational efficiency to tackle one of the most challenging problems in particle physics.`,
+  technicalComplexity: [
+    {
+      title: "Optimization Algorithms",
+      detail: `
+        - **Grid Search:** Exhaustive parameter search with guaranteed global minimum.
+        - **Simulated Annealing:** Stochastic exploration inspired by Monte Carlo methods.
+        - **Nelder-Mead:** A simplex-based method for efficient minimization of non-differentiable functions.`
+    },
+    {
+      title: "Detector Resolution",
+      detail: `
+        - **Gaussian Smearing:** Applied to model energy uncertainties.
+        - **Fourier Convolution Validation:** Ensures numerical robustness.`
+    },
+    {
+      title: "Cross-Section Scaling",
+      detail: `Introduced a scaling factor to address normalization uncertainties, improving residual consistency.`
+    },
+    {
+      title: "Programming Tools",
+      detail: `
+        - Implemented in Python and C++.
+        - Leveraged libraries like NumPy, SciPy, and GSL for precision and computational performance.`
+    }
+  ],
+  keyComponents: [
+    {
+      title: "NLL Minimization",
+      detail: `Used advanced algorithms to find best-fit neutrino oscillation parameters with minimized computational cost.`
+    },
+    {
+      title: "Validation",
+      detail: `Cross-validated methods and results with global neutrino physics benchmarks.`
+    },
+    {
+      title: "Visual Insights",
+      detail: `Generated topographical maps and convergence paths for comparative algorithm analysis.`
+    }
+  ],
+  stack: ['Python', 'C++', 'NumPy', 'SciPy', 'GSL'],
+  status: 'Completed'
+},
+{
+  id: 12,
+  name: 'Detecting Market Data Feed Issues',
+  description: 'A project addressing data feed anomalies in fast-moving fixed-income markets using machine learning and statistical methods.',
+  detailedDescription: `
+    This project focuses on detecting and addressing two key anomalies in market data feeds: staleness (lagging updates) and false jumps (spurious spikes). These issues can distort trading decisions and risk assessments, making real-time detection critical. For single-feed environments, ARIMA and LSTM models were used to identify anomalies through residual analysis, supplemented by synthetic anomaly generation and volatility-adaptive thresholds. Multi-feed setups leveraged cross-feed consistency checks, including correlation analysis, consensus pricing, and attention-based neural architectures. Beyond detection, actionable insights transformed anomaly data into strategic trading tools, improving execution timing, reducing slippage, and enhancing profitability.`,
+  technicalComplexity: [
+    {
+      title: "Single-Feed Techniques",
+      detail: `
+        - **Time-Series Models:** ARIMA and LSTM for expected price dynamics.
+        - **Synthetic Anomaly Training:** Generated staleness and jump distortions.
+        - **Volatility-Adaptive Thresholds:** Adjusted anomaly triggers based on market conditions.`
+    },
+    {
+      title: "Multi-Feed Redundancy",
+      detail: `
+        - **Consensus Pricing:** Weighted averages for outlier detection.
+        - **Cross-Feed Models:** Neural architectures treating each feed as a separate channel.
+        - **Dynamic Weighting:** Reinforcement learning for trust-based feed reliability.`
+    },
+    {
+      title: "Strategic Insights",
+      detail: `Integrated detection insights into trading strategies for better execution timing and risk management.`
+    }
+  ],
+  keyComponents: [
+    {
+      title: "Anomaly Detection",
+      detail: `Developed methods to distinguish genuine market signals from feed issues.`
+    },
+    {
+      title: "Multi-Feed Models",
+      detail: `Enhanced reliability through inter-feed consistency checks and dynamic weighting.`
+    },
+    {
+      title: "Actionable Insights",
+      detail: `Transformed detection outputs into strategic tools for traders, improving decision-making.`
+    }
+  ],
+  stack: ['Python', 'ARIMA', 'LSTM', 'Reinforcement Learning', 'Attention Models', 'Time-Series Analysis'],
+  status: 'Completed'
 }
 ];
 
