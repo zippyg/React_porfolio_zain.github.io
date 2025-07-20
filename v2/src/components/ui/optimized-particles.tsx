@@ -115,8 +115,8 @@ export function OptimizedParticles({
       type: "equation",
       x: x !== null ? x : Math.random() * canvas.width,
       y: y !== null ? y : Math.random() * canvas.height,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
+      vx: (Math.random() - 0.5) * 1.5, // Increased velocity
+      vy: (Math.random() - 0.5) * 1.5,
       radius: 60 * baseScale,
       equation: null,
       image: null,
@@ -143,17 +143,17 @@ export function OptimizedParticles({
           console.log('Loaded image:', img.width, 'x', img.height); // Debug log
           particle.image = img;
           
-          // Dynamic scaling based on complexity
+          // Dynamic scaling based on complexity - make complex equations bigger
           const complexityScale = {
-            simple: 0.6,
-            medium: 0.8,
-            complex: 1.0
+            simple: 0.8,
+            medium: 1.0,
+            complex: 1.4
           };
-          const finalScale = baseScale * (complexityScale[equation.complexity] || 0.8);
+          const finalScale = baseScale * (complexityScale[equation.complexity] || 1.0);
           
-          // Maximum particle size constraints
-          const MAX_WIDTH = 200;
-          const MAX_HEIGHT = 100;
+          // Maximum particle size constraints - increased for complex equations
+          const MAX_WIDTH = 300;
+          const MAX_HEIGHT = 150;
           
           // Calculate dimensions with constraints
           let width = img.width * finalScale;
@@ -202,8 +202,8 @@ export function OptimizedParticles({
         type: "dot",
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.8,
-        vy: (Math.random() - 0.5) * 0.8,
+        vx: (Math.random() - 0.5) * 1.2,
+        vy: (Math.random() - 0.5) * 1.2,
         radius: 2,
         size: 2,
         opacity: 0.4,
@@ -222,8 +222,8 @@ export function OptimizedParticles({
         type: "symbol",
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: (Math.random() - 0.5) * 0.6,
+        vx: (Math.random() - 0.5) * 1.0,
+        vy: (Math.random() - 0.5) * 1.0,
         radius: fontSize * 0.4,
         symbol: mathSymbols[Math.floor(Math.random() * mathSymbols.length)],
         fontSize,
@@ -317,54 +317,104 @@ export function OptimizedParticles({
         particle.opacity = Math.max(particle.opacity - 0.02, 0);
       }
 
-      // Check if equation particle should be replaced
-      if (particle.type === "equation" && isOffScreen(particle, canvas)) {
-        particle.fadeState = 'out';
-        
-        // Replace with new equation when fully faded
-        if (particle.opacity <= 0) {
-          // Create new equation particle at random edge
-          const edge = Math.floor(Math.random() * 4);
-          let newX, newY;
+      // Check if particle should be replaced (for all types)
+      if (isOffScreen(particle, canvas)) {
+        if (particle.type === "equation") {
+          // Start fading out equation
+          particle.fadeState = 'out';
           
-          switch (edge) {
-            case 0: // top
-              newX = Math.random() * canvas.width;
-              newY = -50;
-              break;
-            case 1: // right
-              newX = canvas.width + 50;
-              newY = Math.random() * canvas.height;
-              break;
-            case 2: // bottom
-              newX = Math.random() * canvas.width;
-              newY = canvas.height + 50;
-              break;
-            case 3: // left
-              newX = -50;
-              newY = Math.random() * canvas.height;
-              break;
+          // Replace with new equation when fully faded or immediately if already off screen
+          if (particle.opacity <= 0 || isOffScreen(particle, canvas)) {
+            // Create new equation particle at random edge
+            const edge = Math.floor(Math.random() * 4);
+            let newX, newY, newVx, newVy;
+            
+            switch (edge) {
+              case 0: // top
+                newX = Math.random() * canvas.width;
+                newY = -100;
+                newVx = (Math.random() - 0.5) * 1.5;
+                newVy = Math.random() * 1.5 + 0.5; // Moving down
+                break;
+              case 1: // right
+                newX = canvas.width + 100;
+                newY = Math.random() * canvas.height;
+                newVx = -(Math.random() * 1.5 + 0.5); // Moving left
+                newVy = (Math.random() - 0.5) * 1.5;
+                break;
+              case 2: // bottom
+                newX = Math.random() * canvas.width;
+                newY = canvas.height + 100;
+                newVx = (Math.random() - 0.5) * 1.5;
+                newVy = -(Math.random() * 1.5 + 0.5); // Moving up
+                break;
+              case 3: // left
+                newX = -100;
+                newY = Math.random() * canvas.height;
+                newVx = Math.random() * 1.5 + 0.5; // Moving right
+                newVy = (Math.random() - 0.5) * 1.5;
+                break;
+              default:
+                newX = 0;
+                newY = 0;
+                newVx = 1;
+                newVy = 1;
+            }
+            
+            createEquationParticle(particle.id, newX, newY, canvas).then(newParticle => {
+              newParticle.vx = newVx;
+              newParticle.vy = newVy;
+              particlesRef.current[index] = newParticle;
+            });
+          }
+        } else {
+          // For symbols and dots, respawn at opposite edge with same velocity
+          const buffer = 100;
+          if (particle.x < -buffer) {
+            particle.x = canvas.width + buffer;
+            particle.y = Math.random() * canvas.height;
+          } else if (particle.x > canvas.width + buffer) {
+            particle.x = -buffer;
+            particle.y = Math.random() * canvas.height;
+          } else if (particle.y < -buffer) {
+            particle.y = canvas.height + buffer;
+            particle.x = Math.random() * canvas.width;
+          } else if (particle.y > canvas.height + buffer) {
+            particle.y = -buffer;
+            particle.x = Math.random() * canvas.width;
           }
           
-          createEquationParticle(particle.id, newX!, newY!, canvas).then(newParticle => {
-            particlesRef.current[index] = newParticle;
-          });
+          // Give it a new random velocity to keep things interesting
+          if (particle.type === "symbol") {
+            particle.vx = (Math.random() - 0.5) * 1.0;
+            particle.vy = (Math.random() - 0.5) * 1.0;
+          }
         }
       }
 
-      // Wrap around edges for dots and symbols
-      if (particle.type !== "equation") {
-        const buffer = 50;
-        if (particle.x < -buffer) particle.x = canvas.width + buffer;
-        if (particle.x > canvas.width + buffer) particle.x = -buffer;
-        if (particle.y < -buffer) particle.y = canvas.height + buffer;
-        if (particle.y > canvas.height + buffer) particle.y = -buffer;
+      // Edge proximity fade for equations
+      if (particle.type === "equation") {
+        const edgeFadeDistance = 150;
+        const distToEdge = Math.min(
+          particle.x,
+          particle.y,
+          canvas.width - particle.x,
+          canvas.height - particle.y
+        );
+        
+        if (distToEdge < edgeFadeDistance && particle.fadeState === 'stable') {
+          particle.targetOpacity = Math.max(0.1, particle.targetOpacity * (distToEdge / edgeFadeDistance));
+        }
       }
 
-      // Apply minimal friction
-      particle.vx *= 0.998;
-      particle.vy *= 0.998;
-      particle.rotationSpeed *= 0.998;
+      // Ensure minimum velocity for continuous movement
+      const minVelocity = 0.3;
+      if (Math.abs(particle.vx) < minVelocity) {
+        particle.vx = Math.sign(particle.vx || 1) * minVelocity;
+      }
+      if (Math.abs(particle.vy) < minVelocity) {
+        particle.vy = Math.sign(particle.vy || 1) * minVelocity;
+      }
 
       // Calculate distance to mouse for highlighting
       const distToMouse = Math.sqrt(
