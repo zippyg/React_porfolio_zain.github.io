@@ -1,13 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import './ScrollToTop.css';
-import { ThemeContext } from '../../contexts/theme';
 
 const ScrollToTop = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { pathname } = useLocation();
-  const [{ themeName }] = useContext(ThemeContext);
 
   useEffect(() => {
     const toggleVisibility = () =>
