@@ -22,10 +22,12 @@ export function BackgroundEffects() {
       {/* Optimized Particle System - dots, symbols, and pre-rendered equations */}
       {mounted && (
         <OptimizedParticles 
-          className="fixed inset-0 pointer-events-none" 
-          dotCount={10}
-          symbolCount={10}
-          equationCount={6}
+          className="fixed inset-0" 
+          dotCount={30}
+          symbolCount={8}
+          equationCount={4}
+          enableMouseCollision={true}
+          collisionStrength={0.4}
         />
       )}
 
