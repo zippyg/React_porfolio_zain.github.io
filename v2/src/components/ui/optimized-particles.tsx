@@ -41,6 +41,8 @@ interface EquationParticle extends BaseParticle {
   width: number;
   height: number;
   scale: number;
+  rotationDirection: 1 | -1;
+  maxRotation: number; // Maximum rotation angle (radians)
 }
 
 type Particle = DotParticle | SymbolParticle | EquationParticle;
@@ -98,7 +100,15 @@ export function OptimizedParticles({
     y: number | null, 
     canvas: HTMLCanvasElement
   ): Promise<EquationParticle> => {
-    const scale = Math.random() * 0.5 + 0.8; // 0.8 to 1.3
+    // Base scale - will be adjusted based on complexity
+    const baseScale = Math.random() * 0.3 + 0.7; // 0.7 to 1.0
+    
+    // Convert 60 degrees to radians
+    const maxRotationDegrees = 60;
+    const maxRotationRadians = (maxRotationDegrees * Math.PI) / 180;
+    
+    // Start with a random rotation within limits
+    const initialRotation = (Math.random() - 0.5) * 2 * maxRotationRadians;
     
     const particle: EquationParticle = {
       id,
@@ -107,16 +117,18 @@ export function OptimizedParticles({
       y: y !== null ? y : Math.random() * canvas.height,
       vx: (Math.random() - 0.5) * 0.5,
       vy: (Math.random() - 0.5) * 0.5,
-      radius: 60 * scale,
+      radius: 60 * baseScale,
       equation: null,
       image: null,
-      width: 100 * scale,
-      height: 50 * scale,
-      scale,
+      width: 100 * baseScale,
+      height: 50 * baseScale,
+      scale: baseScale,
       opacity: 0,
       targetOpacity: Math.random() * 0.3 + 0.2, // 0.2 to 0.5
-      rotation: Math.random() * Math.PI * 2,
-      rotationSpeed: (Math.random() - 0.5) * 0.01,
+      rotation: initialRotation,
+      rotationSpeed: (Math.random() + 0.5) * 0.005, // 0.005 to 0.01 rad/frame
+      rotationDirection: Math.random() > 0.5 ? 1 : -1,
+      maxRotation: maxRotationRadians,
       fadeState: 'in'
     };
 
@@ -131,9 +143,37 @@ export function OptimizedParticles({
           console.log('Loaded image:', img.width, 'x', img.height); // Debug log
           particle.image = img;
           
-          // Use actual image dimensions
-          particle.width = img.width * scale;
-          particle.height = img.height * scale;
+          // Dynamic scaling based on complexity
+          const complexityScale = {
+            simple: 0.6,
+            medium: 0.8,
+            complex: 1.0
+          };
+          const finalScale = baseScale * (complexityScale[equation.complexity] || 0.8);
+          
+          // Maximum particle size constraints
+          const MAX_WIDTH = 200;
+          const MAX_HEIGHT = 100;
+          
+          // Calculate dimensions with constraints
+          let width = img.width * finalScale;
+          let height = img.height * finalScale;
+          
+          // Apply maximum size constraints
+          if (width > MAX_WIDTH) {
+            const ratio = MAX_WIDTH / width;
+            width = MAX_WIDTH;
+            height *= ratio;
+          }
+          if (height > MAX_HEIGHT) {
+            const ratio = MAX_HEIGHT / height;
+            height = MAX_HEIGHT;
+            width *= ratio;
+          }
+          
+          particle.width = width;
+          particle.height = height;
+          particle.scale = width / img.width; // Update scale based on final dimensions
           particle.radius = Math.max(particle.width, particle.height) * 0.5;
         }
       } catch (error) {
@@ -249,7 +289,23 @@ export function OptimizedParticles({
       // Update position
       particle.x += particle.vx;
       particle.y += particle.vy;
-      particle.rotation += particle.rotationSpeed;
+      
+      // Update rotation with oscillation for equations
+      if (particle.type === "equation") {
+        const eqParticle = particle as EquationParticle;
+        
+        // Apply rotation
+        particle.rotation += particle.rotationSpeed * eqParticle.rotationDirection;
+        
+        // Check bounds and reverse direction
+        if (Math.abs(particle.rotation) > eqParticle.maxRotation) {
+          particle.rotation = Math.sign(particle.rotation) * eqParticle.maxRotation;
+          eqParticle.rotationDirection *= -1;
+        }
+      } else {
+        // Non-equation particles rotate normally
+        particle.rotation += particle.rotationSpeed;
+      }
 
       // Handle fade states
       if (particle.fadeState === 'in') {

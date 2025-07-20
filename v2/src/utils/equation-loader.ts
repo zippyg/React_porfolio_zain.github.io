@@ -8,17 +8,29 @@ export interface PrerenderedEquation extends Equation {
   path: string;
   width: number;
   height: number;
-  actualFontSize: number;
 }
 
 // Interface for the manifest
 export interface EquationManifest {
-  equations: Record<string, PrerenderedEquation>;
+  equations: Record<string, Omit<PrerenderedEquation, 'id'>>;
   metadata: {
     generatedAt: string;
     totalEquations: number;
-    fontColor: string;
-    backgroundColor: string;
+    byComplexity: {
+      simple: number;
+      medium: number;
+      complex: number;
+    };
+    byCategory: Record<string, number>;
+    renderSettings: {
+      color: string;
+      fontSize: {
+        simple: number;
+        medium: number;
+        complex: number;
+      };
+      method: string;
+    };
   };
 }
 

@@ -1,0 +1,59 @@
+{
+  "equations": {
+    "eq_0": {
+      "filename": "eq_0.png",
+      "path": "/equations/eq_0.png",
+      "width": 240,
+      "height": 110,
+      "latex": "F = ma",
+      "category": "Classical Mechanics",
+      "complexity": "simple",
+      "description": "Newton's second law"
+    },
+    "eq_1": {
+      "filename": "eq_1.png",
+      "path": "/equations/eq_1.png",
+      "width": 352,
+      "height": 110,
+      "latex": "E = \\frac{1}{2}mv^2 + V(x)",
+      "category": "Classical Mechanics",
+      "complexity": "simple",
+      "description": "Total energy"
+    },
+    "eq_2": {
+      "filename": "eq_2.png",
+      "path": "/equations/eq_2.png",
+      "width": 616,
+      "height": 112,
+      "latex": "L = T - V = \\frac{1}{2}m\\dot{q}^2 - V(q)",
+      "category": "Classical Mechanics",
+      "complexity": "medium",
+      "description": "Lagrangian"
+    },
+    "eq_3": {
+      "filename": "eq_3.png",
+      "path": "/equations/eq_3.png",
+      "width": 1720,
+      "height": 110,
+      "latex": "\\frac{d}{dt}\\left(\\frac{\\partial L}{\\partial \\dot{q}_i}\\right) - \\frac{\\partial L}{\\partial q_i} = 0",
+      "category": "Classical Mechanics",
+      "complexity": "complex",
+      "description": "Euler-Lagrange equation"
+    },
+    "eq_4": {
+      "filename": "eq_4.png",
+      "path": "/equations/eq_4.png",
+      "width": 429,
+      "height": 112,
+      "latex": "H = \\sum_i p_i\\dot{q}_i - L",
+      "category": "Classical Mechanics",
+      "complexity": "medium",
+      "description": "Hamiltonian"
+    }
+  },
+  "metadata": {
+    "generatedAt": "2025-07-20T21:06:08.051Z",
+    "totalEquations": 5,
+    "isTestBatch": true
+  }
+}

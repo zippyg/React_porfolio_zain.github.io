@@ -1,0 +1,55 @@
+{
+  "equations": [
+    {
+      "filename": "eq_0.png",
+      "width": 52,
+      "height": 68,
+      "latex": "F = ma",
+      "displayText": "F = ma",
+      "complexity": "simple"
+    },
+    {
+      "filename": "eq_1.png",
+      "width": 55,
+      "height": 68,
+      "latex": "E = mc²",
+      "displayText": "E = mc²",
+      "complexity": "simple"
+    },
+    {
+      "filename": "eq_2.png",
+      "width": 87,
+      "height": 62,
+      "latex": "i\\hbar\\frac{\\partial\\psi}{\\partial t} = \\hat{H}\\psi",
+      "displayText": "iℏ(∂ψ/∂ t) = Ĥψ",
+      "complexity": "medium"
+    },
+    {
+      "filename": "eq_3.png",
+      "width": 77,
+      "height": 62,
+      "latex": "\\nabla \\cdot E = \\frac{\\rho}{\\epsilon_0}",
+      "displayText": "∇ · E = (ρ/ε₀)",
+      "complexity": "medium"
+    },
+    {
+      "filename": "eq_4.png",
+      "width": 174,
+      "height": 56,
+      "latex": "\\frac{\\partial V}{\\partial t} + \\frac{1}{2}\\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} = 0",
+      "displayText": "(∂ V/∂ t) + (1/2)σ² S² (∂² V/∂ S²) = 0",
+      "complexity": "complex"
+    }
+  ],
+  "metadata": {
+    "generatedAt": "2025-07-20T21:11:22.316Z",
+    "totalEquations": 5,
+    "renderSettings": {
+      "color": "#22c55e",
+      "fontFamily": "Arial",
+      "fontWeight": "bold",
+      "glowRadius": 4,
+      "padding": 10
+    }
+  }
+}

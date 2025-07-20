@@ -2,174 +2,174 @@ const { createCanvas } = require('canvas');
 const fs = require('fs');
 const path = require('path');
 
-// Configuration
+// Test equations
+const testEquations = [
+  { latex: 'F = ma', complexity: 'simple' },
+  { latex: 'E = mc²', complexity: 'simple' },
+  { latex: 'i\\hbar\\frac{\\partial\\psi}{\\partial t} = \\hat{H}\\psi', complexity: 'medium' },
+  { latex: '\\nabla \\cdot E = \\frac{\\rho}{\\epsilon_0}', complexity: 'medium' },
+  { latex: '\\frac{\\partial V}{\\partial t} + \\frac{1}{2}\\sigma^2 S^2 \\frac{\\partial^2 V}{\\partial S^2} = 0', complexity: 'complex' }
+];
+
 const OUTPUT_DIR = path.join(__dirname, '../public/equations');
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 120;
-const TEXT_COLOR = '#22c55e';
-const FONT_SIZE = 20;
-const PADDING = 20;
 
 // Ensure output directory exists
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 }
 
-// Simplified equation set with readable notation
-const equations = [
-  // Physics - Simple
-  { latex: 'F = ma', display: 'F = ma', description: "Newton's second law", complexity: 'simple', category: 'Physics' },
-  { latex: 'E = mc²', display: 'E = mc²', description: 'Mass-energy equivalence', complexity: 'simple', category: 'Physics' },
-  { latex: 'F = kx', display: 'F = kx', description: "Hooke's law", complexity: 'simple', category: 'Physics' },
-  { latex: 'PV = nRT', display: 'PV = nRT', description: 'Ideal gas law', complexity: 'simple', category: 'Physics' },
-  
-  // Physics - Medium
-  { latex: 'E = ½mv² + V(x)', display: 'E = ½mv² + V(x)', description: 'Total energy', complexity: 'medium', category: 'Physics' },
-  { latex: 'L = T - V', display: 'L = T - V', description: 'Lagrangian', complexity: 'medium', category: 'Physics' },
-  { latex: 'iℏ∂ψ/∂t = Ĥψ', display: 'iℏ∂ψ/∂t = Ĥψ', description: 'Schrödinger equation', complexity: 'medium', category: 'Physics' },
-  { latex: '∇·E = ρ/ε₀', display: '∇·E = ρ/ε₀', description: "Gauss's law", complexity: 'medium', category: 'Physics' },
-  
-  // Finance
-  { latex: 'C = S₀N(d₁) - Ke⁻ʳᵀN(d₂)', display: 'C = S₀N(d₁) - Ke⁻ʳᵀN(d₂)', description: 'Black-Scholes', complexity: 'complex', category: 'Finance' },
-  { latex: 'dS = μSdt + σSdW', display: 'dS = μSdt + σSdW', description: 'Geometric Brownian motion', complexity: 'medium', category: 'Finance' },
-  { latex: 'VaR_α = μ - σΦ⁻¹(α)', display: 'VaR_α = μ - σΦ⁻¹(α)', description: 'Value at Risk', complexity: 'medium', category: 'Finance' },
-  
-  // Machine Learning
-  { latex: 'θ := θ - α∇J(θ)', display: 'θ := θ - α∇J(θ)', description: 'Gradient descent', complexity: 'simple', category: 'ML' },
-  { latex: 'σ(z) = 1/(1+e⁻ᶻ)', display: 'σ(z) = 1/(1+e⁻ᶻ)', description: 'Sigmoid function', complexity: 'simple', category: 'ML' },
-  { latex: 'softmax(zᵢ) = eᶻⁱ/Σⱼeᶻʲ', display: 'softmax(zᵢ) = eᶻⁱ/Σⱼeᶻʲ', description: 'Softmax function', complexity: 'medium', category: 'ML' },
-  
-  // Mathematics
-  { latex: '∫f(x)dx', display: '∫f(x)dx', description: 'Integral', complexity: 'simple', category: 'Math' },
-  { latex: '∂f/∂x', display: '∂f/∂x', description: 'Partial derivative', complexity: 'simple', category: 'Math' },
-  { latex: '∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z)', display: '∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z)', description: 'Gradient', complexity: 'medium', category: 'Math' },
-  { latex: 'eⁱᵖ + 1 = 0', display: 'eⁱᵖ + 1 = 0', description: "Euler's identity", complexity: 'simple', category: 'Math' },
-  
-  // General Relativity
-  { latex: 'Gμν = 8πTμν', display: 'Gμν = 8πTμν', description: 'Einstein field equations', complexity: 'complex', category: 'Physics' },
-  { latex: 'ds² = gμνdxμdxν', display: 'ds² = gμνdxμdxν', description: 'Metric tensor', complexity: 'medium', category: 'Physics' },
-  
-  // Statistics
-  { latex: 'P(A|B) = P(B|A)P(A)/P(B)', display: 'P(A|B) = P(B|A)P(A)/P(B)', description: "Bayes' theorem", complexity: 'medium', category: 'Stats' },
-  { latex: 'μ = Σxᵢ/n', display: 'μ = Σxᵢ/n', description: 'Mean', complexity: 'simple', category: 'Stats' },
-  { latex: 'σ² = Σ(xᵢ-μ)²/n', display: 'σ² = Σ(xᵢ-μ)²/n', description: 'Variance', complexity: 'simple', category: 'Stats' }
-];
-
-// Function to sanitize filename
-function sanitizeFilename(str, index) {
-  return `equation_${index}`;
-}
-
-// Function to render equation to canvas
-function renderEquationToCanvas(equation, outputPath, index) {
-  try {
-    const canvas = createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-    const ctx = canvas.getContext('2d');
-    
-    // Clear canvas with transparent background
-    ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    
-    // Set text properties
-    ctx.fillStyle = TEXT_COLOR;
-    ctx.font = `${FONT_SIZE}px "Arial", sans-serif`;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    
-    // Measure text and adjust font size if needed
-    const text = equation.display;
-    let fontSize = FONT_SIZE;
-    ctx.font = `${fontSize}px "Arial", sans-serif`;
-    let metrics = ctx.measureText(text);
-    
-    // Scale down if text is too wide
-    while (metrics.width > CANVAS_WIDTH - PADDING * 2 && fontSize > 12) {
-      fontSize -= 2;
-      ctx.font = `${fontSize}px "Arial", sans-serif`;
-      metrics = ctx.measureText(text);
-    }
-    
-    // Draw the equation
-    ctx.fillText(text, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
-    
-    // Add a subtle glow effect
-    ctx.shadowColor = TEXT_COLOR;
-    ctx.shadowBlur = 3;
-    ctx.fillText(text, CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2);
-    
-    // Save to file
-    const buffer = canvas.toBuffer('image/png');
-    fs.writeFileSync(outputPath, buffer);
-    
-    console.log(`✓ Rendered: ${equation.description} (${text})`);
-    
-    return {
-      width: CANVAS_WIDTH,
-      height: CANVAS_HEIGHT,
-      actualFontSize: fontSize,
-      textWidth: metrics.width
-    };
-    
-  } catch (error) {
-    console.error(`Error rendering equation: ${equation.description}`, error);
-    throw error;
+// Clean existing test files
+for (let i = 0; i < 5; i++) {
+  const filename = path.join(OUTPUT_DIR, `eq_${i}.png`);
+  if (fs.existsSync(filename)) {
+    fs.unlinkSync(filename);
   }
 }
 
-// Main function to process all equations
-async function prerenderAllEquations() {
-  const manifest = {
-    equations: {},
-    metadata: {
-      generatedAt: new Date().toISOString(),
-      totalEquations: 0,
-      fontColor: TEXT_COLOR,
-      backgroundColor: 'transparent'
-    }
+function renderEquation(equation, index) {
+  console.log(`\nRendering equation ${index}: ${equation.latex}`);
+  
+  // Font sizes based on complexity
+  const fontSize = equation.complexity === 'simple' ? 32 : 
+                  equation.complexity === 'medium' ? 28 : 
+                  24;
+  
+  // Create a temporary canvas to measure text
+  const tempCanvas = createCanvas(1, 1);
+  const tempCtx = tempCanvas.getContext('2d');
+  tempCtx.font = `bold ${fontSize}px Arial`;
+  
+  // Process LaTeX to readable text (basic conversion)
+  let displayText = equation.latex
+    .replace(/\\frac\{([^}]+)\}\{([^}]+)\}/g, '($1/$2)')
+    .replace(/\\partial/g, '∂')
+    .replace(/\\psi/g, 'ψ')
+    .replace(/\\hbar/g, 'ℏ')
+    .replace(/\\hat\{H\}/g, 'Ĥ')
+    .replace(/\\nabla/g, '∇')
+    .replace(/\\cdot/g, '·')
+    .replace(/\\rho/g, 'ρ')
+    .replace(/\\epsilon/g, 'ε')
+    .replace(/\\sigma/g, 'σ')
+    .replace(/\{/g, '')
+    .replace(/\}/g, '')
+    .replace(/\^2/g, '²')
+    .replace(/\_0/g, '₀')
+    .replace(/\_t/g, 'ₜ')
+    .replace(/\\/g, '');
+  
+  // Measure the actual text
+  const metrics = tempCtx.measureText(displayText);
+  const textWidth = Math.ceil(metrics.width);
+  const textHeight = fontSize * 1.5; // Approximate height
+  
+  // Add minimal padding
+  const padding = 10;
+  const canvasWidth = textWidth + padding * 2;
+  const canvasHeight = textHeight + padding * 2;
+  
+  console.log(`  Text: "${displayText}"`);
+  console.log(`  Font size: ${fontSize}px`);
+  console.log(`  Text dimensions: ${textWidth}x${textHeight}`);
+  console.log(`  Canvas size: ${canvasWidth}x${canvasHeight}`);
+  
+  // Create the actual canvas
+  const canvas = createCanvas(canvasWidth, canvasHeight);
+  const ctx = canvas.getContext('2d');
+  
+  // IMPORTANT: Set composite operation to ensure proper transparency
+  ctx.globalCompositeOperation = 'source-over';
+  
+  // Clear canvas (transparent background)
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  
+  // Reset all properties to ensure green color
+  ctx.save();
+  
+  // Set font
+  ctx.font = `bold ${fontSize}px Arial`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  
+  // FORCE green color and full opacity
+  ctx.globalAlpha = 1.0;
+  ctx.fillStyle = '#22c55e';
+  
+  // Add glow effect
+  ctx.shadowColor = '#22c55e';
+  ctx.shadowBlur = 4;
+  ctx.shadowOffsetX = 0;
+  ctx.shadowOffsetY = 0;
+  
+  // Draw the text
+  const x = canvasWidth / 2;
+  const y = canvasHeight / 2;
+  
+  // Draw multiple times to ensure it's visible
+  ctx.fillText(displayText, x, y);
+  ctx.fillText(displayText, x, y); // Draw twice for stronger color
+  
+  // Restore context
+  ctx.restore();
+  
+  // Verify color was applied
+  const imageData = ctx.getImageData(canvasWidth/2, canvasHeight/2, 1, 1);
+  const [r, g, b, a] = imageData.data;
+  console.log(`  Center pixel color: rgba(${r}, ${g}, ${b}, ${a})`);
+  
+  // Save PNG
+  const filename = `eq_${index}.png`;
+  const buffer = canvas.toBuffer('image/png');
+  fs.writeFileSync(path.join(OUTPUT_DIR, filename), buffer);
+  
+  console.log(`  ✓ Saved as ${filename}`);
+  
+  return {
+    filename,
+    width: canvasWidth,
+    height: canvasHeight,
+    latex: equation.latex,
+    displayText,
+    complexity: equation.complexity
   };
-  
-  console.log('Starting equation pre-rendering...');
-  console.log(`Rendering ${equations.length} equations...`);
-  
-  for (let i = 0; i < equations.length; i++) {
-    const equation = equations[i];
-    const equationId = sanitizeFilename(equation.description, i);
-    const filename = `${equationId}.png`;
-    const outputPath = path.join(OUTPUT_DIR, filename);
-    
-    try {
-      const renderInfo = renderEquationToCanvas(equation, outputPath, i);
-      
-      manifest.equations[equationId] = {
-        latex: equation.latex,
-        display: equation.display,
-        description: equation.description,
-        complexity: equation.complexity,
-        category: equation.category,
-        filename: filename,
-        path: `/equations/${filename}`,
-        ...renderInfo
-      };
-      
-    } catch (error) {
-      console.error(`Failed to render: ${equation.description}`, error.message);
+}
+
+// Generate test batch
+console.log('=== GENERATING FIXED TEST BATCH ===');
+console.log('Target: Green text (#22c55e) on transparent background');
+console.log('Minimal canvas size, bold font\n');
+
+const results = [];
+testEquations.forEach((eq, i) => {
+  const result = renderEquation(eq, i);
+  results.push(result);
+});
+
+// Save manifest
+const manifest = {
+  equations: results,
+  metadata: {
+    generatedAt: new Date().toISOString(),
+    totalEquations: results.length,
+    renderSettings: {
+      color: '#22c55e',
+      fontFamily: 'Arial',
+      fontWeight: 'bold',
+      glowRadius: 4,
+      padding: 10
     }
   }
-  
-  manifest.metadata.totalEquations = Object.keys(manifest.equations).length;
-  
-  // Save manifest
-  const manifestPath = path.join(OUTPUT_DIR, 'manifest.json');
-  fs.writeFileSync(manifestPath, JSON.stringify(manifest, null, 2));
-  
-  console.log(`\nPre-rendering complete!`);
-  console.log(`Total equations rendered: ${manifest.metadata.totalEquations}`);
-  console.log(`Manifest saved to: ${manifestPath}`);
-  console.log(`Images saved to: ${OUTPUT_DIR}`);
-}
+};
 
-// Run the pre-rendering
-if (require.main === module) {
-  prerenderAllEquations().catch(console.error);
-}
+fs.writeFileSync(
+  path.join(OUTPUT_DIR, 'test-manifest-fixed.json'),
+  JSON.stringify(manifest, null, 2)
+);
 
-module.exports = { prerenderAllEquations };
+console.log('\n=== TEST BATCH COMPLETE ===');
+console.log(`Generated ${results.length} equations`);
+console.log('\nPlease check:');
+console.log('1. Green text is visible');
+console.log('2. Canvas size is appropriate (no wasted space)');
+console.log('3. Text is fully opaque');
+console.log('4. Glow effect is visible');

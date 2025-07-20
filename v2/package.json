@@ -10,7 +10,7 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,md,json}\"",
     "type-check": "tsc --noEmit",
-    "prerender:equations": "node scripts/prerender-equations-green.js",
+    "prerender:equations": "node scripts/generate-all-equations.js",
     "prepare": "cd .. && husky || true"
   },
   "dependencies": {
@@ -21,9 +21,12 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.6",
     "katex": "^0.16.22",
+    "mathjax": "^3.2.2",
     "next": "^14.2.30",
+    "puppeteer": "^24.14.0",
     "react": "^18",
     "react-dom": "^18",
+    "sharp": "^0.34.3",
     "tailwind-merge": "^3.3.1",
     "three": "^0.178.0"
   },
