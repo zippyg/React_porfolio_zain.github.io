@@ -107,7 +107,6 @@ out/
 
 # Gatsby files
 .cache/
-public/
 
 # Misc
 *.log
