@@ -4,6 +4,7 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import { cn } from "@/lib/utils";
 import { mathSymbols } from "@/data/equation-bank";
 import { EquationPool, PrerenderedEquation, loadEquationImage } from "@/utils/equation-loader";
+import { useFunMode } from "@/contexts/fun-mode-context";
 
 // Define particle types
 type ParticleType = "dot" | "symbol" | "equation";
@@ -61,9 +62,12 @@ export function OptimizedParticles({
   dotCount = 30, // More dots for better constellation
   symbolCount = 8, // Even fewer symbols
   equationCount = 4, // Further reduced for less density
-  enableMouseCollision = true,
+  enableMouseCollision: enableMouseCollisionProp,
   collisionStrength = 0.5,
 }: OptimizedParticlesProps) {
+  const { isFunMode } = useFunMode();
+  // Only enable mouse collision if fun mode is active and prop allows it
+  const enableMouseCollision = enableMouseCollisionProp ?? isFunMode;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number>();
@@ -76,6 +80,7 @@ export function OptimizedParticles({
   const frameCountRef = useRef(0);
   const fpsRef = useRef(0);
   const lastFpsUpdateRef = useRef(0);
+  const hasShownHintRef = useRef(false);
 
   // Track mouse position
   useEffect(() => {
@@ -255,7 +260,30 @@ export function OptimizedParticles({
 
     particlesRef.current = particles;
     setIsLoading(false);
-  }, [dotCount, symbolCount, equationCount, initializeEquationPool, createEquationParticle]);
+    
+    // Easter egg hint: Make one equation particle briefly glow on first load
+    if (!hasShownHintRef.current && !isFunMode && equationParticles.length > 0) {
+      hasShownHintRef.current = true;
+      const hintParticle = equationParticles[0];
+      
+      // Temporarily boost opacity and size
+      const originalOpacity = hintParticle.targetOpacity;
+      const originalScale = hintParticle.scale;
+      
+      hintParticle.targetOpacity = 0.8;
+      hintParticle.scale = originalScale * 1.2;
+      
+      // Add a special "hint" property to make it pulse
+      (hintParticle as any).isHintParticle = true;
+      
+      // Reset after 3 seconds
+      setTimeout(() => {
+        hintParticle.targetOpacity = originalOpacity;
+        hintParticle.scale = originalScale;
+        (hintParticle as any).isHintParticle = false;
+      }, 3000);
+    }
+  }, [dotCount, symbolCount, equationCount, initializeEquationPool, createEquationParticle, isFunMode]);
 
   // Check if particle is off-screen
   const isOffScreen = useCallback((particle: Particle, canvas: HTMLCanvasElement) => {
@@ -635,6 +663,18 @@ export function OptimizedParticles({
           if (particle.image && particle.equation) {
             ctx.translate(particle.x, particle.y);
             ctx.rotate(particle.rotation);
+            
+            // Add pulsing effect for hint particle
+            if ((particle as any).isHintParticle) {
+              const pulse = Math.sin(Date.now() * 0.003) * 0.1 + 1;
+              const glowRadius = 30 * pulse;
+              const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, glowRadius);
+              gradient.addColorStop(0, 'rgba(34, 197, 94, 0.3)');
+              gradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
+              ctx.fillStyle = gradient;
+              ctx.fillRect(-glowRadius, -glowRadius, glowRadius * 2, glowRadius * 2);
+            }
+            
             ctx.drawImage(
               particle.image,
               -particle.width / 2,

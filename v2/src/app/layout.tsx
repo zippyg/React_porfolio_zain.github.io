@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/providers/motion-provider";
+import { FunModeProvider } from "@/contexts/fun-mode-context";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { BackgroundEffects } from "@/components/layout/background-effects";
+import { CommandPalette } from "@/components/ui/command-palette";
+import { EasterEggHint } from "@/components/ui/easter-egg-hint";
 import "./globals.css";
 
 const inter = Inter({
@@ -61,12 +64,16 @@ export default function RootLayout({
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white font-sans`}
       >
         <MotionProvider>
-          <BackgroundEffects />
-          <Navigation />
-          <div className="flex flex-col min-h-screen relative">
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
+          <FunModeProvider>
+            <CommandPalette />
+            <EasterEggHint />
+            <BackgroundEffects />
+            <Navigation />
+            <div className="flex flex-col min-h-screen relative">
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+          </FunModeProvider>
         </MotionProvider>
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
+import { useFunMode } from "@/contexts/fun-mode-context";
 
 interface MouseGlowProps {
   className?: string;
@@ -38,6 +39,21 @@ export function MouseGlow({ className }: MouseGlowProps) {
   const startTimeRef = useRef(Date.now());
   const scrollYRef = useRef(0);
   const pageHeightRef = useRef(0);
+  const { isFunMode } = useFunMode();
+  
+  // Disable torch and clear effects when exiting fun mode
+  useEffect(() => {
+    if (!isFunMode) {
+      if (torchEnabled) {
+        setTorchEnabled(false);
+        torchEnabledRef.current = false;
+      }
+      // Clear all active effects
+      trailRef.current = [];
+      glowTrailRef.current = [];
+      clickEffectsRef.current = [];
+    }
+  }, [isFunMode, torchEnabled]);
 
   // Sync ref with state
   useEffect(() => {
@@ -49,34 +65,40 @@ export function MouseGlow({ className }: MouseGlowProps) {
       prevMouseRef.current = { ...mouseRef.current };
       mouseRef.current = { x: e.clientX, y: e.clientY };
       
-      // Add to trail (longer lasting)
-      trailRef.current.push({
-        x: e.clientX,
-        y: e.clientY,
-        opacity: 0.8,
-        timestamp: Date.now()
-      });
-      
-      // Add to glow trail
-      glowTrailRef.current.push({
-        x: e.clientX,
-        y: e.clientY,
-        opacity: 0.3,
-        timestamp: Date.now()
-      });
-      
-      // Keep trail limited to 40 points (longer trail)
-      if (trailRef.current.length > 40) {
-        trailRef.current.shift();
-      }
-      
-      // Keep glow trail limited to 15 points
-      if (glowTrailRef.current.length > 15) {
-        glowTrailRef.current.shift();
+      // Only add trails in fun mode
+      if (isFunMode) {
+        // Add to trail (longer lasting)
+        trailRef.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          opacity: 0.8,
+          timestamp: Date.now()
+        });
+        
+        // Add to glow trail
+        glowTrailRef.current.push({
+          x: e.clientX,
+          y: e.clientY,
+          opacity: 0.3,
+          timestamp: Date.now()
+        });
+        
+        // Keep trail limited to 40 points (longer trail)
+        if (trailRef.current.length > 40) {
+          trailRef.current.shift();
+        }
+        
+        // Keep glow trail limited to 15 points
+        if (glowTrailRef.current.length > 15) {
+          glowTrailRef.current.shift();
+        }
       }
     };
 
     const handleClick = (e: MouseEvent) => {
+      // Only handle clicks in fun mode
+      if (!isFunMode) return;
+      
       // Only handle clicks in empty space
       const target = e.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.tagName === 'INPUT') {
@@ -161,7 +183,7 @@ export function MouseGlow({ className }: MouseGlowProps) {
         clearTimeout(clickTimeoutRef.current);
       }
     };
-  }, []);
+  }, [isFunMode]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -262,8 +284,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
         return effect.progress < 1;
       });
 
-      // Only draw glow trail when torch is enabled
-      if (torchEnabled && glowTrailRef.current.length > 0) {
+      // Only draw glow trail when torch is enabled and in fun mode
+      if (isFunMode && torchEnabled && glowTrailRef.current.length > 0) {
         glowTrailRef.current.forEach((point, index) => {
           const radius = 100 * point.opacity;
           const gradient = ctx.createRadialGradient(point.x, point.y, 0, point.x, point.y, radius);
@@ -276,8 +298,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
         });
       }
       
-      // Draw trail
-      if (trailRef.current.length > 1) {
+      // Draw trail (only in fun mode)
+      if (isFunMode && trailRef.current.length > 1) {
         ctx.strokeStyle = "#22c55e";
         ctx.lineCap = "round";
         
@@ -375,7 +397,7 @@ export function MouseGlow({ className }: MouseGlowProps) {
         let shouldProcessLine = false;
         
         // Check if we should process this line based on any effect
-        if (torchEnabledRef.current && distToLine < torchRadius) {
+        if (isFunMode && torchEnabledRef.current && distToLine < torchRadius) {
           shouldProcessLine = true;
         }
         if (clickEffectsRef.current.length > 0) {
@@ -403,8 +425,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
             let shouldDraw = false;
             let intensity = 0;
             
-            // Check torch influence
-            if (torchEnabledRef.current && dist < torchRadius) {
+            // Check torch influence (only in fun mode)
+            if (isFunMode && torchEnabledRef.current && dist < torchRadius) {
               const torchIntensity = Math.pow(1 - dist / torchRadius, 1.5);
               intensity = Math.max(intensity, torchIntensity);
               shouldDraw = true;
@@ -469,8 +491,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
             let shouldDraw = false;
             let intensity = 0;
             
-            // Check torch influence
-            if (torchEnabledRef.current && dist < torchRadius) {
+            // Check torch influence (only in fun mode)
+            if (isFunMode && torchEnabledRef.current && dist < torchRadius) {
               const torchIntensity = Math.pow(1 - dist / torchRadius, 1.5);
               intensity = Math.max(intensity, torchIntensity);
               shouldDraw = true;
@@ -508,19 +530,21 @@ export function MouseGlow({ className }: MouseGlowProps) {
         }
       }
       
-      // Draw pulse effects for torch toggle
-      clickEffectsRef.current.forEach(effect => {
-        if (effect.type === 'pulse') {
-          const radius = effect.progress * 150;
-          ctx.strokeStyle = "#22c55e";
-          ctx.lineWidth = 2 * (1 - effect.progress);
-          ctx.globalAlpha = (1 - effect.progress) * 0.5;
-          
-          ctx.beginPath();
-          ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2);
-          ctx.stroke();
-        }
-      });
+      // Draw pulse effects for torch toggle (only in fun mode)
+      if (isFunMode) {
+        clickEffectsRef.current.forEach(effect => {
+          if (effect.type === 'pulse') {
+            const radius = effect.progress * 150;
+            ctx.strokeStyle = "#22c55e";
+            ctx.lineWidth = 2 * (1 - effect.progress);
+            ctx.globalAlpha = (1 - effect.progress) * 0.5;
+            
+            ctx.beginPath();
+            ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+        });
+      }
       
       // Brighten grid intersections with effects (for both torch AND scanline)
       ctx.fillStyle = "#22c55e";
@@ -528,10 +552,12 @@ export function MouseGlow({ className }: MouseGlowProps) {
         for (let y = 0; y < canvas.height; y += gridSize) {
           let point = { x, y };
           
-          // Apply all active click effects
-          clickEffectsRef.current.forEach(effect => {
-            point = applyClickEffect(point.x, point.y, effect);
-          });
+          // Apply all active click effects (only in fun mode)
+          if (isFunMode) {
+            clickEffectsRef.current.forEach(effect => {
+              point = applyClickEffect(point.x, point.y, effect);
+            });
+          }
           
           const dist = Math.sqrt(Math.pow(x - mouseX, 2) + Math.pow(y - mouseY, 2));
           const distToScanline = Math.abs(y - scanlineY);
@@ -539,8 +565,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
           let shouldDraw = false;
           let intensity = 0;
           
-          // Check torch influence
-          if (torchEnabledRef.current && dist < torchRadius) {
+          // Check torch influence (only in fun mode)
+          if (isFunMode && torchEnabledRef.current && dist < torchRadius) {
             const torchIntensity = Math.pow(1 - dist / torchRadius, 2);
             intensity = Math.max(intensity, 0.1 + torchIntensity * 0.4);
             shouldDraw = true;
@@ -603,7 +629,7 @@ export function MouseGlow({ className }: MouseGlowProps) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, []); // Remove torchEnabled dependency to prevent animation restart
+  }, [isFunMode]); // Added isFunMode dependency
 
   return (
     <canvas

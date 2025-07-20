@@ -26,7 +26,6 @@ export function BackgroundEffects() {
           dotCount={30}
           symbolCount={8}
           equationCount={4}
-          enableMouseCollision={true}
           collisionStrength={0.4}
         />
       )}

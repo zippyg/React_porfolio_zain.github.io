@@ -12,8 +12,16 @@ import { MotionDiv } from "@/components/ui/motion";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMac, setIsMac] = useState(true); // Default to Mac
   const { scrolled } = useScroll();
   const pathname = usePathname();
+  
+  // Detect OS for keyboard shortcut display
+  useEffect(() => {
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isMacOS = userAgent.includes('mac');
+    setIsMac(isMacOS);
+  }, []);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -68,9 +76,14 @@ export function Navigation() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
-                <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border border-border/50 bg-muted/50 px-1.5 font-mono text-[10px] font-medium opacity-100">
-                  <span className="text-xs">⌘</span>K
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="text-gray-400 hover:text-white cursor-help"
+                title="Open command palette"
+              >
+                <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border border-border/50 bg-muted/50 px-1.5 font-mono text-[10px] font-medium opacity-100">
+                  <span className="text-xs">{isMac ? '⌘' : 'Ctrl+'}</span>Z
                 </kbd>
               </Button>
             </div>
