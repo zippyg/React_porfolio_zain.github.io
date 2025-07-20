@@ -1,46 +1,59 @@
-# React Portfolio - Zain Mughal
+# Portfolio - Zain Mughal
 
-Welcome to my personal portfolio website! This project showcases my work, skills, and experiences as a Physics MSci student with a passion for technology, software development, and finance. The website is built using React and hosted on GitHub Pages.
+## 🚀 Project Structure
 
-## Table of Contents
-- [About](#about)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technologies Used](#technologies-used)
-- [Contact](#contact)
-- [License](#license)
+This repository contains both the current (v1) and upcoming (v2) versions of my portfolio website.
 
-## About
-This portfolio website highlights my journey as a Physics MSci student at Imperial College London. It includes detailed descriptions of my projects, skills, and experiences, aimed at potential employers and collaborators. The site is designed to be responsive and visually appealing, with a focus on providing a seamless user experience.
+```
+React_porfolio_zain.github.io/
+├── v1/                 # Current portfolio (React 17, Material-UI) - Live
+├── v2/                 # New portfolio (Next.js 14, TypeScript) - In Development
+├── shared/             # Shared assets between versions
+├── .claude/            # AI documentation (gitignored)
+├── docs/               # Project documentation (gitignored)
+└── README.md           # You are here
+```
 
-## Features
-- **Responsive Design**: Ensures optimal viewing on all devices, including desktops, tablets, and smartphones.
-- **Project Showcase**: Detailed descriptions of my key projects, including links to source code and live demos.
-- **Skills Overview**: A comprehensive list of my technical and soft skills.
-- **Contact Information**: Easy access to my email and social media profiles for networking and collaboration.
-- **Dark Mode Toggle**: Allows users to switch between light and dark themes for better readability and aesthetics.
+## 📍 Current Portfolio (v1)
 
-## Installation
-To run this project locally, follow these steps:
+The current portfolio is live at: https://zippyg.github.io/React_porfolio_zain.github.io/
 
-1. **Clone the repository**:
-    ```bash
-    git clone https://github.com/zippyg/React_porfolio_zain.github.io.git
-    ```
-2. **Navigate to the project directory**:
-    ```bash
-    cd React_porfolio_zain.github.io
-    ```
-3. **Install dependencies**:
-    ```bash
-    npm install
-    ```
-4. **Run the development server**:
-    ```bash
-    npm start
-    ```
-   The website should now be running at `http://localhost:3000`.
+### Features
+- **Responsive Design**: Works seamlessly across all devices
+- **Project Showcase**: 12+ detailed project case studies
+- **Dark Mode**: Toggle between light and dark themes
+- **Contact Form**: Direct communication channel
+- **Skills Overview**: Comprehensive technical competencies
+
+### Local Development
+```bash
+cd v1
+npm install
+npm start
+```
+
+### Deployment
+The v1 portfolio is automatically deployed to GitHub Pages when changes are pushed to the main branch.
+
+## 🎯 New Portfolio (v2) - Coming Soon
+
+A complete redesign featuring:
+- **Modern Stack**: Next.js 14, TypeScript, Tailwind CSS
+- **Retro-Futuristic Design**: Bloomberg Terminal meets Blade Runner aesthetic
+- **Advanced Animations**: Framer Motion, Three.js for 3D effects
+- **Performance First**: <2s load times, 95+ Lighthouse scores
+- **Enhanced SEO**: Server-side rendering for better discoverability
+
+### Tech Stack Preview
+- Framework: Next.js 14 with App Router
+- Language: TypeScript
+- Styling: Tailwind CSS + CSS Modules
+- Animations: Framer Motion + React Three Fiber
+- Deployment: Cloudflare Pages (planned)
+
+## 📝 Development Notes
+
+This is a hybrid development approach where v2 is built alongside the current live portfolio, ensuring zero downtime during the transition.
 
 ## Usage
 - Visit the live website at [zippyg.github.io/React_porfolio_zain.github.io](https://zippyg.github.io/React_porfolio_zain.github.io/)
