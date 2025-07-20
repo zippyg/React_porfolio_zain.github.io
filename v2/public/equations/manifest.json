@@ -1,0 +1,242 @@
+{
+  "equations": {
+    "eq_0": {
+      "filename": "eq_0.png",
+      "path": "/equations/eq_0.png",
+      "width": 44,
+      "height": 46,
+      "latex": "F = ma",
+      "category": "Physics",
+      "complexity": "simple"
+    },
+    "eq_1": {
+      "filename": "eq_1.png",
+      "path": "/equations/eq_1.png",
+      "width": 47,
+      "height": 46,
+      "latex": "E = mc²",
+      "category": "Physics",
+      "complexity": "simple"
+    },
+    "eq_2": {
+      "filename": "eq_2.png",
+      "path": "/equations/eq_2.png",
+      "width": 85,
+      "height": 40,
+      "latex": "E = ½mv² + V(x)",
+      "category": "Physics",
+      "complexity": "medium"
+    },
+    "eq_3": {
+      "filename": "eq_3.png",
+      "path": "/equations/eq_3.png",
+      "width": 50,
+      "height": 40,
+      "latex": "L = T - V",
+      "category": "Physics",
+      "complexity": "medium"
+    },
+    "eq_4": {
+      "filename": "eq_4.png",
+      "path": "/equations/eq_4.png",
+      "width": 69,
+      "height": 40,
+      "latex": "iℏ∂ψ/∂t = Ĥψ",
+      "category": "Physics",
+      "complexity": "medium"
+    },
+    "eq_5": {
+      "filename": "eq_5.png",
+      "path": "/equations/eq_5.png",
+      "width": 57,
+      "height": 40,
+      "latex": "∇·E = ρ/ε₀",
+      "category": "Physics",
+      "complexity": "medium"
+    },
+    "eq_6": {
+      "filename": "eq_6.png",
+      "path": "/equations/eq_6.png",
+      "width": 88,
+      "height": 35,
+      "latex": "ds² = gμνdxμdxν",
+      "category": "Physics",
+      "complexity": "complex"
+    },
+    "eq_7": {
+      "filename": "eq_7.png",
+      "path": "/equations/eq_7.png",
+      "width": 90,
+      "height": 40,
+      "latex": "∇²u = (1/c²)∂²u/∂t²",
+      "category": "Physics",
+      "complexity": "medium"
+    },
+    "eq_8": {
+      "filename": "eq_8.png",
+      "path": "/equations/eq_8.png",
+      "width": 190,
+      "height": 35,
+      "latex": "∂V/∂t + ½σ²S²∂²V/∂S² + rS∂V/∂S - rV = 0",
+      "category": "Finance",
+      "complexity": "complex"
+    },
+    "eq_9": {
+      "filename": "eq_9.png",
+      "path": "/equations/eq_9.png",
+      "width": 112,
+      "height": 35,
+      "latex": "C = S₀N(d₁) - Ke⁻ʳᵀN(d₂)",
+      "category": "Finance",
+      "complexity": "complex"
+    },
+    "eq_10": {
+      "filename": "eq_10.png",
+      "path": "/equations/eq_10.png",
+      "width": 96,
+      "height": 40,
+      "latex": "dS = μSdt + σSdW",
+      "category": "Finance",
+      "complexity": "medium"
+    },
+    "eq_11": {
+      "filename": "eq_11.png",
+      "path": "/equations/eq_11.png",
+      "width": 100,
+      "height": 40,
+      "latex": "VaR_α = μ - σΦ⁻¹(α)",
+      "category": "Finance",
+      "complexity": "medium"
+    },
+    "eq_12": {
+      "filename": "eq_12.png",
+      "path": "/equations/eq_12.png",
+      "width": 78,
+      "height": 46,
+      "latex": "θ := θ - α∇J(θ)",
+      "category": "ML",
+      "complexity": "simple"
+    },
+    "eq_13": {
+      "filename": "eq_13.png",
+      "path": "/equations/eq_13.png",
+      "width": 81,
+      "height": 46,
+      "latex": "σ(z) = 1/(1+e⁻ᶻ)",
+      "category": "ML",
+      "complexity": "simple"
+    },
+    "eq_14": {
+      "filename": "eq_14.png",
+      "path": "/equations/eq_14.png",
+      "width": 112,
+      "height": 40,
+      "latex": "softmax(zᵢ) = eᶻⁱ/Σⱼeᶻʲ",
+      "category": "ML",
+      "complexity": "medium"
+    },
+    "eq_15": {
+      "filename": "eq_15.png",
+      "path": "/equations/eq_15.png",
+      "width": 71,
+      "height": 40,
+      "latex": "J = -Σy·log(ŷ)",
+      "category": "ML",
+      "complexity": "medium"
+    },
+    "eq_16": {
+      "filename": "eq_16.png",
+      "path": "/equations/eq_16.png",
+      "width": 40,
+      "height": 46,
+      "latex": "∫f(x)dx",
+      "category": "Math",
+      "complexity": "simple"
+    },
+    "eq_17": {
+      "filename": "eq_17.png",
+      "path": "/equations/eq_17.png",
+      "width": 33,
+      "height": 46,
+      "latex": "∂f/∂x",
+      "category": "Math",
+      "complexity": "simple"
+    },
+    "eq_18": {
+      "filename": "eq_18.png",
+      "path": "/equations/eq_18.png",
+      "width": 111,
+      "height": 40,
+      "latex": "∇f = (∂f/∂x, ∂f/∂y, ∂f/∂z)",
+      "category": "Math",
+      "complexity": "medium"
+    },
+    "eq_19": {
+      "filename": "eq_19.png",
+      "path": "/equations/eq_19.png",
+      "width": 57,
+      "height": 46,
+      "latex": "eⁱᵖ + 1 = 0",
+      "category": "Math",
+      "complexity": "simple"
+    },
+    "eq_20": {
+      "filename": "eq_20.png",
+      "path": "/equations/eq_20.png",
+      "width": 82,
+      "height": 40,
+      "latex": "Σ₁^∞ 1/n² = π²/6",
+      "category": "Math",
+      "complexity": "medium"
+    },
+    "eq_21": {
+      "filename": "eq_21.png",
+      "path": "/equations/eq_21.png",
+      "width": 41,
+      "height": 46,
+      "latex": "Ax = b",
+      "category": "LinAlg",
+      "complexity": "simple"
+    },
+    "eq_22": {
+      "filename": "eq_22.png",
+      "path": "/equations/eq_22.png",
+      "width": 73,
+      "height": 40,
+      "latex": "det(A - λI) = 0",
+      "category": "LinAlg",
+      "complexity": "medium"
+    },
+    "eq_23": {
+      "filename": "eq_23.png",
+      "path": "/equations/eq_23.png",
+      "width": 53,
+      "height": 40,
+      "latex": "A = UΣVᵀ",
+      "category": "LinAlg",
+      "complexity": "medium"
+    },
+    "eq_24": {
+      "filename": "eq_24.png",
+      "path": "/equations/eq_24.png",
+      "width": 109,
+      "height": 40,
+      "latex": "dXₜ = μdt + σdWₜ",
+      "category": "Stochastic",
+      "complexity": "medium"
+    },
+    "eq_25": {
+      "filename": "eq_25.png",
+      "path": "/equations/eq_25.png",
+      "width": 117,
+      "height": 40,
+      "latex": "E[Wₛ·Wₜ] = min(s,t)",
+      "category": "Stochastic",
+      "complexity": "medium"
+    }
+  },
+  "metadata": {
+    "generatedAt": "2025-07-20T19:20:12.966Z",
+    "totalEquations": 26
+  }
+}

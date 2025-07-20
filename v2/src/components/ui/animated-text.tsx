@@ -62,16 +62,16 @@ interface GlitchTextProps {
 
 export function GlitchText({ text, className }: GlitchTextProps) {
   return (
-    <span className={cn("relative inline-block", className)}>
+    <span className={cn("relative inline-block group", className)}>
       <span className="relative z-10">{text}</span>
       <span
-        className="absolute top-0 left-0 -ml-[2px] text-cyan-500 opacity-70 animate-glitch"
+        className="absolute top-0 left-0 -ml-[2px] text-cyan-500 opacity-0 group-hover:opacity-70 group-hover:animate-glitch transition-opacity"
         aria-hidden="true"
       >
         {text}
       </span>
       <span
-        className="absolute top-0 left-0 ml-[2px] text-pink-500 opacity-70 animate-glitch"
+        className="absolute top-0 left-0 ml-[2px] text-pink-500 opacity-0 group-hover:opacity-70 group-hover:animate-glitch transition-opacity"
         style={{ animationDelay: "0.1s" }}
         aria-hidden="true"
       >

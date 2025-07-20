@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/providers/motion-provider";
+import { Navigation } from "@/components/layout/navigation";
+import { Footer } from "@/components/layout/footer";
+import { BackgroundEffects } from "@/components/layout/background-effects";
 import "./globals.css";
 
 const inter = Inter({
@@ -57,7 +60,14 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white font-sans`}
       >
-        <MotionProvider>{children}</MotionProvider>
+        <MotionProvider>
+          <BackgroundEffects />
+          <Navigation />
+          <div className="flex flex-col min-h-screen relative">
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+        </MotionProvider>
       </body>
     </html>
   );

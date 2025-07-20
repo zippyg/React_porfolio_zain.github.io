@@ -73,7 +73,7 @@ const config: Config = {
         "terminal-blink": "terminal-blink 1s step-end infinite",
         glitch: "glitch 2s infinite",
         float: "float 6s ease-in-out infinite",
-        "scan-line": "scan-line 8s linear infinite",
+        "scan-line": "scan-line 12s linear infinite",
       },
       keyframes: {
         fadeIn: {
@@ -112,10 +112,8 @@ const config: Config = {
           "50%": { transform: "translateY(-20px)" },
         },
         "scan-line": {
-          "0%": { transform: "translateY(-100%)", opacity: "0" },
-          "10%": { opacity: "1" },
-          "90%": { opacity: "1" },
-          "100%": { transform: "translateY(100%)", opacity: "0" },
+          "0%": { transform: "translateY(-100vh)" },
+          "100%": { transform: "translateY(100vh)" },
         },
       },
       backgroundImage: {
