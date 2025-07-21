@@ -112,8 +112,8 @@ export function Navigation() {
                 onClick={() => setShowCommandPalette(true)}
               >
                 <kbd className="inline-flex h-5 w-auto px-1.5 select-none items-center justify-center gap-0.5 rounded bg-transparent font-mono text-[11px] font-medium">
-                  <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>
-                  <span>Z</span>
+                  <span className="text-primary text-sm font-normal">{isMac ? '⌘' : 'Ctrl'}</span>
+                  <span className="text-primary text-xs">Z</span>
                 </kbd>
               </Button>
             </div>
