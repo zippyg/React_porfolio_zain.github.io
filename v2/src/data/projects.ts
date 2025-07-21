@@ -16,7 +16,7 @@ export const projects: Project[] = [
       'Validated results against CERN benchmarks'
     ],
     techStack: ['Python', 'NumPy', 'SciPy', 'Matplotlib', 'Monte Carlo'],
-    pdf: '/assets/Higgs paper.pdf',
+    pdf: '/assets/Higgs%20paper.pdf',
     github: 'https://github.com/zippyg/Zain_Projects/tree/main/Higgs%20Boson%20Discovery',
     year: 2024,
     featured: true,
@@ -135,8 +135,8 @@ export const projects: Project[] = [
       'Demonstrated adiabatic vs isothermal process differences'
     ],
     techStack: ['Python', 'NumPy', 'Matplotlib', 'SciPy', 'Physics Simulation'],
-    pdf: '/assets/Thermo paper.pdf',
-    video: '/assets/screen rec mbs - thermosnooker.mov',
+    pdf: '/assets/Thermo%20paper.pdf',
+    video: '/assets/screen%20rec%20mbs%20-%20thermosnooker.mov',
     github: 'https://github.com/zippyg/Zain_Projects/tree/main/Thermodynamics%20Snooker%20Simulation',
     year: 2023,
     featured: false,
@@ -157,7 +157,7 @@ export const projects: Project[] = [
       'Successfully tested on professional camera rigs'
     ],
     techStack: ['Python', 'C++', 'Arduino', 'MPU-6050', 'Lagrangian Mechanics'],
-    pdf: '/assets/stabilization theory.pdf',
+    pdf: '/assets/stabilization%20theory.pdf',
     github: 'https://github.com/zippyg/Zain_Projects/tree/main/GYROSCOPIC%20STABILIZATION',
     year: 2023,
     featured: false,
@@ -199,7 +199,7 @@ export const projects: Project[] = [
       'Interactive lessons covering complete SUVAT equations'
     ],
     techStack: ['Python', 'Pygame', 'Physics Engine', 'AI'],
-    pdf: '/assets/porj motion documentation.pdf',
+    pdf: '/assets/porj%20motion%20documentation.pdf',
     github: 'https://github.com/zippyg/Zain_Projects/tree/main/Projectile%20Motion%20Tutorial%20and%20Game',
     year: 2022,
     featured: false,
