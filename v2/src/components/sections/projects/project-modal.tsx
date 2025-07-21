@@ -5,6 +5,22 @@ import { X, Github, ExternalLink, Calendar, CheckCircle, FileText, Video } from 
 import { Project } from "@/types/project";
 import { useEffect } from "react";
 
+const categoryColors = {
+  physics: "text-blue-600 dark:text-blue-400 border-blue-600/30 dark:border-blue-400/20 bg-blue-600/10 dark:bg-blue-400/10",
+  quant: "text-green-600 dark:text-green-400 border-green-600/30 dark:border-green-400/20 bg-green-600/10 dark:bg-green-400/10",
+  software: "text-purple-600 dark:text-purple-400 border-purple-600/30 dark:border-purple-400/20 bg-purple-600/10 dark:bg-purple-400/10",
+  'ml-ai': "text-orange-600 dark:text-orange-400 border-orange-600/30 dark:border-orange-400/20 bg-orange-600/10 dark:bg-orange-400/10",
+  'math-stats': "text-pink-600 dark:text-pink-400 border-pink-600/30 dark:border-pink-400/20 bg-pink-600/10 dark:bg-pink-400/10",
+};
+
+const categoryLabels = {
+  physics: "Physics",
+  quant: "Quant",
+  software: "Software",
+  'ml-ai': "ML & AI",
+  'math-stats': "Math/Stats",
+};
+
 interface ProjectModalProps {
   project: Project | null;
   isOpen: boolean;
@@ -57,9 +73,11 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
               <div className="flex items-start justify-between p-6 border-b border-primary/10">
                 <div>
                   <div className="flex items-center gap-3 mb-2">
-                    <span className={`px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20`}>
-                      {project.category}
-                    </span>
+                    {project.categories.map((category) => (
+                      <span key={category} className={`px-2 py-1 text-xs rounded-full border ${categoryColors[category]}`}>
+                        {categoryLabels[category]}
+                      </span>
+                    ))}
                     <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       {project.year}
