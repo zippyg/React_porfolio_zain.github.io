@@ -9,10 +9,13 @@ import { Logo } from "./logo";
 import { useScroll } from "@/hooks/use-scroll";
 import { navigationItems } from "@/config/navigation";
 import { MotionDiv } from "@/components/ui/motion";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { CommandPalette } from "@/components/ui/command-palette";
 
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMac, setIsMac] = useState(true); // Default to Mac
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
   const { scrolled } = useScroll();
   const pathname = usePathname();
   
@@ -46,14 +49,14 @@ export function Navigation() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-black/40 backdrop-blur-sm border-b border-border/20"
+            ? "bg-background/80 backdrop-blur-sm border-b border-border/20"
             : "bg-transparent"
         )}
       >
         <Container>
           <nav className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Logo />
+            <Logo onClick={() => setShowCommandPalette(true)} />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
@@ -66,7 +69,7 @@ export function Navigation() {
                     const target = document.querySelector(item.href);
                     target?.scrollIntoView({ behavior: "smooth" });
                   }}
-                  className="relative text-sm font-medium text-gray-400 hover:text-white transition-colors group cursor-pointer"
+                  className="relative text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group cursor-pointer"
                 >
                   {item.name}
                   <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary transition-all duration-300 group-hover:w-full" />
@@ -75,15 +78,18 @@ export function Navigation() {
             </div>
 
             {/* Desktop CTA */}
-            <div className="hidden md:flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2">
+              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/50 hover:bg-muted transition-colors" />
               <Button 
                 variant="ghost" 
-                size="sm" 
-                className="text-gray-400 hover:text-white cursor-help"
+                size="icon"
+                className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground cursor-pointer flex items-center justify-center"
                 title="Open command palette"
+                onClick={() => setShowCommandPalette(true)}
               >
-                <kbd className="inline-flex h-5 select-none items-center gap-1 rounded border border-border/50 bg-muted/50 px-1.5 font-mono text-[10px] font-medium opacity-100">
-                  <span className="text-xs">{isMac ? '⌘' : 'Ctrl+'}</span>Z
+                <kbd className="inline-flex h-7 w-7 select-none items-center justify-center gap-0.5 rounded border border-border/50 bg-muted/50 font-mono text-[11px] font-medium">
+                  <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>
+                  <span>Z</span>
                 </kbd>
               </Button>
             </div>
@@ -130,7 +136,7 @@ export function Navigation() {
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
         className={cn(
-          "fixed inset-0 z-40 bg-black/95 backdrop-blur-lg md:hidden",
+          "fixed inset-0 z-40 bg-background/95 backdrop-blur-lg md:hidden",
           !isOpen && "pointer-events-none"
         )}
       >
@@ -157,19 +163,39 @@ export function Navigation() {
                   }}
                   className="block cursor-pointer"
                 >
-                  <span className="text-3xl font-bold text-white hover:text-primary transition-colors">
+                  <span className="text-3xl font-bold text-foreground hover:text-primary transition-colors">
                     {item.name}
                   </span>
-                  <span className="text-sm text-gray-500 mt-1 block">
+                  <span className="text-sm text-muted-foreground mt-1 block">
                     {item.description}
                   </span>
                 </a>
               </MotionDiv>
             ))}
             
+            {/* Theme Toggle in Mobile Menu */}
+            <MotionDiv
+              initial={false}
+              animate={isOpen ? "open" : "closed"}
+              variants={{
+                open: { x: 0, opacity: 1 },
+                closed: { x: 50, opacity: 0 },
+              }}
+              transition={{ delay: isOpen ? navigationItems.length * 0.1 : 0 }}
+              className="pt-8 flex items-center gap-4"
+            >
+              <span className="text-sm text-muted-foreground">Theme</span>
+              <ThemeToggle />
+            </MotionDiv>
           </nav>
         </Container>
       </MotionDiv>
+      
+      {/* Command Palette */}
+      <CommandPalette 
+        isOpen={showCommandPalette} 
+        onClose={() => setShowCommandPalette(false)} 
+      />
     </>
   );
 }

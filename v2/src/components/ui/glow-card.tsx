@@ -37,7 +37,7 @@ export function GlowCard({
       {/* Card content */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-lg border border-border/30 bg-black/40 p-6 backdrop-blur-sm transition-all duration-300",
+          "relative overflow-hidden rounded-lg border border-border/30 bg-card/50 dark:bg-black/40 p-6 backdrop-blur-sm transition-all duration-300",
           "group-hover:-translate-y-0.5",
           borderColors[glowColor],
           "before:absolute before:inset-0 before:-translate-x-full before:animate-shimmer before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent",

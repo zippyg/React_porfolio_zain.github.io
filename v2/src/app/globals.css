@@ -6,6 +6,7 @@
 @import "katex/dist/katex.min.css";
 
 @layer base {
+  /* Dark theme (default) */
   :root {
     --background: 0 0% 0%;
     --foreground: 0 0% 100%;
@@ -36,6 +37,37 @@
     --ring: 142 76% 36%;
     
     --radius: 0.5rem;
+  }
+
+  /* Light theme */
+  .light {
+    --background: 0 0% 98%;
+    --foreground: 0 0% 10%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    
+    --primary: 142 76% 30%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 20%;
+    
+    --muted: 0 0% 92%;
+    --muted-foreground: 0 0% 40%;
+    
+    --accent: 142 76% 30%;
+    --accent-foreground: 0 0% 100%;
+    
+    --destructive: 0 84.2% 50%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 142 76% 30%;
   }
 }
 

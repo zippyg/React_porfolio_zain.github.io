@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFunMode } from '@/contexts/fun-mode-context';
+import { useTheme } from '@/contexts/theme-context';
 
 interface Command {
   id: string;
@@ -12,13 +13,28 @@ interface Command {
   aliases?: string[];
 }
 
-export function CommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
+interface CommandPaletteProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
+export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPaletteProps = {}) {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = (value: boolean) => {
+    if (externalIsOpen !== undefined && onClose && !value) {
+      onClose();
+    } else {
+      setInternalIsOpen(value);
+    }
+  };
+  
   const [input, setInput] = useState('');
   const [filteredCommands, setFilteredCommands] = useState<Command[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const { toggleFunMode, isFunMode } = useFunMode();
+  const { theme, toggleTheme } = useTheme();
 
   // Define available commands
   const commands: Command[] = [
@@ -68,7 +84,7 @@ export function CommandPalette() {
       description: 'Download resume/CV',
       action: () => {
         // Open resume PDF in new tab
-        window.open('/assets/Zain Mughal resume Quant.pdf', '_blank');
+        window.open('/assets/Zain%20Mughal%20resume%20Quant.pdf', '_blank');
         setIsOpen(false);
       },
       aliases: ['cv', 'curriculum', 'download']
@@ -88,6 +104,16 @@ export function CommandPalette() {
         }
       },
       aliases: ['easter', 'egg', 'play', 'game']
+    },
+    {
+      id: 'theme',
+      name: '/theme',
+      description: theme === 'dark' ? '🌞 Switch to light theme' : '🌙 Switch to dark theme',
+      action: () => {
+        toggleTheme();
+        setIsOpen(false);
+      },
+      aliases: ['dark', 'light', 'mode', 'toggle']
     }
   ];
 
@@ -105,7 +131,7 @@ export function CommandPalette() {
       setFilteredCommands(filtered);
     }
     setSelectedIndex(0);
-  }, [input, isFunMode]); // Re-filter when fun mode changes
+  }, [input, isFunMode, theme]); // Re-filter when fun mode or theme changes
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
@@ -133,14 +159,16 @@ export function CommandPalette() {
       const isMobile = window.innerWidth < 768;
       if (!isMobile && (e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
-        setIsOpen(true);
+        if (externalIsOpen === undefined) {
+          setInternalIsOpen(true);
+        }
         setInput('');
       }
     };
 
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, []);
+  }, [externalIsOpen]);
 
   // Focus input when opened
   useEffect(() => {
@@ -173,7 +201,7 @@ export function CommandPalette() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-background/30 backdrop-blur-sm z-50"
           />
           
           {/* Command Palette - PROPERLY centered using transform */}
@@ -184,20 +212,23 @@ export function CommandPalette() {
             transition={{ duration: 0.2 }}
             className="command-palette fixed inset-0 flex items-center justify-center z-50 pointer-events-none"
           >
-            <div className="w-[90vw] max-w-2xl bg-black/70 backdrop-blur-sm border border-primary/30 rounded-lg shadow-2xl ring-1 ring-primary/10 shadow-[0_0_50px_rgba(34,197,94,0.1)] pointer-events-auto flex flex-col">
+            <div className="w-[90vw] max-w-2xl bg-background/90 dark:bg-black/70 backdrop-blur-sm border border-primary/30 rounded-lg shadow-2xl ring-1 ring-primary/10 shadow-[0_0_50px_rgba(34,197,94,0.1)] pointer-events-auto flex flex-col">
               {/* Input */}
               <div className="p-4 border-b border-primary/10">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Type a command or search..."
-                  className="w-full bg-transparent text-white placeholder-gray-500 outline-none font-mono text-lg"
-                  autoComplete="off"
-                  spellCheck={false}
-                />
+                <div className="flex items-center gap-2">
+                  <span className="text-primary font-mono text-lg">$</span>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Type a command or search..."
+                    className="w-full bg-transparent text-foreground placeholder-muted-foreground outline-none font-mono text-lg"
+                    autoComplete="off"
+                    spellCheck={false}
+                  />
+                </div>
               </div>
               
               {/* Commands */}
@@ -216,10 +247,10 @@ export function CommandPalette() {
                           <div className="flex items-center justify-between">
                             <div>
                               <span className="text-primary font-mono">{cmd.name}</span>
-                              <span className="text-gray-400 ml-3 text-sm">{cmd.description}</span>
+                              <span className="text-muted-foreground ml-3 text-sm">{cmd.description}</span>
                             </div>
                             {index === selectedIndex && (
-                              <span className="text-gray-500 text-xs">↵</span>
+                              <span className="text-muted-foreground/60 text-xs">↵</span>
                             )}
                           </div>
                         </button>
@@ -227,14 +258,14 @@ export function CommandPalette() {
                     ))}
                   </ul>
                 ) : (
-                  <div className="px-4 py-8 text-center text-gray-500">
+                  <div className="px-4 py-8 text-center text-muted-foreground">
                     No commands found
                   </div>
                 )}
               </div>
               
               {/* Footer hint */}
-              <div className="px-4 py-2 border-t border-primary/10 text-xs text-gray-500 flex justify-between">
+              <div className="px-4 py-2 border-t border-primary/10 text-xs text-muted-foreground flex justify-between">
                 <span>↑↓ Navigate</span>
                 <span>↵ Select</span>
                 <span>esc Close</span>

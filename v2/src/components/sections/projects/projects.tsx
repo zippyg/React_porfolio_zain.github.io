@@ -75,7 +75,7 @@ export function ProjectsSection() {
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                   selectedCategory === category.id
                     ? 'bg-primary text-black'
-                    : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
+                    : 'bg-card/50 text-muted-foreground hover:bg-card/70 hover:text-foreground'
                 }`}
               >
                 {category.label}

@@ -28,24 +28,24 @@ export function Hero() {
           <MotionDiv variants={fadeInUp}>
             <h1 className="text-5xl md:text-7xl font-bold mb-4 font-display cursor-pointer">
               <GlitchText text="Zain" className="text-primary glow-green" />{" "}
-              <GlitchText text="Mughal" className="text-white" />
+              <GlitchText text="Mughal" className="text-foreground" />
             </h1>
           </MotionDiv>
 
           <MotionDiv variants={fadeInUp}>
-            <p className="text-xl text-gray-400 mb-4">
+            <p className="text-xl text-muted-foreground mb-4">
               Harnessing Physics for Data Mastery
             </p>
           </MotionDiv>
 
           <MotionDiv variants={fadeInUp}>
-            <p className="text-lg text-gray-500 mb-8">
+            <p className="text-lg text-muted-foreground/80 mb-8">
               Innovator and Technologist
             </p>
           </MotionDiv>
 
           <MotionDiv variants={fadeInUp}>
-            <div className="text-sm text-gray-600 font-mono">
+            <div className="text-sm text-muted-foreground/60 font-mono">
               <AnimatedText text="Imperial College London • Physics MSci" typewriter />
             </div>
           </MotionDiv>
@@ -55,7 +55,7 @@ export function Hero() {
           <Button 
             variant="terminal" 
             size="lg" 
-            className="group bg-black/40 backdrop-blur-sm border border-green-500/30 text-green-500 hover:bg-green-500/10 hover:text-green-400 hover:border-green-400/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300"
+            className="group bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-green-600 dark:border-green-500/30 text-green-600 dark:text-green-500 hover:bg-green-600/10 dark:hover:bg-green-500/10 hover:text-green-700 dark:hover:text-green-400 hover:border-green-700 dark:hover:border-green-400/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300"
             onClick={() => {
               const target = document.querySelector("#projects");
               target?.scrollIntoView({ behavior: "smooth" });
@@ -65,14 +65,14 @@ export function Hero() {
             <span className="ml-2 transition-transform group-hover:translate-y-0.5">↓</span>
           </Button>
           <a 
-            href="/assets/Zain Mughal resume Quant.pdf" 
+            href="/assets/Zain%20Mughal%20resume%20Quant.pdf" 
             target="_blank" 
             rel="noopener noreferrer"
           >
             <Button 
               variant="outline" 
               size="lg" 
-              className="group bg-black/40 backdrop-blur-sm border border-cyan-500/30 text-cyan-500 hover:bg-cyan-500/10 hover:text-cyan-400 hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300"
+              className="group bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-cyan-600 dark:border-cyan-500/30 text-cyan-600 dark:text-cyan-500 hover:bg-cyan-600/10 dark:hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-400 hover:border-cyan-700 dark:hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300"
             >
               Resume
               <span className="ml-2 transition-transform group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span>
@@ -81,7 +81,7 @@ export function Hero() {
           <Button 
             variant="outline" 
             size="lg"
-            className="bg-black/40 backdrop-blur-sm border border-purple-500/30 text-purple-500 hover:bg-purple-500/10 hover:text-purple-400 hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300"
+            className="bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-purple-600 dark:border-purple-500/30 text-purple-600 dark:text-purple-500 hover:bg-purple-600/10 dark:hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-400 hover:border-purple-700 dark:hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300"
             onClick={() => {
               const target = document.querySelector("#contact");
               target?.scrollIntoView({ behavior: "smooth" });
@@ -133,9 +133,9 @@ export function Hero() {
         transition={{ delay: 2, duration: 1 }}
         className="absolute bottom-24 left-1/2 -translate-x-1/2"
       >
-        <div className="flex flex-col items-center gap-2 text-gray-500">
+        <div className="flex flex-col items-center gap-2 text-muted-foreground">
           <span className="text-xs font-mono">scroll</span>
-          <div className="w-6 h-10 border-2 border-gray-600 rounded-full p-1">
+          <div className="w-6 h-10 border-2 border-muted-foreground/50 rounded-full p-1">
             <div className="w-1 h-2 bg-primary rounded-full animate-bounce mx-auto" />
           </div>
         </div>

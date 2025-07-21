@@ -41,7 +41,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-background/80 dark:bg-black/80 backdrop-blur-sm z-50"
           />
           
           {/* Modal */}
@@ -52,7 +52,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
             transition={{ type: "spring", damping: 20 }}
             className="fixed inset-x-4 top-[5vh] bottom-[5vh] md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-4xl z-50"
           >
-            <div className="bg-black/90 backdrop-blur-xl border border-primary/20 rounded-xl h-full flex flex-col overflow-hidden">
+            <div className="bg-background/95 dark:bg-black/90 backdrop-blur-xl border border-primary/20 rounded-xl h-full flex flex-col overflow-hidden">
               {/* Header */}
               <div className="flex items-start justify-between p-6 border-b border-primary/10">
                 <div>
@@ -60,7 +60,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                     <span className={`px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20`}>
                       {project.category}
                     </span>
-                    <span className="flex items-center gap-1 text-xs text-gray-400">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       {project.year}
                     </span>
@@ -71,14 +71,14 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                       {project.status === 'completed' ? 'Completed' : 'In Progress'}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+                  <h3 className="text-2xl font-bold text-foreground">{project.title}</h3>
                 </div>
                 
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  className="p-2 hover:bg-card/50 rounded-lg transition-colors"
                 >
-                  <X className="w-5 h-5 text-gray-400" />
+                  <X className="w-5 h-5 text-muted-foreground" />
                 </button>
               </div>
               
@@ -87,15 +87,15 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                 <div className="space-y-6">
                   {/* Description */}
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Overview</h4>
-                    <div className="text-gray-400 whitespace-pre-line leading-relaxed">
+                    <h4 className="text-lg font-semibold text-foreground mb-3">Overview</h4>
+                    <div className="text-muted-foreground whitespace-pre-line leading-relaxed">
                       {project.longDescription}
                     </div>
                   </div>
                   
                   {/* Highlights */}
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Key Achievements</h4>
+                    <h4 className="text-lg font-semibold text-foreground mb-3">Key Achievements</h4>
                     <ul className="space-y-2">
                       {project.highlights.map((highlight, index) => (
                         <motion.li
@@ -106,7 +106,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                           className="flex items-start gap-3"
                         >
                           <span className="text-primary mt-1">▸</span>
-                          <span className="text-gray-400">{highlight}</span>
+                          <span className="text-muted-foreground">{highlight}</span>
                         </motion.li>
                       ))}
                     </ul>
@@ -114,12 +114,12 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                   
                   {/* Tech Stack */}
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-3">Technologies Used</h4>
+                    <h4 className="text-lg font-semibold text-foreground mb-3">Technologies Used</h4>
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1 text-xs bg-white/5 text-gray-300 rounded-full border border-white/10"
+                          className="px-3 py-1 text-xs bg-card/50 text-muted-foreground rounded-full border border-border"
                         >
                           {tech}
                         </span>
@@ -138,7 +138,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
                       >
                         <Github className="w-4 h-4" />
                         <span className="text-sm">View Code</span>
@@ -160,7 +160,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.pdf}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
                       >
                         <FileText className="w-4 h-4" />
                         <span className="text-sm">Research Paper</span>
@@ -171,7 +171,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.video}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
                       >
                         <Video className="w-4 h-4" />
                         <span className="text-sm">Demo Video</span>

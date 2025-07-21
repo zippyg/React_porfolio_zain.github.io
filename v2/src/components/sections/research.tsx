@@ -65,7 +65,7 @@ export function ResearchSection() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Research & <span className="text-primary">Publications</span>
           </h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Exploring the intersection of physics, mathematics, and computational finance
             through rigorous research and innovative solutions
           </p>
@@ -80,14 +80,14 @@ export function ResearchSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:border-primary/30 transition-colors"
+              className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-colors"
             >
               <area.icon className="w-10 h-10 text-primary mb-4" />
-              <h3 className="text-lg font-semibold text-white mb-2">{area.title}</h3>
-              <p className="text-sm text-gray-400 mb-4">{area.description}</p>
+              <h3 className="text-lg font-semibold text-foreground mb-2">{area.title}</h3>
+              <p className="text-sm text-muted-foreground mb-4">{area.description}</p>
               <div className="space-y-1">
                 {area.papers.map((paper) => (
-                  <p key={paper} className="text-xs text-gray-500">• {paper}</p>
+                  <p key={paper} className="text-xs text-muted-foreground">• {paper}</p>
                 ))}
               </div>
             </motion.div>
@@ -114,12 +114,12 @@ export function ResearchSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-6 hover:border-primary/30 transition-colors"
+                className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 hover:border-primary/30 transition-colors"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <h4 className="text-lg font-semibold text-white mb-1">{pub.title}</h4>
-                    <p className="text-sm text-gray-400">
+                    <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title}</h4>
+                    <p className="text-sm text-muted-foreground">
                       {pub.venue} • {pub.year}
                     </p>
                   </div>
@@ -127,7 +127,7 @@ export function ResearchSection() {
                     {pub.type}
                   </span>
                 </div>
-                <p className="text-sm text-gray-400 leading-relaxed">{pub.abstract}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed">{pub.abstract}</p>
               </motion.article>
             ))}
           </div>
@@ -141,7 +141,7 @@ export function ResearchSection() {
           transition={{ delay: 0.5 }}
           className="mt-12 text-center"
         >
-          <p className="text-gray-400 mb-4">
+          <p className="text-muted-foreground mb-4">
             Interested in collaboration or discussing research opportunities?
           </p>
           <a

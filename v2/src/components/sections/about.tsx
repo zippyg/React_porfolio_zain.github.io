@@ -82,7 +82,7 @@ export function AboutSection() {
               </motion.div>
             </div>
             
-            <div className="space-y-4 text-gray-400">
+            <div className="space-y-4 text-muted-foreground">
               <p className="text-lg leading-relaxed">
                 I'm a Physics MSci student at Imperial College London with a passion for 
                 quantitative research and software development. My unique blend of theoretical 
@@ -111,10 +111,10 @@ export function AboutSection() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.1 }}
-                className="bg-white/5 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
+                className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
               >
                 <div className="text-2xl font-bold text-primary">12+</div>
-                <div className="text-sm text-gray-400">Major Projects</div>
+                <div className="text-sm text-muted-foreground">Major Projects</div>
               </motion.div>
               
               <motion.div
@@ -122,10 +122,10 @@ export function AboutSection() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2 }}
-                className="bg-white/5 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
+                className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
               >
                 <div className="text-2xl font-bold text-primary">5+</div>
-                <div className="text-sm text-gray-400">Research Papers</div>
+                <div className="text-sm text-muted-foreground">Research Papers</div>
               </motion.div>
             </div>
           </motion.div>
@@ -155,8 +155,8 @@ export function AboutSection() {
                   <div className="absolute left-[-4px] top-2 w-[10px] h-[10px] bg-primary rounded-full" />
                   
                   <div className="space-y-2">
-                    <h4 className="text-lg font-semibold text-white">{edu.institution}</h4>
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
+                    <h4 className="text-lg font-semibold text-foreground">{edu.institution}</h4>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Award className="w-4 h-4" />
                         {edu.degree}
@@ -171,7 +171,7 @@ export function AboutSection() {
                     {edu.highlights && (
                       <ul className="mt-3 space-y-1">
                         {edu.highlights.map((highlight, i) => (
-                          <li key={i} className="text-sm text-gray-400 flex items-start gap-2">
+                          <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
                             <span className="text-primary mt-1">•</span>
                             <span>{highlight}</span>
                           </li>
@@ -189,7 +189,7 @@ export function AboutSection() {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="mt-8 flex items-center gap-2 text-gray-400"
+              className="mt-8 flex items-center gap-2 text-muted-foreground"
             >
               <MapPin className="w-4 h-4" />
               <span>London, United Kingdom</span>

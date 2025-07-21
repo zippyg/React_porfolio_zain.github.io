@@ -1,26 +1,97 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Container } from "@/components/ui/container";
 import { navigationItems, socialLinks } from "@/config/navigation";
 import { cn } from "@/lib/utils";
+import { useFunMode } from "@/contexts/fun-mode-context";
+import { useTheme } from "@/contexts/theme-context";
 
 export function Footer() {
   const [command, setCommand] = useState("");
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [output, setOutput] = useState("");
+  const [showOutput, setShowOutput] = useState(false);
   const currentYear = new Date().getFullYear();
+  const { toggleFunMode, isFunMode } = useFunMode();
+  const { theme, toggleTheme } = useTheme();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (command.toLowerCase() === "sudo make me a sandwich") {
-      setShowEasterEgg(true);
-      setTimeout(() => setShowEasterEgg(false), 3000);
+  const handleCommand = (cmd: string) => {
+    const trimmedCmd = cmd.trim().toLowerCase();
+    
+    // Handle commands
+    if (trimmedCmd === "/about" || trimmedCmd === "about") {
+      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+      setOutput("Navigating to About section...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
       setCommand("");
+    } else if (trimmedCmd === "/projects" || trimmedCmd === "projects") {
+      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+      setOutput("Navigating to Projects section...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "/research" || trimmedCmd === "research") {
+      document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' });
+      setOutput("Navigating to Research section...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "/contact" || trimmedCmd === "contact") {
+      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+      setOutput("Navigating to Contact section...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "/resume" || trimmedCmd === "resume") {
+      window.open('/assets/Zain%20Mughal%20resume%20Quant.pdf', '_blank');
+      setOutput("Opening resume...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "/fun" || trimmedCmd === "fun") {
+      toggleFunMode();
+      setOutput(isFunMode ? "🎮 Fun mode disabled" : "🎮 Fun mode activated!");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "/theme" || trimmedCmd === "theme") {
+      toggleTheme();
+      setOutput(theme === 'dark' ? "☀️ Switched to light theme" : "🌙 Switched to dark theme");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
+    } else if (trimmedCmd === "sudo make me a sandwich") {
+      setOutput("🥪 Okay.");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 3000);
+      setCommand("");
+    } else if (trimmedCmd === "help" || trimmedCmd === "/help") {
+      setOutput("Available commands: /about, /projects, /research, /contact, /resume, /fun, /theme");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 4000);
+      setCommand("");
+    } else if (trimmedCmd === "clear") {
+      setCommand("");
+      setOutput("");
+      setShowOutput(false);
+    } else if (trimmedCmd !== "") {
+      setOutput(`Command not found: ${cmd}`);
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
     }
-  }, [command]);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleCommand(command);
+    }
+  };
 
   return (
-    <footer className="relative mt-32 border-t border-border/20 bg-black/40 backdrop-blur-sm">
+    <footer className="relative mt-32 border-t border-border/20 bg-background/60 dark:bg-black/40 backdrop-blur-sm">
       {/* Matrix-style background effect */}
       <div className="absolute inset-0 overflow-hidden opacity-5">
         <div className="matrix-bg" />
@@ -34,28 +105,30 @@ export function Footer() {
               <span className="text-2xl font-bold font-display text-primary">ZM</span>
               <span className="inline-block w-3 h-5 bg-primary animate-terminal-blink" />
             </div>
-            <p className="text-sm text-gray-400 mb-6 max-w-sm">
+            <p className="text-sm text-muted-foreground mb-6 max-w-sm">
               Physics enthusiast and student at Imperial College London. Diving into complex 
               datasets and turning them into insights through Python, C++, machine learning 
               and deep theoretical understanding.
             </p>
             
-            {/* Terminal Easter Egg */}
+            {/* Terminal */}
             <div className="relative">
-              <div className="flex items-center gap-2 text-xs font-mono text-gray-500">
+              <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
                 <span className="text-primary">$</span>
                 <input
+                  ref={inputRef}
                   type="text"
                   value={command}
                   onChange={(e) => setCommand(e.target.value)}
+                  onKeyPress={handleKeyPress}
                   placeholder="type a command..."
-                  className="bg-transparent outline-none flex-1 placeholder:text-gray-700"
+                  className="bg-transparent outline-none flex-1 text-muted-foreground placeholder:text-muted-foreground/50"
                   spellCheck={false}
                 />
               </div>
-              {showEasterEgg && (
-                <div className="absolute top-full mt-2 text-xs font-mono text-primary animate-fade-in">
-                  🥪 Okay.
+              {showOutput && (
+                <div className="absolute top-full mt-2 text-xs font-mono text-primary animate-fade-in whitespace-nowrap">
+                  {output}
                 </div>
               )}
             </div>
@@ -63,13 +136,13 @@ export function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Quick Links</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-4">Quick Links</h3>
             <ul className="space-y-2">
               {navigationItems.map((item) => (
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm text-gray-400 hover:text-primary transition-colors inline-flex items-center gap-1 group"
+                    className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1 group"
                   >
                     <span className="text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                       /
@@ -83,7 +156,7 @@ export function Footer() {
 
           {/* Connect */}
           <div>
-            <h3 className="text-sm font-semibold text-white mb-4">Connect</h3>
+            <h3 className="text-sm font-semibold text-foreground mb-4">Connect</h3>
             <div className="flex gap-4">
               {socialLinks.map((link) => (
                 <a
@@ -91,7 +164,7 @@ export function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 border border-border/50 rounded flex items-center justify-center hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
+                  className="w-8 h-8 border border-border/50 rounded flex items-center justify-center text-muted-foreground hover:border-primary hover:text-primary transition-all hover:-translate-y-0.5"
                   aria-label={link.name}
                 >
                   <SocialIcon icon={link.icon} />
@@ -103,7 +176,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border/30">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
             <p>© {currentYear} Zain Mughal. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <Link href="/privacy" className="hover:text-primary transition-colors">
@@ -113,9 +186,9 @@ export function Footer() {
                 Terms
               </Link>
               <span className="font-mono">
-                <span className="text-gray-700">Built with</span>{" "}
+                <span className="text-muted-foreground">Built with</span>{" "}
                 <span className="text-primary">React</span>{" "}
-                <span className="text-gray-700">&</span>{" "}
+                <span className="text-muted-foreground">&</span>{" "}
                 <span className="text-primary">Next.js</span>
               </span>
             </div>

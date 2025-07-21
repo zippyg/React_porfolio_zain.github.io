@@ -11,11 +11,11 @@ interface ProjectTileProps {
 }
 
 const categoryColors = {
-  physics: "text-blue-400 border-blue-400/20 bg-blue-400/10",
-  finance: "text-green-400 border-green-400/20 bg-green-400/10",
-  software: "text-purple-400 border-purple-400/20 bg-purple-400/10",
-  ml: "text-orange-400 border-orange-400/20 bg-orange-400/10",
-  research: "text-pink-400 border-pink-400/20 bg-pink-400/10",
+  physics: "text-blue-600 dark:text-blue-400 border-blue-600/30 dark:border-blue-400/20 bg-blue-600/10 dark:bg-blue-400/10",
+  finance: "text-green-600 dark:text-green-400 border-green-600/30 dark:border-green-400/20 bg-green-600/10 dark:bg-green-400/10",
+  software: "text-purple-600 dark:text-purple-400 border-purple-600/30 dark:border-purple-400/20 bg-purple-600/10 dark:bg-purple-400/10",
+  ml: "text-orange-600 dark:text-orange-400 border-orange-600/30 dark:border-orange-400/20 bg-orange-600/10 dark:bg-orange-400/10",
+  research: "text-pink-600 dark:text-pink-400 border-pink-600/30 dark:border-pink-400/20 bg-pink-600/10 dark:bg-pink-400/10",
 };
 
 export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
@@ -27,7 +27,7 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -5 }}
       onClick={onClick}
-      className="group relative bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 cursor-pointer hover:border-primary/30 transition-all duration-300"
+      className="group relative bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 cursor-pointer hover:border-primary/50 transition-all duration-300"
     >
       {/* Glow effect on hover */}
       <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
@@ -47,16 +47,16 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
               )}
             </div>
             
-            <h3 className="text-lg font-semibold text-white group-hover:text-primary transition-colors">
+            <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
               {project.title}
             </h3>
           </div>
           
-          <ArrowUpRight className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
+          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
         </div>
         
         {/* Description */}
-        <p className="text-sm text-gray-400 line-clamp-2">
+        <p className="text-sm text-muted-foreground line-clamp-2">
           {project.shortDescription}
         </p>
         
@@ -65,25 +65,25 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
           {project.techStack.slice(0, 4).map((tech) => (
             <span
               key={tech}
-              className="px-2 py-1 text-xs bg-white/5 text-gray-500 rounded border border-white/5"
+              className="px-2 py-1 text-xs bg-muted/50 text-muted-foreground rounded border border-border"
             >
               {tech}
             </span>
           ))}
           {project.techStack.length > 4 && (
-            <span className="px-2 py-1 text-xs text-gray-500">
+            <span className="px-2 py-1 text-xs text-muted-foreground">
               +{project.techStack.length - 4} more
             </span>
           )}
         </div>
         
         {/* Footer */}
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             {project.year}
           </span>
-          <span className={project.status === 'completed' ? 'text-green-400' : 'text-yellow-400'}>
+          <span className={project.status === 'completed' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'}>
             {project.status === 'completed' ? '● Completed' : '● In Progress'}
           </span>
         </div>

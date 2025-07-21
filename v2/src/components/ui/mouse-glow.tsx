@@ -24,6 +24,7 @@ interface ClickEffect {
 }
 
 export function MouseGlow({ className }: MouseGlowProps) {
+  const { isFunMode } = useFunMode();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const prevMouseRef = useRef({ x: 0, y: 0 });
@@ -39,26 +40,53 @@ export function MouseGlow({ className }: MouseGlowProps) {
   const startTimeRef = useRef(Date.now());
   const scrollYRef = useRef(0);
   const pageHeightRef = useRef(0);
-  const { isFunMode } = useFunMode();
-  
-  // Disable torch and clear effects when exiting fun mode
+  const [mounted, setMounted] = useState(false);
+
+  // Load initial torch state
   useEffect(() => {
+    setMounted(true);
+    if (isFunMode) {
+      const saved = localStorage.getItem('torchEnabled');
+      if (saved === 'true') {
+        setTorchEnabled(true);
+        torchEnabledRef.current = true;
+      }
+    }
+  }, [isFunMode]);
+  
+  // Handle fun mode changes
+  useEffect(() => {
+    if (!mounted) return;
+    
     if (!isFunMode) {
       if (torchEnabled) {
         setTorchEnabled(false);
         torchEnabledRef.current = false;
       }
+      // Clear torch state from localStorage when exiting fun mode
+      localStorage.removeItem('torchEnabled');
       // Clear all active effects
       trailRef.current = [];
       glowTrailRef.current = [];
       clickEffectsRef.current = [];
+    } else {
+      // When entering fun mode, restore torch state from localStorage
+      const saved = localStorage.getItem('torchEnabled');
+      if (saved === 'true') {
+        setTorchEnabled(true);
+        torchEnabledRef.current = true;
+      }
     }
-  }, [isFunMode, torchEnabled]);
+  }, [isFunMode, mounted]);
 
-  // Sync ref with state
+  // Sync ref with state and save to localStorage
   useEffect(() => {
     torchEnabledRef.current = torchEnabled;
-  }, [torchEnabled]);
+    // Only save if in fun mode
+    if (isFunMode) {
+      localStorage.setItem('torchEnabled', torchEnabled.toString());
+    }
+  }, [torchEnabled, isFunMode]);
 
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {

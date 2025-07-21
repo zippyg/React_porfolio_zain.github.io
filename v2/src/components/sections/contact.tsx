@@ -100,7 +100,7 @@ export function ContactSection() {
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Let's <span className="text-primary">Connect</span>
             </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Whether you're interested in research collaboration, have a challenging problem to solve, 
               or just want to say hi – I'd love to hear from you
             </p>
@@ -116,7 +116,7 @@ export function ContactSection() {
             >
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-muted-foreground mb-2">
                     Name
                   </label>
                   <input
@@ -126,13 +126,13 @@ export function ContactSection() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary/50 transition-colors"
+                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground"
                     placeholder="Your name"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
                     Email
                   </label>
                   <input
@@ -142,13 +142,13 @@ export function ContactSection() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary/50 transition-colors"
+                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground"
                     placeholder="your.email@example.com"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="message" className="block text-sm font-medium text-muted-foreground mb-2">
                     Message
                   </label>
                   <textarea
@@ -158,7 +158,7 @@ export function ContactSection() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:outline-none focus:border-primary/50 transition-colors resize-none"
+                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors resize-none text-foreground"
                     placeholder="Tell me about your project or idea..."
                   />
                 </div>
@@ -166,7 +166,7 @@ export function ContactSection() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-primary text-black font-medium rounded-lg hover:bg-primary/90 disabled:opacity-50 transition-all"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 dark:bg-primary text-white dark:text-black font-medium rounded-lg hover:bg-green-600 dark:hover:bg-primary/90 disabled:opacity-50 transition-all"
                 >
                   {isSubmitting ? (
                     <span>Sending...</span>
@@ -210,11 +210,11 @@ export function ContactSection() {
             >
               {/* Direct Contact */}
               <div>
-                <h3 className="text-xl font-semibold text-white mb-4">Get in Touch</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-4">Get in Touch</h3>
                 <div className="space-y-4">
                   <a
                     href="mailto:zainmughal77@outlook.com"
-                    className="flex items-center gap-3 text-gray-400 hover:text-primary transition-colors"
+                    className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors"
                   >
                     <Mail className="w-5 h-5" />
                     <span>zainmughal77@outlook.com</span>
@@ -224,31 +224,31 @@ export function ContactSection() {
 
               {/* Social Links */}
               <div>
-                <h3 className="text-xl font-semibold text-white mb-4">Connect Online</h3>
+                <h3 className="text-xl font-semibold text-foreground mb-4">Connect Online</h3>
                 <div className="flex gap-4">
                   <a
                     href="https://github.com/zippyg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors group"
+                    className="p-3 bg-card/50 hover:bg-card/70 rounded-lg transition-colors group"
                   >
-                    <Github className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
+                    <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                   <a
                     href="https://www.linkedin.com/in/mughalzain/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-white/5 hover:bg-white/10 rounded-lg transition-colors group"
+                    className="p-3 bg-card/50 hover:bg-card/70 rounded-lg transition-colors group"
                   >
-                    <Linkedin className="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors" />
+                    <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                 </div>
               </div>
 
               {/* Availability */}
               <div className="p-6 bg-primary/5 border border-primary/20 rounded-lg">
-                <h3 className="text-lg font-semibold text-white mb-2">Current Status</h3>
-                <p className="text-sm text-gray-400 mb-3">
+                <h3 className="text-lg font-semibold text-foreground mb-2">Current Status</h3>
+                <p className="text-sm text-muted-foreground mb-3">
                   Open to opportunities in quantitative research, data science, and software engineering roles.
                 </p>
                 <div className="flex items-center gap-2 text-primary">

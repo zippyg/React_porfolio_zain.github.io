@@ -344,8 +344,8 @@ export function OptimizedParticles({
     const { distance, normalX, normalY, isColliding } = collision;
     
     if (isColliding) {
-      // Hard collision - much gentler bounce effect
-      const bounceForce = 2 * strength; // Much reduced force
+      // Hard collision - very gentle bounce effect
+      const bounceForce = 1.2 * strength; // Further reduced force
       particle.vx += normalX * bounceForce;
       particle.vy += normalY * bounceForce;
       
@@ -370,12 +370,12 @@ export function OptimizedParticles({
       // Very subtle visual feedback
       particle.targetOpacity = Math.min(particle.targetOpacity + 0.1, particle.targetOpacity * 1.2);
     } else {
-      // Soft repulsion field - much smaller and subtler
-      const repulsionRadius = particle.radius + 20; // Much smaller field
+      // Soft repulsion field - very small and subtle
+      const repulsionRadius = particle.radius + 15; // Smaller field
       if (distance < repulsionRadius) {
         // Use cubic falloff for smoother interaction
         const repulsionStrength = Math.pow(1 - distance / repulsionRadius, 3);
-        const repulsionForce = repulsionStrength * 0.8 * strength; // Much reduced force
+        const repulsionForce = repulsionStrength * 0.5 * strength; // Further reduced force
         
         particle.vx += normalX * repulsionForce;
         particle.vy += normalY * repulsionForce;
@@ -743,7 +743,7 @@ export function OptimizedParticles({
       <canvas
         ref={canvasRef}
         className={cn(
-          enableMouseCollision ? "" : "pointer-events-none",
+          "pointer-events-none", // Always disable pointer events on canvas
           className
         )}
         style={{
@@ -752,7 +752,6 @@ export function OptimizedParticles({
           left: 0,
           width: "100%",
           height: "100%",
-          cursor: "default",
         }}
       />
     </>
