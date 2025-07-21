@@ -112,9 +112,8 @@ export function Footer() {
               <span className="inline-block w-3 h-5 bg-primary animate-terminal-blink" />
             </div>
             <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-              Physics enthusiast and student at Imperial College London. Diving into complex 
-              datasets and turning them into insights through Python, C++, machine learning 
-              and deep theoretical understanding.
+              Aspiring Quant Researcher, Part-Time Physicist, Part-Time Full-Stack Developer, 
+              Full-Time Dreamer, and Incoming Startup Founder.
             </p>
             
             {/* Terminal */}
