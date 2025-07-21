@@ -37,7 +37,7 @@ export function GlowCard({
       {/* Card content */}
       <div
         className={cn(
-          "relative overflow-hidden rounded-lg border border-border/30 bg-card/50 dark:bg-black/40 p-6 backdrop-blur-sm transition-all duration-300",
+          "relative overflow-hidden rounded-lg border border-border/50 bg-card/60 dark:bg-black/50 p-6 backdrop-blur-sm transition-all duration-300 shadow-sm",
           "group-hover:-translate-y-0.5",
           borderColors[glowColor],
           "before:absolute before:inset-0 before:-translate-x-full before:animate-shimmer before:bg-gradient-to-r before:from-transparent before:via-white/5 before:to-transparent",
@@ -45,6 +45,16 @@ export function GlowCard({
         )}
         {...props}
       >
+        {/* Inner glow gradient */}
+        <div 
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg"
+          style={{
+            background: glowColor === 'green' ? 'radial-gradient(ellipse at center, rgba(34, 197, 94, 0.1) 0%, transparent 70%)' :
+                       glowColor === 'cyan' ? 'radial-gradient(ellipse at center, rgba(6, 182, 212, 0.1) 0%, transparent 70%)' :
+                       glowColor === 'purple' ? 'radial-gradient(ellipse at center, rgba(168, 85, 247, 0.1) 0%, transparent 70%)' :
+                       'radial-gradient(ellipse at center, rgba(236, 72, 153, 0.1) 0%, transparent 70%)'
+          }}
+        />
         <div className="relative z-10">{children}</div>
       </div>
     </div>

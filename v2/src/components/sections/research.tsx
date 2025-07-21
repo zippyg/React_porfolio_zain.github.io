@@ -5,48 +5,27 @@ import { Container } from "@/components/ui/container";
 import { motion } from "framer-motion";
 import { FileText, TrendingUp, Brain, Atom } from "lucide-react";
 
-const researchAreas = [
-  {
-    icon: Atom,
-    title: "Particle Physics",
-    description: "Computational studies in neutrino oscillations and Higgs boson analysis",
-    papers: ["Neutrino Oscillation Parameter Extraction", "Higgs Boson Statistical Analysis"]
-  },
-  {
-    icon: TrendingUp,
-    title: "Quantitative Finance",
-    description: "Advanced options pricing models and market anomaly detection systems",
-    papers: ["Enhanced Black-Scholes with Adaptive Volatility", "Detecting Market Data Feed Issues"]
-  },
-  {
-    icon: Brain,
-    title: "Machine Learning",
-    description: "Applications of deep learning in financial markets and physics simulations",
-    papers: ["LSTM Models for Volatility Prediction", "GAN-based Market Generation"]
-  }
-];
-
 const publications = [
   {
-    title: "Extraction of Neutrino Oscillation Parameters Using Advanced Optimization",
-    venue: "Imperial College Physics Department",
-    year: 2024,
-    type: "Thesis",
-    abstract: "Computational extraction of θ23 and Δm²23 using Grid Search, Simulated Annealing, and Nelder-Mead optimization."
+    title: "LLM Applications in Quantitative Finance",
+    venue: "ACL 2025 (Target)",
+    year: 2025,
+    type: "In Progress",
+    abstract: "Investigating the application of large language models for financial market analysis and automated trading strategies. Focus on prompt engineering for volatility prediction."
   },
   {
-    title: "Detecting Staleness and False Jumps in Fixed-Income Market Data",
-    venue: "Quantitative Finance Research",
-    year: 2024,
-    type: "Working Paper",
-    abstract: "ML-powered anomaly detection for high-frequency trading environments with sub-10ms latency."
+    title: "Advanced Volatility Modeling using Deep Learning",
+    venue: "Journal of Financial Data Science (Target)",
+    year: 2026,
+    type: "In Progress",
+    abstract: "Novel approach to volatility forecasting combining LSTM networks with traditional GARCH models. Emphasis on high-frequency trading data and market microstructure."
   },
   {
-    title: "Thermodynamic Simulation of Gas Behavior Through Kinetic Theory",
-    venue: "Computational Physics Lab",
-    year: 2023,
-    type: "Research Project",
-    abstract: "Validation of Maxwell-Boltzmann distribution through hard-sphere collision simulations."
+    title: "Path Theory Applications in Neural Network Optimization",
+    venue: "JMLR / NeurIPS 2026 (Target)",
+    year: 2026,
+    type: "In Progress",
+    abstract: "Theoretical framework connecting path integrals from physics to neural network training dynamics. Applications to understanding loss landscape geometry and optimization trajectories."
   }
 ];
 
@@ -71,42 +50,8 @@ export function ResearchSection() {
           </p>
         </motion.div>
 
-        {/* Research Areas */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {researchAreas.map((area, index) => (
-            <motion.div
-              key={area.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              className="bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 hover:border-primary/30 transition-colors"
-            >
-              <area.icon className="w-10 h-10 text-primary mb-4" />
-              <h3 className="text-lg font-semibold text-foreground mb-2">{area.title}</h3>
-              <p className="text-sm text-muted-foreground mb-4">{area.description}</p>
-              <div className="space-y-1">
-                {area.papers.map((paper) => (
-                  <p key={paper} className="text-xs text-muted-foreground">• {paper}</p>
-                ))}
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Publications */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <h3 className="text-2xl font-bold mb-8 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-primary" />
-            Recent Publications
-          </h3>
-
-          <div className="space-y-6">
+        {/* Papers in Progress */}
+        <div className="space-y-6">
             {publications.map((pub, index) => (
               <motion.article
                 key={pub.title}
@@ -114,24 +59,27 @@ export function ResearchSection() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-card/50 backdrop-blur-sm border border-border rounded-lg p-6 hover:border-primary/30 transition-colors"
+                className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 shadow-sm group"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title}</h4>
-                    <p className="text-sm text-muted-foreground">
-                      {pub.venue} • {pub.year}
-                    </p>
+                {/* Orange glow effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg" />
+                <div className="relative z-10">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title} - Coming Soon</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {pub.venue} • {pub.year}
+                      </p>
+                    </div>
+                    <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20">
+                      {pub.type}
+                    </span>
                   </div>
-                  <span className="px-3 py-1 text-xs bg-primary/10 text-primary rounded-full border border-primary/20">
-                    {pub.type}
-                  </span>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{pub.abstract}</p>
                 </div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{pub.abstract}</p>
               </motion.article>
             ))}
           </div>
-        </motion.div>
 
         {/* Call to Action */}
         <motion.div

@@ -104,30 +104,6 @@ export function AboutSection() {
               </p>
             </div>
 
-            {/* Quick Stats */}
-            <div className="grid grid-cols-2 gap-4 mt-8">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
-              >
-                <div className="text-2xl font-bold text-primary">12+</div>
-                <div className="text-sm text-muted-foreground">Major Projects</div>
-              </motion.div>
-              
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="bg-card/50 backdrop-blur-sm border border-primary/20 rounded-lg p-4"
-              >
-                <div className="text-2xl font-bold text-primary">5+</div>
-                <div className="text-sm text-muted-foreground">Research Papers</div>
-              </motion.div>
-            </div>
           </motion.div>
 
           {/* Right Column - Education Timeline */}
@@ -196,6 +172,30 @@ export function AboutSection() {
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.5 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12"
+        >
+          <div className="bg-gray-100/40 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-6 text-center shadow-sm hover:border-primary/30 transition-colors">
+            <div className="text-3xl font-bold text-primary mb-2">12+</div>
+            <div className="text-sm text-muted-foreground">Major Projects</div>
+          </div>
+          
+          <div className="bg-gray-100/40 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-6 text-center shadow-sm hover:border-primary/30 transition-colors">
+            <div className="text-3xl font-bold text-primary mb-2">5+</div>
+            <div className="text-sm text-muted-foreground">Research Papers</div>
+          </div>
+
+          <div className="bg-gray-100/40 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-6 text-center shadow-sm hover:border-primary/30 transition-colors">
+            <div className="text-3xl font-bold text-primary mb-2">Coming Soon</div>
+            <div className="text-sm text-muted-foreground">Published Papers</div>
+          </div>
+        </motion.div>
       </Container>
       
       {/* Image Modal */}

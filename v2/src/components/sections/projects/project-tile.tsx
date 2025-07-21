@@ -27,10 +27,18 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: -5 }}
       onClick={onClick}
-      className="group relative bg-card/50 backdrop-blur-sm border border-border rounded-xl p-6 cursor-pointer hover:border-primary/50 transition-all duration-300"
+      className={`group relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 cursor-pointer transition-all duration-300 shadow-sm ${
+        project.status === 'completed' 
+          ? 'hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)]' 
+          : 'hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)]'
+      }`}
     >
       {/* Glow effect on hover */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl ${
+        project.status === 'completed'
+          ? 'bg-gradient-to-r from-green-500/0 via-green-500/5 to-green-500/0'
+          : 'bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0'
+      }`} />
       
       <div className="relative space-y-4">
         {/* Header */}
@@ -47,12 +55,20 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
               )}
             </div>
             
-            <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+            <h3 className={`text-lg font-semibold text-foreground transition-colors ${
+              project.status === 'completed' 
+                ? 'group-hover:text-green-500' 
+                : 'group-hover:text-orange-500'
+            }`}>
               {project.title}
             </h3>
           </div>
           
-          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+          <ArrowUpRight className={`w-5 h-5 text-muted-foreground transition-colors ${
+            project.status === 'completed' 
+              ? 'group-hover:text-green-500' 
+              : 'group-hover:text-orange-500'
+          }`} />
         </div>
         
         {/* Description */}
@@ -65,7 +81,7 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
           {project.techStack.slice(0, 4).map((tech) => (
             <span
               key={tech}
-              className="px-2 py-1 text-xs bg-muted/50 text-muted-foreground rounded border border-border"
+              className="px-2 py-1 text-xs bg-muted/50 text-muted-foreground rounded border border-border/50 shadow-sm"
             >
               {tech}
             </span>
@@ -83,7 +99,7 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
             <Calendar className="w-3 h-3" />
             {project.year}
           </span>
-          <span className={project.status === 'completed' ? 'text-green-600 dark:text-green-400' : 'text-yellow-600 dark:text-yellow-400'}>
+          <span className={project.status === 'completed' ? 'text-green-600 dark:text-green-400' : 'text-orange-500'}>
             {project.status === 'completed' ? '● Completed' : '● In Progress'}
           </span>
         </div>

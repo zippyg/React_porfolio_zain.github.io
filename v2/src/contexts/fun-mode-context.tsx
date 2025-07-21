@@ -13,19 +13,8 @@ const FunModeContext = createContext<FunModeContextType | undefined>(undefined);
 export function FunModeProvider({ children }: { children: ReactNode }) {
   const [isFunMode, setIsFunMode] = useState(false);
 
-  // Load fun mode state from localStorage
+  // Add/remove body class for CSS effects
   useEffect(() => {
-    const savedFunMode = localStorage.getItem('funMode');
-    if (savedFunMode === 'true') {
-      setIsFunMode(true);
-    }
-  }, []);
-
-  // Save fun mode state to localStorage
-  useEffect(() => {
-    localStorage.setItem('funMode', isFunMode.toString());
-    
-    // Add a subtle class to body for potential CSS effects
     if (isFunMode) {
       document.body.classList.add('fun-mode-active');
     } else {

@@ -16,6 +16,7 @@ export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMac, setIsMac] = useState(true); // Default to Mac
   const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [heroInView, setHeroInView] = useState(true);
   const { scrolled } = useScroll();
   const pathname = usePathname();
   
@@ -24,6 +25,23 @@ export function Navigation() {
     const userAgent = navigator.userAgent.toLowerCase();
     const isMacOS = userAgent.includes('mac');
     setIsMac(isMacOS);
+  }, []);
+
+  // Track hero section visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.getElementById('hero');
+      if (heroSection) {
+        const rect = heroSection.getBoundingClientRect();
+        // Consider hero in view if any part of it is visible
+        setHeroInView(rect.bottom > 100);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial check
+    
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Close mobile menu on route change
@@ -47,16 +65,22 @@ export function Navigation() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "sticky-header",
           scrolled
-            ? "bg-background/80 backdrop-blur-sm border-b border-border/20"
+            ? "bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm"
             : "bg-transparent"
         )}
       >
         <Container>
           <nav className="flex items-center justify-between h-16">
             {/* Logo */}
-            <Logo onClick={() => setShowCommandPalette(true)} />
+            <Logo 
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                window.history.pushState({}, '', '/');
+              }} 
+              showFullName={!heroInView}
+            />
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
@@ -79,15 +103,15 @@ export function Navigation() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-2">
-              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/50 hover:bg-muted transition-colors" />
+              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm hover:border-primary/30" />
               <Button 
                 variant="ghost" 
                 size="icon"
-                className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground cursor-pointer flex items-center justify-center"
+                className="h-9 w-9 p-0 text-muted-foreground hover:text-foreground cursor-pointer flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm hover:border-primary/30"
                 title="Open command palette"
                 onClick={() => setShowCommandPalette(true)}
               >
-                <kbd className="inline-flex h-7 w-7 select-none items-center justify-center gap-0.5 rounded border border-border/50 bg-muted/50 font-mono text-[11px] font-medium">
+                <kbd className="inline-flex h-5 w-auto px-1.5 select-none items-center justify-center gap-0.5 rounded bg-transparent font-mono text-[11px] font-medium">
                   <span className="text-xs">{isMac ? '⌘' : 'Ctrl'}</span>
                   <span>Z</span>
                 </kbd>
@@ -136,7 +160,7 @@ export function Navigation() {
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
         className={cn(
-          "fixed inset-0 z-40 bg-background/95 backdrop-blur-lg md:hidden",
+          "fixed inset-0 z-[99] bg-background/95 backdrop-blur-lg md:hidden",
           !isOpen && "pointer-events-none"
         )}
       >

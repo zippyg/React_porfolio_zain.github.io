@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { mathSymbols } from "@/data/equation-bank";
 import { EquationPool, PrerenderedEquation, loadEquationImage } from "@/utils/equation-loader";
 import { useFunMode } from "@/contexts/fun-mode-context";
+import { useEasterEggs, EASTER_EGGS } from "@/contexts/easter-egg-context";
 
 // Define particle types
 type ParticleType = "dot" | "symbol" | "equation";
@@ -66,15 +67,19 @@ export function OptimizedParticles({
   collisionStrength = 0.5,
 }: OptimizedParticlesProps) {
   const { isFunMode } = useFunMode();
-  // Only enable mouse collision if fun mode is active and prop allows it
-  const enableMouseCollision = enableMouseCollisionProp ?? isFunMode;
+  const { discoverEgg } = useEasterEggs();
+  // Only enable mouse collision if fun mode is active (unless prop explicitly overrides)
+  const enableMouseCollision = enableMouseCollisionProp !== undefined ? enableMouseCollisionProp : isFunMode;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number>();
   const equationPoolRef = useRef<EquationPool | null>(null);
   const lastFrameTimeRef = useRef<number>(0);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const prevMouseRef = useRef({ x: 0, y: 0 });
   const [isLoading, setIsLoading] = useState(true);
+  const hasTriggeredEquationCollision = useRef(false);
+  const isInitializedRef = useRef(false);
   
   // Performance monitoring
   const frameCountRef = useRef(0);
@@ -82,14 +87,22 @@ export function OptimizedParticles({
   const lastFpsUpdateRef = useRef(0);
   const hasShownHintRef = useRef(false);
 
-  // Track mouse position
+  // Track mouse position and velocity
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
+      prevMouseRef.current = { ...mouseRef.current };
       mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
+  
+  // Reset equation collision tracking when fun mode changes
+  useEffect(() => {
+    if (!isFunMode) {
+      hasTriggeredEquationCollision.current = false;
+    }
+  }, [isFunMode]);
 
   // Initialize equation pool
   const initializeEquationPool = useCallback(async () => {
@@ -140,8 +153,8 @@ export function OptimizedParticles({
       opacity: 0,
       targetOpacity: Math.random() * 0.3 + 0.2, // 0.2 to 0.5
       rotation: initialRotation,
-      rotationSpeed: (Math.random() + 0.5) * 0.005, // 0.005 to 0.01 rad/frame
-      rotationDirection: Math.random() > 0.5 ? 1 : -1,
+      rotationSpeed: (Math.random() - 0.5) * 0.05, // Much higher initial rotation speed, can be negative
+      rotationDirection: 1, // Not used anymore but keeping for compatibility
       maxRotation: maxRotationRadians,
       fadeState: 'in'
     };
@@ -202,6 +215,16 @@ export function OptimizedParticles({
   const initializeParticles = useCallback(async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    
+    // Prevent double initialization
+    if (isInitializedRef.current && particlesRef.current.length > 0) {
+      console.log('[OptimizedParticles] Skipping initialization - particles already exist');
+      return;
+    }
+    
+    // Debug log to track when particles are reinitialized
+    console.log('[OptimizedParticles] Initializing particles');
+    isInitializedRef.current = true;
 
     setIsLoading(true);
     await initializeEquationPool();
@@ -216,8 +239,8 @@ export function OptimizedParticles({
         type: "dot",
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3, // Much slower
-        vy: (Math.random() - 0.5) * 0.3,
+        vx: (Math.random() - 0.5) * 0.6, // Increased velocity
+        vy: (Math.random() - 0.5) * 0.6,
         radius: 0.5,
         size: 1, // Fixed size dots
         opacity: 1.0,
@@ -236,15 +259,15 @@ export function OptimizedParticles({
         type: "symbol",
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5, // Slower symbols
-        vy: (Math.random() - 0.5) * 0.5,
+        vx: (Math.random() - 0.5) * 0.8, // Increased velocity
+        vy: (Math.random() - 0.5) * 0.8,
         radius: 8, // Fixed small radius
         symbol: mathSymbols[Math.floor(Math.random() * mathSymbols.length)],
         fontSize,
         opacity: Math.random() * 0.2 + 0.1, // More subtle
         targetOpacity: Math.random() * 0.2 + 0.1,
         rotation: Math.random() * Math.PI * 2,
-        rotationSpeed: (Math.random() - 0.5) * 0.02,
+        rotationSpeed: (Math.random() - 0.5) * 0.02, // Symbol rotation
         fadeState: 'stable',
       });
     }
@@ -309,16 +332,16 @@ export function OptimizedParticles({
     const dy = particle.y - mouseY;
     const distance = Math.sqrt(dx * dx + dy * dy);
     
-    // Define interaction radius based on particle type - much tighter to mouse cursor
+    // Define interaction radius based on particle type - even tighter
     let interactionRadius = particle.radius;
     if (particle.type === "equation") {
-      // Small buffer for equations
-      interactionRadius = particle.radius + 10;
+      // Minimal buffer for equations - just enough to interact
+      interactionRadius = particle.radius + 5;
     } else if (particle.type === "symbol") {
-      interactionRadius = particle.radius + 8;
+      interactionRadius = particle.radius + 3;
     } else {
       // Dots have minimal interaction radius
-      interactionRadius = particle.radius + 5;
+      interactionRadius = particle.radius + 2;
     }
     
     if (distance < interactionRadius) {
@@ -327,7 +350,7 @@ export function OptimizedParticles({
         distance,
         dx,
         dy,
-        normalX: distance > 0 ? dx / distance : 0,
+        normalX: distance > 0 ? dx / distance : 1,
         normalY: distance > 0 ? dy / distance : 0
       };
     }
@@ -344,45 +367,101 @@ export function OptimizedParticles({
     const { distance, normalX, normalY, isColliding } = collision;
     
     if (isColliding) {
-      // Hard collision - very gentle bounce effect
-      const bounceForce = 1.2 * strength; // Further reduced force
-      particle.vx += normalX * bounceForce;
-      particle.vy += normalY * bounceForce;
+      // Calculate mouse velocity for momentum transfer
+      const mouseVx = mouseRef.current.x - prevMouseRef.current.x;
+      const mouseVy = mouseRef.current.y - prevMouseRef.current.y;
+      const mouseSpeed = Math.sqrt(mouseVx * mouseVx + mouseVy * mouseVy);
       
-      // Add subtle rotation impulse for equations and symbols
+      // Position correction to prevent penetration - gentler
+      const overlap = particle.radius - distance;
+      if (overlap > 0) {
+        particle.x += normalX * overlap * 0.8; // Push out of collision
+        particle.y += normalY * overlap * 0.8;
+      }
+      
+      // More natural momentum transfer based on mouse movement
+      if (mouseSpeed > 0.1) { // Only transfer momentum if mouse is actually moving
+        // Calculate relative velocity
+        const relativeVx = mouseVx - particle.vx;
+        const relativeVy = mouseVy - particle.vy;
+        
+        // Dot product for momentum transfer in collision direction
+        const dotProduct = (relativeVx * normalX + relativeVy * normalY);
+        
+        // Only transfer momentum if moving towards particle
+        if (dotProduct < 0) {
+          const impactForce = Math.min(mouseSpeed * 0.3, 2.0) * strength;
+          
+          // Apply force based on collision dynamics
+          const elasticity = 0.7; // How bouncy the collision is
+          const friction = 0.3; // How much tangential velocity is transferred
+          
+          // Normal impulse (bounce)
+          particle.vx += normalX * impactForce * Math.abs(dotProduct) * elasticity;
+          particle.vy += normalY * impactForce * Math.abs(dotProduct) * elasticity;
+          
+          // Tangential impulse (dragging/friction)
+          const tangentX = -normalY;
+          const tangentY = normalX;
+          const tangentialMouseV = mouseVx * tangentX + mouseVy * tangentY;
+          
+          particle.vx += tangentX * tangentialMouseV * friction;
+          particle.vy += tangentY * tangentialMouseV * friction;
+          
+          // Direct momentum transfer in mouse direction
+          particle.vx += mouseVx * 0.15;
+          particle.vy += mouseVy * 0.15;
+        }
+      }
+      
+      // Very subtle bounce to prevent sticking
+      particle.vx += normalX * 0.2;
+      particle.vy += normalY * 0.2;
+      
+      // Add smooth rotation impulse for equations and symbols
       if (particle.type === 'symbol') {
-        const rotationImpulse = (Math.random() - 0.5) * 0.1 * strength;
+        // Very small rotation impulse for symbols
+        const rotationImpulse = (Math.random() - 0.5) * 0.02 * strength;
         particle.rotationSpeed += rotationImpulse;
       } else if (particle.type === 'equation') {
         const eqParticle = particle as EquationParticle;
-        // Subtle rotation effect for equations
-        const rotationImpulse = (Math.random() - 0.5) * 0.15 * strength;
+        
+        // Calculate rotation based on glancing angle of impact
+        const crossProduct = (mouseVx * normalY - mouseVy * normalX); // How much the hit is glancing
+        
+        // Add rotation based on how off-center the hit is
+        const rotationImpulse = crossProduct * 0.15; // Much stronger impulse
         particle.rotationSpeed += rotationImpulse;
         
-        // 10% chance to reverse rotation direction on hard hit
-        if (Math.random() < 0.1) {
-          eqParticle.rotationDirection *= -1;
-        }
+        // Add some random rotation to make it more dynamic
+        particle.rotationSpeed += (Math.random() - 0.5) * 0.03;
         
-        // No temporary rotation increase - keep it subtle
+        // Remove smoothing - let it spin freely
+        // particle.rotationSpeed *= 0.98;
+        
+        // Clamp rotation speed to prevent wild spinning
+        const maxRotSpeed = 0.2; // Even higher max rotation speed
+        particle.rotationSpeed = Math.max(-maxRotSpeed, Math.min(maxRotSpeed, particle.rotationSpeed));
       }
       
       // Very subtle visual feedback
       particle.targetOpacity = Math.min(particle.targetOpacity + 0.1, particle.targetOpacity * 1.2);
     } else {
-      // Soft repulsion field - very small and subtle
-      const repulsionRadius = particle.radius + 15; // Smaller field
+      // Soft repulsion field - very localized around mouse
+      const repulsionRadius = particle.radius + 5; // Very tight field
       if (distance < repulsionRadius) {
-        // Use cubic falloff for smoother interaction
-        const repulsionStrength = Math.pow(1 - distance / repulsionRadius, 3);
-        const repulsionForce = repulsionStrength * 0.5 * strength; // Further reduced force
+        // Use exponential falloff for sharp localization
+        const normalizedDist = distance / repulsionRadius;
+        const repulsionStrength = Math.exp(-normalizedDist * 5); // Sharp exponential decay
+        const repulsionForce = repulsionStrength * 0.2 * strength; // Very subtle force
         
         particle.vx += normalX * repulsionForce;
         particle.vy += normalY * repulsionForce;
         
-        // Very subtle rotation effect
-        if (particle.type !== 'dot' && repulsionStrength > 0.3) {
-          particle.rotationSpeed += (Math.random() - 0.5) * 0.005 * repulsionStrength;
+        // Extremely subtle rotation effect in repulsion field
+        if (particle.type === 'equation' && repulsionStrength > 0.5) {
+          // Don't slow down rotation - let it continue spinning
+          // particle.rotationSpeed *= 0.98;
         }
       }
     }
@@ -394,7 +473,7 @@ export function OptimizedParticles({
     
     // Clamp rotation speed
     if (particle.type !== 'dot') {
-      const maxRotationSpeed = 0.1;
+      const maxRotationSpeed = 0.2; // Match the equation max speed
       particle.rotationSpeed = Math.max(-maxRotationSpeed, Math.min(maxRotationSpeed, particle.rotationSpeed));
     }
   }, []);
@@ -428,6 +507,9 @@ export function OptimizedParticles({
     // Draw mouse glow effect
     const mouseX = mouseRef.current.x;
     const mouseY = mouseRef.current.y;
+    
+    // Update previous mouse position for next frame
+    prevMouseRef.current = { ...mouseRef.current };
     
     // Create radial gradient for mouse glow
     const glowRadius = 200;
@@ -469,17 +551,16 @@ export function OptimizedParticles({
       particle.x += particle.vx;
       particle.y += particle.vy;
       
-      // Update rotation with oscillation for equations
+      // Update rotation
       if (particle.type === "equation") {
         const eqParticle = particle as EquationParticle;
         
-        // Apply rotation
-        particle.rotation += particle.rotationSpeed * eqParticle.rotationDirection;
+        // Apply rotation without bounds checking for natural motion
+        particle.rotation += particle.rotationSpeed;
         
-        // Check bounds and reverse direction
-        if (Math.abs(particle.rotation) > eqParticle.maxRotation) {
-          particle.rotation = Math.sign(particle.rotation) * eqParticle.maxRotation;
-          eqParticle.rotationDirection *= -1;
+        // Keep rotation in reasonable range without hard reversals
+        if (Math.abs(particle.rotation) > Math.PI * 2) {
+          particle.rotation = particle.rotation % (Math.PI * 2);
         }
       } else {
         // Non-equation particles rotate normally
@@ -563,10 +644,13 @@ export function OptimizedParticles({
             particle.x = Math.random() * canvas.width;
           }
           
-          // Give it a new random velocity to keep things interesting
+          // Give all particles new random velocity to keep things interesting
           if (particle.type === "symbol") {
             particle.vx = (Math.random() - 0.5) * 1.0;
             particle.vy = (Math.random() - 0.5) * 1.0;
+          } else if (particle.type === "dot") {
+            particle.vx = (Math.random() - 0.5) * 0.6;
+            particle.vy = (Math.random() - 0.5) * 0.6;
           }
         }
       }
@@ -598,25 +682,45 @@ export function OptimizedParticles({
         const collision = checkMouseCollision(particle, mouseX, mouseY);
         if (collision) {
           handleMouseCollision(particle, collision, collisionStrength);
+          
+          // Track equation collision easter egg
+          if (particle.type === 'equation' && !hasTriggeredEquationCollision.current && isFunMode) {
+            hasTriggeredEquationCollision.current = true;
+            discoverEgg(EASTER_EGGS.EQUATION_COLLISION);
+          }
         }
       }
       
       // Apply velocity damping for smoother motion
-      particle.vx *= 0.99; // Slight friction
-      particle.vy *= 0.99;
+      particle.vx *= 0.997; // Reduced friction for better movement
+      particle.vy *= 0.997;
       if (particle.type !== 'dot') {
-        particle.rotationSpeed *= 0.98; // Rotational damping
+        particle.rotationSpeed *= 0.995; // Even less rotational damping to keep spinning
       }
 
-      // Ensure minimum velocity for equations only (dots can be slow)
+      // Ensure minimum velocity for all particles to prevent stagnation
+      let minVelocity = 0.2; // Base minimum for all particles
       if (particle.type === "equation") {
-        const minVelocity = 0.5;
-        if (Math.abs(particle.vx) < minVelocity) {
-          particle.vx = Math.sign(particle.vx || 1) * minVelocity;
+        minVelocity = 0.5; // Higher minimum for equations
+        
+        // Ensure equations always have some rotation
+        if (Math.abs(particle.rotationSpeed) < 0.01) {
+          particle.rotationSpeed = (Math.random() - 0.5) * 0.03;
         }
-        if (Math.abs(particle.vy) < minVelocity) {
-          particle.vy = Math.sign(particle.vy || 1) * minVelocity;
-        }
+      } else if (particle.type === "symbol") {
+        minVelocity = 0.3; // Medium minimum for symbols
+      }
+      
+      // Apply minimum velocity with some randomness to prevent stuck patterns
+      if (Math.abs(particle.vx) < minVelocity) {
+        particle.vx = Math.sign(particle.vx || (Math.random() - 0.5)) * minVelocity;
+        // Add small random perturbation
+        particle.vx += (Math.random() - 0.5) * 0.1;
+      }
+      if (Math.abs(particle.vy) < minVelocity) {
+        particle.vy = Math.sign(particle.vy || (Math.random() - 0.5)) * minVelocity;
+        // Add small random perturbation
+        particle.vy += (Math.random() - 0.5) * 0.1;
       }
 
       // Draw particle
@@ -693,7 +797,7 @@ export function OptimizedParticles({
     ctx.globalAlpha = 1;
 
     animationFrameRef.current = requestAnimationFrame(animate);
-  }, [createEquationParticle, isOffScreen, enableMouseCollision, checkMouseCollision, handleMouseCollision, collisionStrength]);
+  }, [createEquationParticle, isOffScreen, enableMouseCollision, checkMouseCollision, handleMouseCollision, collisionStrength, isFunMode, discoverEgg]);
 
   // Setup and cleanup
   useEffect(() => {
@@ -701,12 +805,40 @@ export function OptimizedParticles({
     if (!canvas) return;
 
     const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      initializeParticles();
+      const newWidth = window.innerWidth;
+      const newHeight = window.innerHeight;
+      
+      // Only update if dimensions actually changed
+      if (canvas.width === newWidth && canvas.height === newHeight) {
+        return;
+      }
+      
+      const oldWidth = canvas.width;
+      const oldHeight = canvas.height;
+      
+      // Update canvas dimensions (this clears the canvas)
+      canvas.width = newWidth;
+      canvas.height = newHeight;
+      
+      // Only reinitialize if we don't have particles yet
+      if (particlesRef.current.length === 0) {
+        initializeParticles();
+      } else {
+        // Scale particle positions to new canvas size
+        const widthRatio = newWidth / oldWidth;
+        const heightRatio = newHeight / oldHeight;
+        
+        particlesRef.current.forEach(particle => {
+          particle.x *= widthRatio;
+          particle.y *= heightRatio;
+        });
+      }
     };
 
-    handleResize();
+    // Initial setup
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
     window.addEventListener("resize", handleResize);
 
     return () => {
@@ -719,14 +851,19 @@ export function OptimizedParticles({
 
   // Start animation
   useEffect(() => {
+    let mounted = true;
+    
     const startAnimation = async () => {
+      if (!mounted) return;
       await initializeParticles();
+      if (!mounted) return;
       animate();
     };
 
     startAnimation();
 
     return () => {
+      mounted = false;
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

@@ -41,7 +41,7 @@ export function ScrollToTop() {
           whileHover={{ scale: 1.1, y: -5 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 group"
+          className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 group"
           aria-label="Scroll to top"
         >
           {/* Progress ring */}

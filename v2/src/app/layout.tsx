@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/providers/motion-provider";
 import { FunModeProvider } from "@/contexts/fun-mode-context";
 import { ThemeProvider } from "@/contexts/theme-context";
+import { EasterEggProvider } from "@/contexts/easter-egg-context";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { BackgroundEffects } from "@/components/layout/background-effects";
@@ -94,17 +95,19 @@ export default function RootLayout({
         <ThemeProvider>
           <MotionProvider>
             <FunModeProvider>
-            <ScrollToTopOnMount />
-            <CommandPalette />
-            <EasterEggHint />
-            <ScrollToTop />
-            <BackgroundEffects />
-            <Navigation />
-            <div className="flex flex-col min-h-screen relative">
-              <main className="flex-grow">{children}</main>
-              <Footer />
-            </div>
-            <Analytics />
+              <EasterEggProvider>
+                <ScrollToTopOnMount />
+                <CommandPalette />
+                <EasterEggHint />
+                <ScrollToTop />
+                <BackgroundEffects />
+                <Navigation />
+                <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+                  <main className="flex-grow">{children}</main>
+                  <Footer />
+                </div>
+                <Analytics />
+              </EasterEggProvider>
             </FunModeProvider>
           </MotionProvider>
         </ThemeProvider>

@@ -126,7 +126,7 @@ export function ContactSection() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground"
+                    className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground shadow-sm"
                     placeholder="Your name"
                   />
                 </div>
@@ -142,7 +142,7 @@ export function ContactSection() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground"
+                    className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground shadow-sm"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -158,7 +158,7 @@ export function ContactSection() {
                     onChange={handleChange}
                     required
                     rows={5}
-                    className="w-full px-4 py-3 bg-card/50 border border-border rounded-lg focus:outline-none focus:border-primary/50 transition-colors resize-none text-foreground"
+                    className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors resize-none text-foreground shadow-sm"
                     placeholder="Tell me about your project or idea..."
                   />
                 </div>
@@ -230,7 +230,7 @@ export function ContactSection() {
                     href="https://github.com/zippyg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-card/50 hover:bg-card/70 rounded-lg transition-colors group"
+                    className="p-3 bg-card/60 hover:bg-card/70 border border-border/50 rounded-lg transition-colors group shadow-sm hover:border-primary/30"
                   >
                     <Github className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
@@ -238,7 +238,7 @@ export function ContactSection() {
                     href="https://www.linkedin.com/in/mughalzain/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 bg-card/50 hover:bg-card/70 rounded-lg transition-colors group"
+                    className="p-3 bg-card/60 hover:bg-card/70 border border-border/50 rounded-lg transition-colors group shadow-sm hover:border-primary/30"
                   >
                     <Linkedin className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
@@ -246,7 +246,7 @@ export function ContactSection() {
               </div>
 
               {/* Availability */}
-              <div className="p-6 bg-primary/5 border border-primary/20 rounded-lg">
+              <div className="p-6 bg-primary/10 border border-border/50 rounded-lg shadow-sm hover:border-primary/30 transition-colors">
                 <h3 className="text-lg font-semibold text-foreground mb-2">Current Status</h3>
                 <p className="text-sm text-muted-foreground mb-3">
                   Open to opportunities in quantitative research, data science, and software engineering roles.

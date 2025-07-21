@@ -76,7 +76,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                 
                 <button
                   onClick={onClose}
-                  className="p-2 hover:bg-card/50 rounded-lg transition-colors"
+                  className="p-2 hover:bg-card/60 border border-border/50 rounded-lg transition-colors shadow-sm"
                 >
                   <X className="w-5 h-5 text-muted-foreground" />
                 </button>
@@ -119,7 +119,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                       {project.techStack.map((tech) => (
                         <span
                           key={tech}
-                          className="px-3 py-1 text-xs bg-card/50 text-muted-foreground rounded-full border border-border"
+                          className="px-3 py-1 text-xs bg-card/60 text-muted-foreground rounded-full border border-border/50 shadow-sm"
                         >
                           {tech}
                         </span>
@@ -138,7 +138,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/60 hover:bg-card/70 border border-border/50 rounded-lg transition-colors shadow-sm hover:border-primary/30"
                       >
                         <Github className="w-4 h-4" />
                         <span className="text-sm">View Code</span>
@@ -160,7 +160,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.pdf}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/60 hover:bg-card/70 border border-border/50 rounded-lg transition-colors shadow-sm hover:border-primary/30"
                       >
                         <FileText className="w-4 h-4" />
                         <span className="text-sm">Research Paper</span>
@@ -171,7 +171,7 @@ export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
                         href={project.video}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-2 px-4 py-2 bg-card/50 hover:bg-card/70 rounded-lg transition-colors"
+                        className="flex items-center gap-2 px-4 py-2 bg-card/60 hover:bg-card/70 border border-border/50 rounded-lg transition-colors shadow-sm hover:border-primary/30"
                       >
                         <Video className="w-4 h-4" />
                         <span className="text-sm">Demo Video</span>

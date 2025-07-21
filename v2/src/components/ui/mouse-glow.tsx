@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { useFunMode } from "@/contexts/fun-mode-context";
+import { useEasterEggs, EASTER_EGGS } from "@/contexts/easter-egg-context";
 
 interface MouseGlowProps {
   className?: string;
@@ -25,6 +26,7 @@ interface ClickEffect {
 
 export function MouseGlow({ className }: MouseGlowProps) {
   const { isFunMode } = useFunMode();
+  const { discoverEgg } = useEasterEggs();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
   const prevMouseRef = useRef({ x: 0, y: 0 });
@@ -40,6 +42,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
   const startTimeRef = useRef(Date.now());
   const scrollYRef = useRef(0);
   const pageHeightRef = useRef(0);
+  const funModeActivatedRef = useRef(0);
+  const isProcessingClickRef = useRef(false);
   const [mounted, setMounted] = useState(false);
 
   // Load initial torch state
@@ -70,6 +74,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
       glowTrailRef.current = [];
       clickEffectsRef.current = [];
     } else {
+      // Track when fun mode was activated
+      funModeActivatedRef.current = Date.now();
       // When entering fun mode, restore torch state from localStorage
       const saved = localStorage.getItem('torchEnabled');
       if (saved === 'true') {
@@ -127,47 +133,83 @@ export function MouseGlow({ className }: MouseGlowProps) {
       // Only handle clicks in fun mode
       if (!isFunMode) return;
       
+      // Ignore clicks within 500ms of fun mode activation
+      if (Date.now() - funModeActivatedRef.current < 500) return;
+      
+      // Prevent processing multiple clicks simultaneously
+      if (isProcessingClickRef.current) return;
+      
       // Only handle clicks in empty space
       const target = e.target as HTMLElement;
       if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.tagName === 'INPUT') {
         return;
       }
       
+      // Also check for command palette elements
+      if (target.closest('.command-palette') || target.closest('[role="dialog"]')) {
+        return;
+      }
+      
+      isProcessingClickRef.current = true;
+      
       const currentTime = Date.now();
       const timeSinceLastClick = currentTime - lastClickTimeRef.current;
       
-      // If there's a pending single click timeout, this is a double click
-      if (clickTimeoutRef.current) {
-        // Cancel the single click action
-        clearTimeout(clickTimeoutRef.current);
-        clickTimeoutRef.current = null;
+      // Check if this is a double click (second click within 300ms)
+      if (timeSinceLastClick < 300 && timeSinceLastClick > 0) {
+        // This is a double click
+        console.log('Double-click detected!');
         
-        // Double click - trigger effects WITHOUT toggling torch
-        const effectTypes: ClickEffect['type'][] = ['shear', 'rotate', 'scale', 'wave', 'dissolve', 'ripple'];
-        const randomEffect = effectTypes[Math.floor(Math.random() * effectTypes.length)];
-        
-        clickEffectsRef.current.push({
-          x: e.clientX,
-          y: e.clientY,
-          type: randomEffect,
-          progress: 0,
-          timestamp: Date.now()
-        });
-        
-        // Keep effects limited
-        if (clickEffectsRef.current.length > 5) {
-          clickEffectsRef.current.shift();
+        // Cancel any pending single click action
+        if (clickTimeoutRef.current) {
+          clearTimeout(clickTimeoutRef.current);
+          clickTimeoutRef.current = null;
         }
         
-        lastClickTimeRef.current = 0; // Reset
+        // Double click - only trigger effects if torch is enabled
+        if (torchEnabledRef.current) {
+          const effectTypes: ClickEffect['type'][] = ['shear', 'rotate', 'scale', 'wave', 'dissolve', 'ripple'];
+          const randomEffect = effectTypes[Math.floor(Math.random() * effectTypes.length)];
+          
+          clickEffectsRef.current.push({
+            x: e.clientX,
+            y: e.clientY,
+            type: randomEffect,
+            progress: 0,
+            timestamp: Date.now()
+          });
+          
+          console.log(`Applied ${randomEffect} effect!`);
+          
+          // Discover easter egg for double click warp (only when torch is on)
+          discoverEgg(EASTER_EGGS.DOUBLE_CLICK_WARP);
+          
+          // Keep effects limited
+          if (clickEffectsRef.current.length > 5) {
+            clickEffectsRef.current.shift();
+          }
+        } else {
+          // If torch is off, double click does nothing special
+          console.log('Enable torch first to use double-click effects!');
+        }
+        
+        lastClickTimeRef.current = 0; // Reset to prevent triple clicks
+        isProcessingClickRef.current = false;
       } else {
-        // Potential single click - wait to see if it's a double click
+        // First click - set timestamp and wait to see if it's a double click
         lastClickTimeRef.current = currentTime;
+        isProcessingClickRef.current = false; // Allow the second click to be processed
+        
         clickTimeoutRef.current = setTimeout(() => {
           // This is a single click - toggle torch
+          console.log('Single click - toggling torch');
           setTorchEnabled(prev => {
             const newValue = !prev;
             torchEnabledRef.current = newValue;
+            // Discover easter egg when torch is first enabled
+            if (newValue && isFunMode) {
+              discoverEgg(EASTER_EGGS.TORCH_LIGHT);
+            }
             return newValue;
           });
           
@@ -181,6 +223,7 @@ export function MouseGlow({ className }: MouseGlowProps) {
           });
           
           clickTimeoutRef.current = null;
+          lastClickTimeRef.current = 0; // Reset
         }, 300); // Wait 300ms to see if double click
       }
     };
@@ -211,7 +254,7 @@ export function MouseGlow({ className }: MouseGlowProps) {
         clearTimeout(clickTimeoutRef.current);
       }
     };
-  }, [isFunMode]);
+  }, [isFunMode, discoverEgg]);
 
   useEffect(() => {
     const canvas = canvasRef.current;

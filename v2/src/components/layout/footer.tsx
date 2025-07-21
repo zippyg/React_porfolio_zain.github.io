@@ -33,6 +33,12 @@ export function Footer() {
       setShowOutput(true);
       setTimeout(() => setShowOutput(false), 2000);
       setCommand("");
+    } else if (trimmedCmd === "/skills" || trimmedCmd === "skills") {
+      document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
+      setOutput("Navigating to Skills section...");
+      setShowOutput(true);
+      setTimeout(() => setShowOutput(false), 2000);
+      setCommand("");
     } else if (trimmedCmd === "/research" || trimmedCmd === "research") {
       document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' });
       setOutput("Navigating to Research section...");
@@ -69,7 +75,7 @@ export function Footer() {
       setTimeout(() => setShowOutput(false), 3000);
       setCommand("");
     } else if (trimmedCmd === "help" || trimmedCmd === "/help") {
-      setOutput("Available commands: /about, /projects, /research, /contact, /resume, /fun, /theme");
+      setOutput("Available commands: /about, /projects, /skills, /research, /contact, /resume, /fun, /theme");
       setShowOutput(true);
       setTimeout(() => setShowOutput(false), 4000);
       setCommand("");

@@ -100,69 +100,7 @@ export function EasterEggHint() {
         )}
       </AnimatePresence>
 
-      {/* Fun mode indicator (not on mobile) */}
-      <AnimatePresence>
-        {isFunMode && !isMobile && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0 }}
-            className="fixed bottom-4 left-4 z-50"
-          >
-            <motion.div
-              animate={{
-                rotate: [0, 5, -5, 0],
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="relative group cursor-help"
-              title="Fun mode is active! 🎮"
-            >
-              {/* Glow effect */}
-              <div className="absolute inset-0 bg-primary/30 rounded-full blur-md group-hover:bg-primary/50 transition-colors" />
-              
-              {/* Icon */}
-              <div className="relative w-8 h-8 bg-black/80 border border-primary/50 rounded-full flex items-center justify-center">
-                <span className="text-sm">🎮</span>
-              </div>
-              
-              {/* Particle effect on hover */}
-              <div className="absolute inset-0 pointer-events-none">
-                <motion.div
-                  className="absolute top-0 left-1/2 w-1 h-1 bg-primary rounded-full"
-                  animate={{
-                    y: [-10, -20],
-                    x: [-10, 10],
-                    opacity: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    repeatDelay: 0.5,
-                  }}
-                />
-                <motion.div
-                  className="absolute top-0 left-1/2 w-1 h-1 bg-primary rounded-full"
-                  animate={{
-                    y: [-10, -20],
-                    x: [10, -10],
-                    opacity: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 1,
-                    repeat: Infinity,
-                    repeatDelay: 0.7,
-                    delay: 0.2,
-                  }}
-                />
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Fun mode indicator removed - now in easter-egg-counter */}
     </>
   );
 }

@@ -10,6 +10,11 @@ export const navigationItems = [
     description: "Featured work",
   },
   {
+    name: "Skills",
+    href: "#skills",
+    description: "Technical expertise",
+  },
+  {
     name: "Research",
     href: "#research",
     description: "Quantitative analysis",

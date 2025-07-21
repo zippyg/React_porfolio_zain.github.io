@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFunMode } from '@/contexts/fun-mode-context';
 import { useTheme } from '@/contexts/theme-context';
+import { useEasterEggs, EASTER_EGGS } from '@/contexts/easter-egg-context';
 
 interface Command {
   id: string;
@@ -35,6 +36,7 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
   const inputRef = useRef<HTMLInputElement>(null);
   const { toggleFunMode, isFunMode } = useFunMode();
   const { theme, toggleTheme } = useTheme();
+  const { discoverEgg } = useEasterEggs();
 
   // Define available commands
   const commands: Command[] = [
@@ -57,6 +59,16 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
         setIsOpen(false);
       },
       aliases: ['project', 'work', 'portfolio']
+    },
+    {
+      id: 'skills',
+      name: '/skills',
+      description: 'Navigate to Skills section',
+      action: () => {
+        document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
+        setIsOpen(false);
+      },
+      aliases: ['skills', 'tech', 'technologies', 'expertise']
     },
     {
       id: 'research',
@@ -101,6 +113,7 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
         if (!isFunMode) {
           // Trigger a particle burst or something fun
           console.log('🎉 Fun mode activated!');
+          discoverEgg(EASTER_EGGS.FUN_MODE);
         }
       },
       aliases: ['easter', 'egg', 'play', 'game']
@@ -241,7 +254,10 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
                           className={`w-full px-4 py-3 text-left hover:bg-primary/10 transition-colors ${
                             index === selectedIndex ? 'bg-primary/20' : ''
                           }`}
-                          onClick={() => cmd.action()}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            cmd.action();
+                          }}
                           onMouseEnter={() => setSelectedIndex(index)}
                         >
                           <div className="flex items-center justify-between">
