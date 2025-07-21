@@ -160,14 +160,14 @@ export function Hero() {
           </MotionDiv>
 
           <MotionDiv variants={fadeInUp}>
-            <p className="text-xl text-muted-foreground mb-4">
-              Harnessing Physics for Data Mastery
+            <p className="text-xl text-muted-foreground mb-4 font-mono">
+              <span className="text-primary">:=</span> Math + Code + Physics
             </p>
           </MotionDiv>
 
           <MotionDiv variants={fadeInUp}>
             <p className="text-lg text-muted-foreground/80 mb-8">
-              Innovator and Technologist
+              Transforming Complex Problems into Elegant Solutions
             </p>
           </MotionDiv>
 

@@ -27,6 +27,16 @@ const education = [
     degree: "A Levels",
     period: "2020 - 2022",
     grade: "A*A*A* in Mathematics, Physics, Computer Science"
+  },
+  {
+    institution: "Rosedale College",
+    degree: "GCSEs",
+    period: "2015 - 2020",
+    grade: "13 GCSEs with grades 9 to 8 including Maths and English, and 2 Distinctions",
+    highlights: [
+      "Achieved 13 GCSEs with grades 9 to 8 including Maths and English, and 2 Distinctions",
+      "Valedictorian, recognised for academic excellence and leadership qualities"
+    ]
   }
 ];
 
@@ -84,23 +94,27 @@ export function AboutSection() {
             
             <div className="space-y-4 text-muted-foreground">
               <p className="text-lg leading-relaxed">
-                I'm a Physics MSci student at Imperial College London with a passion for 
-                quantitative research and software development. My unique blend of theoretical 
-                physics knowledge and practical programming skills enables me to tackle complex 
-                problems at the intersection of science and technology.
+                I am the most un-physicist physics student you'll ever meet. 
+                A simple, raw blend of curiosity, ability, and exposure has taken me a long way and 
+                will continue to drive me.
               </p>
               
               <p className="leading-relaxed">
-                From simulating particle physics phenomena to building sophisticated financial 
-                models, I thrive on transforming abstract mathematical concepts into practical, 
-                high-performance solutions. My work spans across physics research, quantitative 
-                finance, and full-stack development.
+                Practical programming skills unlock every barrier that has stood in my path so far, 
+                implementing math and physics into algorithms and even quantitative deployable algorithms 
+                at full scale. From simulating particle physics phenomena to deploying algorithmic trading 
+                models successfully and profitably. I, for some reason, find enjoyment in transforming 
+                seemingly abstract mathematical concepts into practical, profitable, high-performance 
+                solutions that other people - and even myself at some points - struggle to understand.
               </p>
               
               <p className="leading-relaxed">
-                Currently focused on machine learning applications in financial markets, 
-                advanced risk modeling, and exploring the fascinating world of particle physics 
-                through computational methods.
+                My work isn't just physics - it goes into research, machine learning, quant finance, 
+                full-stack development. Without hyping myself up too much, I am a jack of all trades, 
+                but a specialized one. Currently focused on machine learning applications in financial 
+                markets, advanced risk modeling, and actually deployable pipelines within this niche. 
+                As well as advanced mathematical techniques to reshape how the world really looks at 
+                irregular data.
               </p>
             </div>
 
@@ -145,7 +159,7 @@ export function AboutSection() {
                     <p className="text-sm text-primary">{edu.grade}</p>
                     
                     {edu.highlights && (
-                      <ul className="mt-3 space-y-1">
+                      <ul className="mt-2 space-y-1">
                         {edu.highlights.map((highlight, i) => (
                           <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
                             <span className="text-primary mt-1">•</span>

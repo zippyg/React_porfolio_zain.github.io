@@ -71,7 +71,7 @@ export function ResearchSection() {
                         {pub.venue} • {pub.year}
                       </p>
                     </div>
-                    <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20">
+                    <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20 whitespace-nowrap">
                       {pub.type}
                     </span>
                   </div>
