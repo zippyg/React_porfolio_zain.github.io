@@ -1,26 +1,17 @@
 import { Hero } from "@/components/sections/hero";
+import { AboutSection } from "@/components/sections/about";
+import { ProjectsSection } from "@/components/sections/projects/projects";
+import { ResearchSection } from "@/components/sections/research";
+import { ContactSection } from "@/components/sections/contact";
 
 export default function Home() {
   return (
     <main className="pt-16">
       <Hero />
-      
-      {/* Placeholder sections - we'll build these next */}
-      <section id="about" className="min-h-screen flex items-center justify-center">
-        <h2 className="text-4xl font-bold text-gray-600">About Section Coming Soon</h2>
-      </section>
-      
-      <section id="projects" className="min-h-screen flex items-center justify-center bg-gray-900/20">
-        <h2 className="text-4xl font-bold text-gray-600">Projects Section Coming Soon</h2>
-      </section>
-      
-      <section id="research" className="min-h-screen flex items-center justify-center">
-        <h2 className="text-4xl font-bold text-gray-600">Research Section Coming Soon</h2>
-      </section>
-      
-      <section id="contact" className="min-h-screen flex items-center justify-center bg-gray-900/20">
-        <h2 className="text-4xl font-bold text-gray-600">Contact Section Coming Soon</h2>
-      </section>
+      <AboutSection />
+      <ProjectsSection />
+      <ResearchSection />
+      <ContactSection />
     </main>
   );
 }

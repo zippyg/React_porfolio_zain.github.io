@@ -7,6 +7,9 @@ import { Footer } from "@/components/layout/footer";
 import { BackgroundEffects } from "@/components/layout/background-effects";
 import { CommandPalette } from "@/components/ui/command-palette";
 import { EasterEggHint } from "@/components/ui/easter-egg-hint";
+import { ScrollToTop } from "@/components/ui/scroll-to-top";
+import { ScrollToTopOnMount } from "@/components/layout/scroll-to-top-on-mount";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const inter = Inter({
@@ -60,19 +63,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        {/* Ensure page loads at top */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (history.scrollRestoration) {
+                history.scrollRestoration = 'manual';
+              }
+              window.scrollTo(0, 0);
+            `,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-black text-white font-sans`}
       >
         <MotionProvider>
           <FunModeProvider>
+            <ScrollToTopOnMount />
             <CommandPalette />
             <EasterEggHint />
+            <ScrollToTop />
             <BackgroundEffects />
             <Navigation />
             <div className="flex flex-col min-h-screen relative">
               <main className="flex-grow">{children}</main>
               <Footer />
             </div>
+            <Analytics />
           </FunModeProvider>
         </MotionProvider>
       </body>

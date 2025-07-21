@@ -43,6 +43,16 @@ export function CommandPalette() {
       aliases: ['project', 'work', 'portfolio']
     },
     {
+      id: 'research',
+      name: '/research',
+      description: 'Navigate to Research section',
+      action: () => {
+        document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' });
+        setIsOpen(false);
+      },
+      aliases: ['research', 'papers', 'publications']
+    },
+    {
       id: 'contact',
       name: '/contact',
       description: 'Navigate to Contact section',
