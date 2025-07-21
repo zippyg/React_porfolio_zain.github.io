@@ -294,9 +294,10 @@ export function Hero() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2, duration: 1 }}
-        className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-12 left-1/2 -translate-x-1/2"
+        style={{ marginLeft: '-20px' }}
       >
-        <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground">
+        <div className="flex flex-col items-center gap-2 text-muted-foreground">
           <span className="text-xs font-mono text-center">scroll</span>
           <div className="w-6 h-10 border-2 border-muted-foreground/50 rounded-full p-1 flex items-start justify-center">
             <div className="w-1 h-2 bg-primary rounded-full animate-bounce" />

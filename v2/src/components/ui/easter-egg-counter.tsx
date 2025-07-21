@@ -14,7 +14,7 @@ export function EasterEggCounter() {
       initial={{ opacity: 0, scale: 0.8 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 3, duration: 0.5 }}
-      className="fixed bottom-4 left-4 z-20"
+      className="fixed bottom-4 left-4 z-20 hidden md:block"
     >
       <div className="group relative flex items-center gap-3">
         {/* Easter egg counter */}

@@ -103,7 +103,7 @@ export function Navigation() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-2">
-              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm hover:border-primary/30" />
+              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm" />
               <Button 
                 variant="ghost" 
                 size="icon"
@@ -118,34 +118,39 @@ export function Navigation() {
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden relative w-6 h-6 focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              <span className="sr-only">Toggle menu</span>
-              <div className="absolute w-6 h-5 flex flex-col justify-between">
-                <span
-                  className={cn(
-                    "w-full h-[2px] bg-primary transform transition-all duration-300 origin-left",
-                    isOpen && "rotate-45 translate-y-[1px]"
-                  )}
-                />
-                <span
-                  className={cn(
-                    "w-full h-[2px] bg-primary transition-all duration-300",
-                    isOpen && "opacity-0"
-                  )}
-                />
-                <span
-                  className={cn(
-                    "w-full h-[2px] bg-primary transform transition-all duration-300 origin-left",
-                    isOpen && "-rotate-45 -translate-y-[1px]"
-                  )}
-                />
-              </div>
-            </button>
+            {/* Mobile Header Controls */}
+            <div className="md:hidden flex items-center gap-2">
+              <ThemeToggle className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm" />
+              
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="h-9 w-9 flex items-center justify-center rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm hover:border-primary/30"
+                aria-label="Toggle menu"
+              >
+                <span className="sr-only">Toggle menu</span>
+                <div className="relative w-5 h-4 flex flex-col justify-between">
+                  <span
+                    className={cn(
+                      "w-full h-[2px] bg-primary transform transition-all duration-300 origin-left",
+                      isOpen && "rotate-45 translate-y-[1px]"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "w-full h-[2px] bg-primary transition-all duration-300",
+                      isOpen && "opacity-0"
+                    )}
+                  />
+                  <span
+                    className={cn(
+                      "w-full h-[2px] bg-primary transform transition-all duration-300 origin-left",
+                      isOpen && "-rotate-45 -translate-y-[1px]"
+                    )}
+                  />
+                </div>
+              </button>
+            </div>
           </nav>
         </Container>
       </header>
@@ -196,21 +201,6 @@ export function Navigation() {
                 </a>
               </MotionDiv>
             ))}
-            
-            {/* Theme Toggle in Mobile Menu */}
-            <MotionDiv
-              initial={false}
-              animate={isOpen ? "open" : "closed"}
-              variants={{
-                open: { x: 0, opacity: 1 },
-                closed: { x: 50, opacity: 0 },
-              }}
-              transition={{ delay: isOpen ? navigationItems.length * 0.1 : 0 }}
-              className="pt-8 flex items-center gap-4"
-            >
-              <span className="text-sm text-muted-foreground">Theme</span>
-              <ThemeToggle />
-            </MotionDiv>
           </nav>
         </Container>
       </MotionDiv>

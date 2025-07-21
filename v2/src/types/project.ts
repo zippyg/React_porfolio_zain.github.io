@@ -1,7 +1,9 @@
+export type ProjectCategory = 'physics' | 'quant' | 'software' | 'ml-ai' | 'math-stats';
+
 export interface Project {
   id: string;
   title: string;
-  category: 'physics' | 'finance' | 'software' | 'ml' | 'research';
+  categories: ProjectCategory[];
   shortDescription: string;
   longDescription: string;
   highlights: string[];

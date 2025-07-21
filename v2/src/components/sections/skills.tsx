@@ -142,9 +142,15 @@ const skillCategories: Record<string, { title: string; color: string; glowColor:
       { name: "Statistical Mechanics", level: 5 },
       { name: "Electromagnetism", level: 5 },
       { name: "Classical Mechanics", level: 5 },
+      { name: "Lagrangian Mechanics", level: 5 },
+      { name: "Hamiltonian Mechanics", level: 5 },
       { name: "Particle Physics", level: 4 },
-      { name: "Computational Physics", level: 5 },
       { name: "Thermodynamics", level: 5 },
+      { name: "Computational Physics", level: 5 },
+      { name: "Special Relativity", level: 5 },
+      { name: "General Relativity", level: 4 },
+      { name: "Quantum Field Theory", level: 3 },
+      { name: "Condensed Matter", level: 4 },
       { name: "Optics", level: 4 },
       { name: "Scientific Computing", level: 5 },
       { name: "Research Methodologies", level: 5 }
@@ -156,38 +162,53 @@ const skillCategories: Record<string, { title: string; color: string; glowColor:
     glowColor: "rgba(168, 85, 247, 0.3)",
     skills: [
       { name: "Linear Algebra", level: 5 },
-      { name: "Calculus", level: 5 },
-      { name: "Differential Equations", level: 5 },
-      { name: "Probability Theory", level: 5 },
+      { name: "Multivariable Calculus", level: 5 },
+      { name: "Real Analysis", level: 5 },
       { name: "Complex Analysis", level: 4 },
-      { name: "Fourier Analysis", level: 4 },
+      { name: "Differential Equations", level: 5 },
+      { name: "Partial Differential Equations", level: 4 },
+      { name: "Probability Theory", level: 5 },
+      { name: "Measure Theory", level: 4 },
+      { name: "Rough Path Theory", level: 3 },
       { name: "Numerical Methods", level: 5 },
-      { name: "Group Theory", level: 3 },
+      { name: "Mathematical Optimization", level: 5 },
+      { name: "Group Theory", level: 4 },
+      { name: "Topology", level: 3 },
+      { name: "Fourier Analysis", level: 5 },
       { name: "Stochastic Processes", level: 5 },
-      { name: "Statistical Analysis", level: 5 }
+      { name: "Statistical Analysis", level: 5 },
+      { name: "Bayesian Statistics", level: 4 },
+      { name: "Time Series Analysis", level: 5 }
     ]
   },
   machineLearning: {
-    title: "Machine Learning",
+    title: "Machine Learning & AI",
     color: "from-cyan-500 to-blue-600",
     glowColor: "rgba(6, 182, 212, 0.3)",
     skills: [
       { 
         name: "TensorFlow", 
         icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tensorflow/tensorflow-original.svg",
-        level: 4 
+        level: 5 
       },
+      { name: "PyTorch", level: 5 },
+      { name: "JAX", level: 4 },
+      { name: "CUDA", level: 4 },
       { name: "Scikit-Learn", level: 5 },
-      { name: "LSTM", level: 4 },
+      { name: "LSTM", level: 5 },
       { name: "GRU", level: 4 },
+      { name: "Transformers", level: 4 },
       { name: "ARIMA", level: 4 },
-      { name: "GANs", level: 3 },
+      { name: "GANs", level: 4 },
       { name: "Optuna", level: 4 },
-      { name: "Neural Networks", level: 4 },
-      { name: "Deep Learning", level: 4 },
-      { name: "NLP", level: 3 },
+      { name: "Neural Networks", level: 5 },
+      { name: "Deep Learning", level: 5 },
+      { name: "NLP", level: 4 },
       { name: "Computer Vision", level: 3 },
-      { name: "Reinforcement Learning", level: 3 }
+      { name: "Reinforcement Learning", level: 4 },
+      { name: "SLURM", level: 4 },
+      { name: "RAG", level: 4 },
+      { name: "QLoRA", level: 4 }
     ]
   }
 };

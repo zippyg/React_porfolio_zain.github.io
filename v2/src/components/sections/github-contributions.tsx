@@ -228,8 +228,14 @@ export function GitHubContributionsSection() {
               </div>
 
               {/* Contributions Graph */}
-              <div className="relative w-full bg-gray-100/30 dark:bg-gray-900/20 border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-4 shadow-sm">
-                <div className="w-full">
+              <div className="relative w-full">
+                <div className="md:hidden text-xs text-muted-foreground text-right mb-2">
+                  <span className="inline-flex items-center gap-1">
+                    ← Swipe to view more →
+                  </span>
+                </div>
+                <div className="relative w-full bg-gray-100/30 dark:bg-gray-900/20 border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-4 shadow-sm overflow-x-auto scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent">
+                  <div className="min-w-[700px] md:min-w-0 w-full">
                   <div className="w-full">
                     {/* Month labels */}
                     <div className="flex gap-[3px] mb-2 ml-10 justify-between w-full">
@@ -324,6 +330,7 @@ export function GitHubContributionsSection() {
                       <span>More</span>
                     </div>
                   </div>
+                </div>
                 </div>
               </div>
 

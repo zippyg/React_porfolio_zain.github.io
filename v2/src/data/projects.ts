@@ -2,30 +2,48 @@ import { Project } from '@/types/project';
 
 export const projects: Project[] = [
   {
-    id: 'higgs-boson-analysis',
-    title: 'Higgs Boson Statistical Analysis',
-    category: 'physics',
-    shortDescription: 'Simulated discovery of Higgs boson using advanced statistical methods and Python',
-    longDescription: `Recreated the groundbreaking data analysis that led to the Higgs boson discovery. This project demonstrates deep understanding of particle physics, statistical modeling, and computational techniques used at CERN.
-    
-    Using Monte Carlo simulations, I generated datasets mimicking the H → γγ decay channel with realistic signal and background distributions. Implemented Maximum Likelihood Estimation and Chi-Square methods to extract optimal parameters and validate the significance of the Higgs signal through 10,000+ simulations.`,
+    id: 'finllm-halo',
+    title: 'FinLLM-HALO-500',
+    categories: ['quant', 'ml-ai', 'software'],
+    shortDescription: 'Open-source SEC finance Q&A benchmark for evaluating and mitigating LLM hallucinations',
+    longDescription: `Groundbreaking research project addressing the critical challenge of large language model hallucinations in financial contexts. As an undergraduate research intern, I manually curated and open-sourced FinHALO-500, a comprehensive 500-pair SEC finance Q&A benchmark that sets new standards for evaluating LLM reliability in financial applications.
+
+    The project introduces two novel evaluation metrics: NIWH (materiality-weighted errors) for assessing the business impact of hallucinations, and BAHE (cost-performance optimization) for balancing accuracy with computational efficiency. Developed an end-to-end mitigation pipeline combining Retrieval-Augmented Generation (RAG) with QLoRA fine-tuning on frontier models ranging from 8B to 70B parameters, achieving remarkable results.`,
     highlights: [
-      'Achieved 5-sigma significance detection matching historical results',
-      'Processed 10,000+ simulated collision events',
-      'Implemented MLE and χ² optimization techniques',
-      'Validated results against CERN benchmarks'
+      'Reduced GPT-4o hallucinations by >20 percentage points on SEC filing numeric tasks',
+      'Slashed inference costs by 78% while maintaining accuracy',
+      'Developed novel NIWH and BAHE evaluation metrics',
+      'Peer-reviewed and slated for ACL 2025 publication',
+      'Commercial release planned with major financial institutions'
     ],
-    techStack: ['Python', 'NumPy', 'SciPy', 'Matplotlib', 'Monte Carlo'],
-    pdf: '/assets/Higgs%20paper.pdf',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Higgs%20Boson%20Discovery',
+    techStack: ['Python', 'PyTorch', 'JAX', 'CUDA', 'OpenAI API', 'Google Gemini', 'GCP', 'SLURM', 'NVIDIA H100', 'RAG', 'QLoRA', 'Transformers'],
+    year: 2025,
+    featured: true,
+    status: 'in-progress'
+  },
+  {
+    id: 'enhanced-black-scholes',
+    title: 'Enhanced Black-Scholes with Adaptive Volatility',
+    categories: ['quant', 'ml-ai', 'software', 'math-stats'],
+    shortDescription: 'Advanced options pricing integrating stochastic volatility and ML predictions',
+    longDescription: `Revolutionary enhancement to the Black-Scholes model incorporating dynamic volatility through both stochastic models (GARCH, Heston, SABR, Lévy) and machine learning (LSTM, GRU, GAN hybrid).
+    
+    This approach captures real market dynamics missed by constant volatility assumptions. Monte Carlo stress testing validates model robustness under extreme conditions, while real-time data integration enables adaptive pricing that reflects current market sentiment.`,
+    highlights: [
+      'Improved pricing accuracy by 34% over standard BSM',
+      'Stress-tested with 100,000+ Monte Carlo scenarios',
+      'Real-time volatility adaptation with sub-second updates',
+      'Outperformed traditional models during 2023 volatility spikes'
+    ],
+    techStack: ['Python', 'QuantLib', 'TensorFlow', 'LSTM', 'GAN', 'GARCH', 'Monte Carlo'],
     year: 2024,
     featured: true,
-    status: 'completed'
+    status: 'in-progress'
   },
   {
     id: 'neutrino-oscillation',
     title: 'Neutrino Oscillation Parameter Extraction',
-    category: 'physics',
+    categories: ['physics', 'math-stats'],
     shortDescription: 'Extracted neutrino parameters θ23 and Δm²23 using advanced optimization algorithms',
     longDescription: `Computational study extracting fundamental neutrino oscillation parameters through sophisticated optimization techniques. This work tackles one of particle physics' most challenging problems by combining theoretical physics with computational efficiency.
     
@@ -44,9 +62,51 @@ export const projects: Project[] = [
     status: 'completed'
   },
   {
+    id: 'marketseer',
+    title: 'MarketSeer - AI Financial Forecasting',
+    categories: ['ml-ai', 'software', 'quant', 'math-stats'],
+    shortDescription: 'Real-time market predictions combining traditional data with sentiment analysis',
+    longDescription: `Comprehensive financial forecasting platform that uniquely combines quantitative market data with qualitative sentiment analysis from news and social media. Delivers actionable insights through interactive visualizations and customizable alerts.
+    
+    Built with scalable architecture supporting novice to expert traders. Features include portfolio simulation tools, ML-powered predictions, and educational resources explaining the impact of sentiment on markets.`,
+    highlights: [
+      'Processes 50K+ news articles daily for sentiment',
+      'Achieved 73% directional accuracy on SPY predictions',
+      'Real-time alerts with <30s latency from news events',
+      'Interactive dashboards with 50+ technical indicators'
+    ],
+    techStack: ['Python', 'Flask', 'React', 'TensorFlow', 'PostgreSQL', 'NLP'],
+    year: 2024,
+    featured: true,
+    status: 'in-progress'
+  },
+  {
+    id: 'portfolio-website-v2',
+    title: 'This Website - Portfolio',
+    categories: ['software'],
+    shortDescription: 'Modern portfolio featuring 168 floating physics equations, 5 hidden easter eggs, and a black hole',
+    longDescription: `You're experiencing it right now! This portfolio represents the cutting edge of web development, featuring a custom particle physics system rendering 168 mathematical equations from quantum mechanics, thermodynamics, and quantitative finance. The site includes five carefully crafted easter eggs, culminating in a spectacular black hole animation that warps spacetime itself.
+    
+    Built with performance as a priority, the Canvas API particle system maintains 60+ FPS while managing complex gravitational interactions. Hidden features include a command palette (CMD/CTRL+K), secret "fun mode" with torch physics, double-click warping effects, sticky navigation Easter egg, and the grand finale - a physics-accurate black hole that consumes the entire page. Every aspect is meticulously optimized using React performance patterns, Web Workers for physics calculations, and GPU-accelerated animations.`,
+    highlights: [
+      '168 LaTeX equations rendered as interactive particles with physics',
+      '5 hidden easter eggs including physics-accurate black hole animation',
+      'Command palette with fuzzy search navigation (CMD/CTRL+K)',
+      'Torch mode with gravitational effects and grid warping',
+      '60+ FPS performance with hundreds of animated elements',
+      'Responsive design with dark theme and accessibility features'
+    ],
+    techStack: ['Next.js 14', 'TypeScript', 'React', 'Framer Motion', 'Canvas API', 'GSAP', 'Tailwind CSS', 'Web Workers', 'LaTeX'],
+    github: 'https://github.com/zippyg/React_porfolio_zain.github.io',
+    live: 'https://zainmughal.dev',
+    year: 2025,
+    featured: true,
+    status: 'completed'
+  },
+  {
     id: 'market-anomaly-detection',
     title: 'Market Data Feed Anomaly Detection',
-    category: 'finance',
+    categories: ['quant'],
     shortDescription: 'ML-powered detection of staleness and false jumps in fixed-income data feeds',
     longDescription: `Developed sophisticated anomaly detection system for high-frequency trading environments, addressing critical issues of data staleness and false price jumps that can distort trading decisions.
     
@@ -60,32 +120,34 @@ export const projects: Project[] = [
     techStack: ['Python', 'LSTM', 'ARIMA', 'Reinforcement Learning', 'Time-Series Analysis'],
     pdf: '/assets/feed_data_report.pdf',
     year: 2024,
-    featured: true,
+    featured: false,
     status: 'completed'
   },
   {
-    id: 'enhanced-black-scholes',
-    title: 'Enhanced Black-Scholes with Adaptive Volatility',
-    category: 'finance',
-    shortDescription: 'Advanced options pricing integrating stochastic volatility and ML predictions',
-    longDescription: `Revolutionary enhancement to the Black-Scholes model incorporating dynamic volatility through both stochastic models (GARCH, Heston, SABR, Lévy) and machine learning (LSTM, GRU, GAN hybrid).
+    id: 'higgs-boson-analysis',
+    title: 'Higgs Boson Statistical Analysis',
+    categories: ['physics', 'math-stats'],
+    shortDescription: 'Simulated discovery of Higgs boson using advanced statistical methods and Python',
+    longDescription: `Recreated the groundbreaking data analysis that led to the Higgs boson discovery. This project demonstrates deep understanding of particle physics, statistical modeling, and computational techniques used at CERN.
     
-    This approach captures real market dynamics missed by constant volatility assumptions. Monte Carlo stress testing validates model robustness under extreme conditions, while real-time data integration enables adaptive pricing that reflects current market sentiment.`,
+    Using Monte Carlo simulations, I generated datasets mimicking the H → γγ decay channel with realistic signal and background distributions. Implemented Maximum Likelihood Estimation and Chi-Square methods to extract optimal parameters and validate the significance of the Higgs signal through 10,000+ simulations.`,
     highlights: [
-      'Improved pricing accuracy by 34% over standard BSM',
-      'Stress-tested with 100,000+ Monte Carlo scenarios',
-      'Real-time volatility adaptation with sub-second updates',
-      'Outperformed traditional models during 2023 volatility spikes'
+      'Achieved 5-sigma significance detection matching historical results',
+      'Processed 10,000+ simulated collision events',
+      'Implemented MLE and χ² optimization techniques',
+      'Validated results against CERN benchmarks'
     ],
-    techStack: ['Python', 'QuantLib', 'TensorFlow', 'LSTM', 'GAN', 'GARCH', 'Monte Carlo'],
+    techStack: ['Python', 'NumPy', 'SciPy', 'Matplotlib', 'Monte Carlo'],
+    pdf: '/assets/Higgs%20paper.pdf',
+    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Higgs%20Boson%20Discovery',
     year: 2024,
-    featured: true,
-    status: 'in-progress'
+    featured: false,
+    status: 'completed'
   },
   {
     id: 'portfolio-risk-management',
     title: 'High-Performance Portfolio Risk System',
-    category: 'finance',
+    categories: ['quant', 'software', 'math-stats'],
     shortDescription: 'C++ risk management system calculating VaR/CVaR with ML predictions',
     longDescription: `Enterprise-grade risk management system built for speed and accuracy. Processes real-time market data to calculate Value at Risk and Conditional Value at Risk, enhanced with machine learning for predictive insights.
     
@@ -102,28 +164,9 @@ export const projects: Project[] = [
     status: 'in-progress'
   },
   {
-    id: 'marketseer',
-    title: 'MarketSeer - AI Financial Forecasting',
-    category: 'ml',
-    shortDescription: 'Real-time market predictions combining traditional data with sentiment analysis',
-    longDescription: `Comprehensive financial forecasting platform that uniquely combines quantitative market data with qualitative sentiment analysis from news and social media. Delivers actionable insights through interactive visualizations and customizable alerts.
-    
-    Built with scalable architecture supporting novice to expert traders. Features include portfolio simulation tools, ML-powered predictions, and educational resources explaining the impact of sentiment on markets.`,
-    highlights: [
-      'Processes 50K+ news articles daily for sentiment',
-      'Achieved 73% directional accuracy on SPY predictions',
-      'Real-time alerts with <30s latency from news events',
-      'Interactive dashboards with 50+ technical indicators'
-    ],
-    techStack: ['Python', 'Flask', 'React', 'TensorFlow', 'PostgreSQL', 'NLP'],
-    year: 2024,
-    featured: false,
-    status: 'in-progress'
-  },
-  {
     id: 'thermodynamics-simulation',
     title: 'Thermodynamics Gas Behavior Simulator',
-    category: 'physics',
+    categories: ['physics', 'math-stats', 'software'],
     shortDescription: 'Hard-sphere collision simulation validating classical gas laws',
     longDescription: `Advanced simulation studying gas behavior through kinetic theory, modeling particles as hard spheres with perfectly elastic collisions. Validates classical thermodynamic laws while exploring microscopic gas behavior.
     
@@ -145,7 +188,7 @@ export const projects: Project[] = [
   {
     id: 'gyroscopic-stabilization',
     title: 'Advanced Gyroscopic Stabilization',
-    category: 'software',
+    categories: ['ml-ai', 'math-stats', 'software'],
     shortDescription: 'Mechanical stabilizers using gyroscopic principles for precision instruments',
     longDescription: `Innovative stabilization system applying gyroscopic physics to create affordable, effective stabilizers for cameras and precision instruments. Combines theoretical modeling with practical implementation.
     
@@ -166,7 +209,7 @@ export const projects: Project[] = [
   {
     id: 'bedroom-rent-calculator',
     title: 'Fair Rent Distribution Calculator',
-    category: 'software',
+    categories: ['software'],
     shortDescription: 'ML-powered rent calculator using hedonic regression for mathematically fair pricing',
     longDescription: `Sophisticated web application solving the common problem of fair rent distribution in shared housing. Originally developed for personal use, now serves hundreds of users seeking equitable rent splitting.
     
@@ -187,7 +230,7 @@ export const projects: Project[] = [
   {
     id: 'projectile-motion-game',
     title: 'Educational Projectile Motion Simulator',
-    category: 'software',
+    categories: ['software', 'math-stats', 'physics'],
     shortDescription: 'Interactive physics education tool with adaptive AI difficulty',
     longDescription: `Advanced educational game making physics engaging through interactive projectile motion simulations. Features adaptive AI that adjusts difficulty based on player performance, maintaining optimal challenge level.
     
@@ -208,7 +251,7 @@ export const projects: Project[] = [
   {
     id: 'spotify-youtube-downloader',
     title: 'Spotify-YouTube Music Downloader',
-    category: 'software',
+    categories: ['software'],
     shortDescription: 'Automated tool to download Spotify playlists via YouTube with metadata',
     longDescription: `Powerful application bridging Spotify and YouTube, automatically downloading tracks from playlists and liked songs. Features sophisticated matching algorithms to find correct tracks and embed proper metadata.
     
@@ -223,27 +266,6 @@ export const projects: Project[] = [
     github: 'https://github.com/zippyg/Spotify-YouTube-Music-Downloader',
     year: 2022,
     featured: false,
-    status: 'completed'
-  },
-  {
-    id: 'portfolio-website-v2',
-    title: 'Interactive Portfolio with Particle Physics',
-    category: 'software',
-    shortDescription: 'This website - featuring 168 floating equations and hidden easter eggs',
-    longDescription: `You're looking at it! This portfolio pushes web development boundaries with a custom particle system rendering 168 mathematical equations, hidden command palette (CMD+Z), and secret "fun mode" with interactive physics.
-    
-    Built for performance with Canvas API achieving 60+ FPS while managing complex animations. Features constellation patterns between particles, page-relative scanline effects, and carefully crafted user experience balancing innovation with usability.`,
-    highlights: [
-      '168 LaTeX equations rendered as floating particles',
-      'Hidden command palette with navigation shortcuts',
-      'Secret fun mode with mouse physics interactions',
-      '60+ FPS performance with hundreds of particles'
-    ],
-    techStack: ['Next.js 14', 'TypeScript', 'Framer Motion', 'Canvas API', 'Tailwind'],
-    github: 'https://github.com/zippyg/React_porfolio_zain.github.io',
-    live: 'https://zainmughal.dev',
-    year: 2025,
-    featured: true,
     status: 'completed'
   }
 ];

@@ -14,7 +14,7 @@ export function ThemeToggle({ className }: ThemeToggleProps = {}) {
   return (
     <motion.button
       onClick={toggleTheme}
-      className={className || "relative p-2 rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm hover:border-primary/30"}
+      className={className || "relative p-2 rounded-lg bg-muted/60 hover:bg-muted border border-border/50 transition-colors shadow-sm"}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
@@ -28,7 +28,7 @@ export function ThemeToggle({ className }: ThemeToggleProps = {}) {
             exit={{ rotate: 90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Moon className="w-5 h-5 text-muted-foreground" />
+            <Moon className="w-5 h-5 text-primary" />
           </motion.div>
         ) : (
           <motion.div
@@ -38,7 +38,7 @@ export function ThemeToggle({ className }: ThemeToggleProps = {}) {
             exit={{ rotate: -90, opacity: 0 }}
             transition={{ duration: 0.2 }}
           >
-            <Sun className="w-5 h-5 text-muted-foreground" />
+            <Sun className="w-5 h-5 text-primary" />
           </motion.div>
         )}
       </AnimatePresence>

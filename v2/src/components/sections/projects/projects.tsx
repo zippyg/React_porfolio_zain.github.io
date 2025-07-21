@@ -12,10 +12,10 @@ import { Project } from "@/types/project";
 const categories = [
   { id: 'all', label: 'All Projects' },
   { id: 'physics', label: 'Physics' },
-  { id: 'finance', label: 'Finance' },
-  { id: 'ml', label: 'Machine Learning' },
+  { id: 'quant', label: 'Quant Research' },
+  { id: 'ml-ai', label: 'ML & AI' },
   { id: 'software', label: 'Software' },
-  { id: 'research', label: 'Research' }
+  { id: 'math-stats', label: 'Math & Stats' }
 ];
 
 export function ProjectsSection() {
@@ -25,7 +25,7 @@ export function ProjectsSection() {
 
   const filteredProjects = useMemo(() => {
     if (selectedCategory === 'all') return projects;
-    return projects.filter(p => p.category === selectedCategory);
+    return projects.filter(p => p.categories.includes(selectedCategory as any));
   }, [selectedCategory]);
 
   const handleProjectClick = (project: Project) => {
@@ -82,7 +82,7 @@ export function ProjectsSection() {
                 <span className="ml-2 text-xs opacity-60">
                   ({category.id === 'all' 
                     ? projects.length 
-                    : projects.filter(p => p.category === category.id).length})
+                    : projects.filter(p => p.categories.includes(category.id as any)).length})
                 </span>
               </button>
             ))}

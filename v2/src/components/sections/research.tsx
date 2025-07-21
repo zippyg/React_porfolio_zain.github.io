@@ -7,11 +7,11 @@ import { FileText, TrendingUp, Brain, Atom } from "lucide-react";
 
 const publications = [
   {
-    title: "LLM Applications in Quantitative Finance",
+    title: "FinLLM-HALO-500: A Financial Q&A Benchmark with Novel Metrics for Evaluating and Mitigating LLM Hallucinations",
     venue: "ACL 2025 (Target)",
     year: 2025,
     type: "In Progress",
-    abstract: "Investigating the application of large language models for financial market analysis and automated trading strategies. Focus on prompt engineering for volatility prediction."
+    abstract: "Manually curated and open-sourced FinHALO-500, a 500-pair SEC finance Q&A benchmark and mitigation library, introducing two novel evaluation metrics: NIWH (materiality-weighted errors) and BAHE (cost-performance optimisation). Developed end-to-end mitigation pipeline combining RAG with QLoRA fine-tuning, reducing GPT-4o hallucinations by >20pp on SEC filing numeric tasks while slashing inference costs by 78%."
   },
   {
     title: "Advanced Volatility Modeling using Deep Learning",
@@ -21,11 +21,11 @@ const publications = [
     abstract: "Novel approach to volatility forecasting combining LSTM networks with traditional GARCH models. Emphasis on high-frequency trading data and market microstructure."
   },
   {
-    title: "Path Theory Applications in Neural Network Optimization",
+    title: "Rough Path Theory Applications in Neural Network Optimisation",
     venue: "JMLR / NeurIPS 2026 (Target)",
     year: 2026,
     type: "In Progress",
-    abstract: "Theoretical framework connecting path integrals from physics to neural network training dynamics. Applications to understanding loss landscape geometry and optimization trajectories."
+    abstract: "Theoretical framework connecting path integrals from physics to neural network training dynamics. Applications to understanding loss landscape geometry and optimisation trajectories."
   }
 ];
 
