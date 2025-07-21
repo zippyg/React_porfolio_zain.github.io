@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
 import { GlowCard } from "@/components/ui/glow-card";
@@ -9,13 +9,127 @@ import { MotionDiv } from "@/components/ui/motion";
 import { fadeInUp, staggerContainer } from "@/components/ui/motion";
 import { TrendingUp, Atom, Brain } from "lucide-react";
 import { EasterEggCounter } from "@/components/ui/easter-egg-counter";
+import { useFunMode } from "@/contexts/fun-mode-context";
+import { BlackHoleEffect } from "@/components/ui/black-hole-effect";
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
+  const { isFunMode } = useFunMode();
+  const [torchEnabled, setTorchEnabled] = useState(false);
+  const [triggerBlackHole, setTriggerBlackHole] = useState(false);
+  const [showClickCount, setShowClickCount] = useState(0);
+  const clickCountRef = useRef(0);
+  const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastClickTimeRef = useRef(0);
+  const clickPositionRef = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    // Check torch state from localStorage
+    if (isFunMode) {
+      const saved = localStorage.getItem('torchEnabled');
+      setTorchEnabled(saved === 'true');
+    }
+  }, [isFunMode]);
+
+  // Listen for torch state changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      if (isFunMode) {
+        const saved = localStorage.getItem('torchEnabled');
+        const newState = saved === 'true';
+        console.log('Torch state update in hero:', newState);
+        setTorchEnabled(newState);
+      }
+    };
+
+    // Check immediately
+    handleStorageChange();
+
+    window.addEventListener('storage', handleStorageChange);
+    // Also listen for custom event for same-tab updates
+    window.addEventListener('torchToggled', handleStorageChange);
+
+    // Poll localStorage as backup (since storage events don't fire in same tab)
+    const interval = setInterval(handleStorageChange, 100);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('torchToggled', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [isFunMode]);
+
+  // Reset trigger when component unmounts or fun mode changes
+  useEffect(() => {
+    return () => {
+      setTriggerBlackHole(false);
+      clickCountRef.current = 0;
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+      }
+    };
+  }, [isFunMode]);
+
+  // Debug trigger state
+  useEffect(() => {
+    if (triggerBlackHole) {
+      console.log('🚨 triggerBlackHole is now TRUE in hero component!');
+    }
+  }, [triggerBlackHole]);
+
+  const handleZainClick = (e: React.MouseEvent) => {
+    console.log('=== Zain Click Debug ===');
+    console.log('Fun mode:', isFunMode);
+    console.log('Torch enabled:', torchEnabled);
+    
+    if (!isFunMode || !torchEnabled) {
+      console.log('Click ignored - fun mode or torch not enabled');
+      return;
+    }
+    
+    e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
+    
+    const currentTime = Date.now();
+    const timeSinceLastClick = currentTime - lastClickTimeRef.current;
+    
+    // Clear any existing timeout
+    if (clickTimeoutRef.current) {
+      clearTimeout(clickTimeoutRef.current);
+      clickTimeoutRef.current = null;
+    }
+    
+    // Count rapid clicks
+    if (timeSinceLastClick < 300) {
+      clickCountRef.current++;
+    } else {
+      clickCountRef.current = 1;
+    }
+    
+    console.log(`Zain click count: ${clickCountRef.current}, time since last: ${timeSinceLastClick}ms`);
+    lastClickTimeRef.current = currentTime;
+    clickPositionRef.current = { x: e.clientX, y: e.clientY };
+    
+    // Update visual feedback
+    setShowClickCount(clickCountRef.current);
+    
+    // Wait to see if more clicks are coming
+    clickTimeoutRef.current = setTimeout(() => {
+      const finalCount = clickCountRef.current;
+      console.log(`Final Zain click count: ${finalCount}`);
+      
+      if (finalCount >= 6) {
+        console.log('🌌 BLACK HOLE SHOULD TRIGGER NOW!');
+        console.log('Setting triggerBlackHole to true...');
+        setTriggerBlackHole(true);
+      } else {
+        console.log(`Not enough clicks: ${finalCount} < 6`);
+      }
+      clickCountRef.current = 0;
+      setShowClickCount(0);
+    }, 300);
+  };
 
   return (
     <section id="hero" className="min-h-[calc(100vh-2rem)] relative overflow-hidden flex items-center pt-8">
@@ -28,8 +142,19 @@ export function Hero() {
           className="text-center mb-8 sm:mb-12"
         >
           <MotionDiv variants={fadeInUp}>
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 font-display cursor-pointer">
-              <GlitchText text="Zain" className="text-primary glow-green" />{" "}
+            <h1 className="text-5xl md:text-7xl font-bold mb-4 font-display">
+              <span 
+                onClick={handleZainClick}
+                className={`cursor-pointer inline-block relative ${torchEnabled ? 'hover:scale-105 transition-transform' : ''}`}
+                style={{ userSelect: torchEnabled ? 'none' : 'auto' }}
+              >
+                <GlitchText text="Zain" className="text-primary glow-green" />
+                {showClickCount > 0 && torchEnabled && (
+                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-green-500 font-mono">
+                    {showClickCount} / 6
+                  </span>
+                )}
+              </span>{" "}
               <GlitchText text="Mughal" className="text-foreground" />
             </h1>
           </MotionDiv>
@@ -178,6 +303,19 @@ export function Hero() {
           </div>
         </div>
       </MotionDiv>
+
+      {/* Black hole easter egg */}
+      {isFunMode && (
+        <BlackHoleEffect 
+          trigger={triggerBlackHole}
+          position={clickPositionRef.current}
+          onComplete={() => {
+            console.log('Black hole animation complete');
+            setTriggerBlackHole(false);
+            clickCountRef.current = 0;
+          }}
+        />
+      )}
     </section>
   );
 }

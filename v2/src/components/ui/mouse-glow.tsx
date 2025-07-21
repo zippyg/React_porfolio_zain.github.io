@@ -45,6 +45,10 @@ export function MouseGlow({ className }: MouseGlowProps) {
   const funModeActivatedRef = useRef(0);
   const isProcessingClickRef = useRef(false);
   const [mounted, setMounted] = useState(false);
+  const consecutiveClickCountRef = useRef(0);
+  const multiClickModeRef = useRef(false);
+  const [clickFeedback, setClickFeedback] = useState<{ count: number; show: boolean }>({ count: 0, show: false });
+  const lastClickPositionRef = useRef({ x: 0, y: 0 });
 
   // Load initial torch state
   useEffect(() => {
@@ -73,6 +77,8 @@ export function MouseGlow({ className }: MouseGlowProps) {
       trailRef.current = [];
       glowTrailRef.current = [];
       clickEffectsRef.current = [];
+      // Remove no-select class
+      document.body.classList.remove('no-select');
     } else {
       // Track when fun mode was activated
       funModeActivatedRef.current = Date.now();
@@ -84,6 +90,19 @@ export function MouseGlow({ className }: MouseGlowProps) {
       }
     }
   }, [isFunMode, mounted]);
+  
+  // Add/remove no-select class based on torch state
+  useEffect(() => {
+    if (isFunMode && torchEnabled) {
+      document.body.classList.add('no-select');
+    } else {
+      document.body.classList.remove('no-select');
+    }
+    
+    return () => {
+      document.body.classList.remove('no-select');
+    };
+  }, [isFunMode, torchEnabled]);
 
   // Sync ref with state and save to localStorage
   useEffect(() => {
@@ -136,38 +155,82 @@ export function MouseGlow({ className }: MouseGlowProps) {
       // Ignore clicks within 500ms of fun mode activation
       if (Date.now() - funModeActivatedRef.current < 500) return;
       
-      // Prevent processing multiple clicks simultaneously
-      if (isProcessingClickRef.current) return;
+      // Prevent default to stop text selection
+      e.preventDefault();
       
-      // Only handle clicks in empty space
+      // Only skip interactive elements, allow clicks on text/divs/etc
       const target = e.target as HTMLElement;
-      if (target.tagName === 'BUTTON' || target.tagName === 'A' || target.tagName === 'INPUT') {
+      if (
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'A' || 
+        target.tagName === 'INPUT' ||
+        target.closest('.command-palette') || 
+        target.closest('[role="dialog"]')
+      ) {
         return;
       }
-      
-      // Also check for command palette elements
-      if (target.closest('.command-palette') || target.closest('[role="dialog"]')) {
-        return;
-      }
-      
-      isProcessingClickRef.current = true;
       
       const currentTime = Date.now();
       const timeSinceLastClick = currentTime - lastClickTimeRef.current;
       
-      // Check if this is a double click (second click within 300ms)
-      if (timeSinceLastClick < 300 && timeSinceLastClick > 0) {
-        // This is a double click
-        console.log('Double-click detected!');
+      // Clear any existing timeout
+      if (clickTimeoutRef.current) {
+        clearTimeout(clickTimeoutRef.current);
+        clickTimeoutRef.current = null;
+      }
+      
+      // Count rapid clicks
+      if (timeSinceLastClick < 300) {
+        consecutiveClickCountRef.current++;
+      } else {
+        consecutiveClickCountRef.current = 1;
+      }
+      
+      lastClickTimeRef.current = currentTime;
+      lastClickPositionRef.current = { x: e.clientX, y: e.clientY };
+      
+      // Show visual feedback for clicks when torch is on
+      if (torchEnabledRef.current) {
+        setClickFeedback({ count: consecutiveClickCountRef.current, show: true });
         
-        // Cancel any pending single click action
-        if (clickTimeoutRef.current) {
-          clearTimeout(clickTimeoutRef.current);
-          clickTimeoutRef.current = null;
-        }
+        // Hide feedback after a delay
+        setTimeout(() => {
+          setClickFeedback(prev => ({ ...prev, show: false }));
+        }, 2000);
         
-        // Double click - only trigger effects if torch is enabled
-        if (torchEnabledRef.current) {
+        console.log(`Click count: ${consecutiveClickCountRef.current}`);
+      }
+      
+      // Wait to see if more clicks are coming
+      clickTimeoutRef.current = setTimeout(() => {
+        const finalClickCount = consecutiveClickCountRef.current;
+        
+        // Process based on final click count
+        if (finalClickCount === 1) {
+          // Single click - toggle torch
+          console.log('Single click - toggling torch');
+          setTorchEnabled(prev => {
+            const newValue = !prev;
+            torchEnabledRef.current = newValue;
+            // Discover easter egg when torch is first enabled
+            if (newValue && isFunMode) {
+              discoverEgg(EASTER_EGGS.TORCH_LIGHT);
+            }
+            // Dispatch custom event for same-tab updates
+            window.dispatchEvent(new Event('torchToggled'));
+            return newValue;
+          });
+          
+          // Add a pulse effect to indicate torch toggle
+          clickEffectsRef.current.push({
+            x: e.clientX,
+            y: e.clientY,
+            type: 'pulse',
+            progress: 0,
+            timestamp: Date.now()
+          });
+        } else if (finalClickCount === 2 && torchEnabledRef.current) {
+          // Exactly 2 clicks = double-click effect (only when torch is on)
           const effectTypes: ClickEffect['type'][] = ['shear', 'rotate', 'scale', 'wave', 'dissolve', 'ripple'];
           const randomEffect = effectTypes[Math.floor(Math.random() * effectTypes.length)];
           
@@ -180,52 +243,17 @@ export function MouseGlow({ className }: MouseGlowProps) {
           });
           
           console.log(`Applied ${randomEffect} effect!`);
-          
-          // Discover easter egg for double click warp (only when torch is on)
           discoverEgg(EASTER_EGGS.DOUBLE_CLICK_WARP);
           
-          // Keep effects limited
           if (clickEffectsRef.current.length > 5) {
             clickEffectsRef.current.shift();
           }
-        } else {
-          // If torch is off, double click does nothing special
-          console.log('Enable torch first to use double-click effects!');
         }
         
-        lastClickTimeRef.current = 0; // Reset to prevent triple clicks
-        isProcessingClickRef.current = false;
-      } else {
-        // First click - set timestamp and wait to see if it's a double click
-        lastClickTimeRef.current = currentTime;
-        isProcessingClickRef.current = false; // Allow the second click to be processed
-        
-        clickTimeoutRef.current = setTimeout(() => {
-          // This is a single click - toggle torch
-          console.log('Single click - toggling torch');
-          setTorchEnabled(prev => {
-            const newValue = !prev;
-            torchEnabledRef.current = newValue;
-            // Discover easter egg when torch is first enabled
-            if (newValue && isFunMode) {
-              discoverEgg(EASTER_EGGS.TORCH_LIGHT);
-            }
-            return newValue;
-          });
-          
-          // Add a pulse effect to indicate torch toggle
-          clickEffectsRef.current.push({
-            x: e.clientX,
-            y: e.clientY,
-            type: 'pulse',
-            progress: 0,
-            timestamp: Date.now()
-          });
-          
-          clickTimeoutRef.current = null;
-          lastClickTimeRef.current = 0; // Reset
-        }, 300); // Wait 300ms to see if double click
-      }
+        // Reset counter after processing
+        consecutiveClickCountRef.current = 0;
+        setClickFeedback({ count: 0, show: false });
+      }, 300); // Wait 300ms to see if more clicks come
     };
 
     const handleScroll = () => {
@@ -703,17 +731,29 @@ export function MouseGlow({ className }: MouseGlowProps) {
   }, [isFunMode]); // Added isFunMode dependency
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={cn("pointer-events-none", className)}
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        zIndex: 1,
-      }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className={cn("pointer-events-none", className)}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1,
+        }}
+      />
+      {/* Click feedback indicator - subtle, near game controller */}
+      {clickFeedback.show && clickFeedback.count > 2 && torchEnabled && (
+        <div className="fixed bottom-4 left-44 pointer-events-none z-20">
+          <div className="bg-black/40 backdrop-blur-sm rounded-full px-3 py-1">
+            <span className="text-green-500/60 font-mono text-xs">
+              {clickFeedback.count} clicks
+            </span>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

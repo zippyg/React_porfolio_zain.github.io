@@ -56,7 +56,7 @@ export function EasterEggProvider({ children }: { children: React.ReactNode }) {
       value={{
         discoveredEggs,
         discoverEgg,
-        totalEggs: 4, // Only count the 4 implemented eggs for now
+        totalEggs: 5, // All 5 easter eggs are now implemented
         discoveredCount: discoveredEggs.size,
       }}
     >
