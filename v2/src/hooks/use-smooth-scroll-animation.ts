@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { useInView } from 'framer-motion';
+import { useInView, Variants } from 'framer-motion';
 
 interface UseSmoothScrollAnimationOptions {
   threshold?: number;
@@ -23,7 +23,7 @@ export function useSmoothScrollAnimation({
 }
 
 // Animation variants for consistent scroll animations
-export const scrollAnimationVariants = {
+export const scrollAnimationVariants: Record<string, Variants> = {
   fadeInUp: {
     hidden: { 
       opacity: 0, 
@@ -37,7 +37,7 @@ export const scrollAnimationVariants = {
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.25, 0.46, 0.45, 0.94] // Custom easing for smoothness
+        ease: "easeOut" // Smooth easing
       }
     }
   },
