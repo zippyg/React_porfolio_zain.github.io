@@ -15,7 +15,6 @@ export function useSmoothScrollAnimation({
   const ref = useRef(null);
   const isInView = useInView(ref, {
     once: triggerOnce,
-    margin: rootMargin,
     amount: threshold
   });
 
