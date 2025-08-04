@@ -4,6 +4,43 @@ import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { motion } from "framer-motion";
 import { FileText, TrendingUp, Brain, Atom } from "lucide-react";
+import { useSmoothScrollAnimation, scrollAnimationVariants, getStaggerDelay } from "@/hooks/use-smooth-scroll-animation";
+
+function ResearchCard({ pub, index }: { pub: typeof publications[0]; index: number }) {
+  const { ref, isInView } = useSmoothScrollAnimation({ threshold: 0.3 });
+  
+  return (
+    <motion.article
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={scrollAnimationVariants.fadeInUp}
+      transition={{ delay: getStaggerDelay(index, 0.1) }}
+      className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 shadow-sm group"
+    >
+      {/* Orange glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg" />
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title} - Coming Soon</h4>
+            <p className="text-sm text-muted-foreground">
+              {pub.venue} • {pub.year}
+            </p>
+          </div>
+          <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20 whitespace-nowrap">
+            {pub.type}
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">{pub.abstract}</p>
+        <motion.div className="flex items-center text-sm text-orange-500 font-medium group-hover:translate-x-1 transition-transform">
+          <FileText className="w-4 h-4 mr-1" />
+          Manuscript in preparation
+        </motion.div>
+      </div>
+    </motion.article>
+  );
+}
 
 const publications = [
   {
@@ -35,10 +72,10 @@ export function ResearchSection() {
       <Container>
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={scrollAnimationVariants.fadeInUp}
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -53,40 +90,21 @@ export function ResearchSection() {
         {/* Papers in Progress */}
         <div className="space-y-6">
             {publications.map((pub, index) => (
-              <motion.article
+              <ResearchCard
                 key={pub.title}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 shadow-sm group"
-              >
-                {/* Orange glow effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg" />
-                <div className="relative z-10">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title} - Coming Soon</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {pub.venue} • {pub.year}
-                      </p>
-                    </div>
-                    <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20 whitespace-nowrap">
-                      {pub.type}
-                    </span>
-                  </div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{pub.abstract}</p>
-                </div>
-              </motion.article>
+                pub={pub}
+                index={index}
+              />
             ))}
           </div>
 
         {/* Call to Action */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={scrollAnimationVariants.fadeInUp}
+          transition={{ delay: 0.3 }}
           className="mt-12 text-center"
         >
           <p className="text-muted-foreground mb-4">

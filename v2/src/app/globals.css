@@ -5,6 +5,9 @@
 /* KaTeX styles for equation rendering */
 @import "katex/dist/katex.min.css";
 
+/* Animation optimizations */
+@import '../styles/animations.css';
+
 @layer base {
   /* Dark theme (default) */
   :root {

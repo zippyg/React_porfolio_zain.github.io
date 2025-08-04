@@ -22,6 +22,55 @@ export const projects: Project[] = [
     status: 'in-progress'
   },
   {
+    id: 'polylens',
+    title: 'PolyLens - Social Alpha Trading System',
+    categories: ['quant', 'ml-ai', 'software'],
+    shortDescription: 'First production-ready algorithmic trading system harnessing social media virality for financial alpha',
+    longDescription: `PolyLens represents a paradigm shift in algorithmic trading by being the first production-ready system to harness the predictive power of social media virality and cultural momentum for financial markets. Unlike traditional trading systems that rely solely on price action and technical indicators, PolyLens ingests and analyzes content from TikTok, YouTube, Twitter, Reddit, and Instagram in real-time, using advanced sentiment analysis to detect emerging trends before they manifest in market movements.
+    
+    The system employs a sophisticated multi-agent architecture with five specialized AI agents - Research, Analysis, Strategy, Risk, and Execution - that collaborate through a Redis message bus to transform multimodal signals into executable trades. Built on a modern technology stack including Python 3.11, FastAPI, PostgreSQL with TimescaleDB, Next.js 14, and integrated with Interactive Brokers for paper trading, the system processes thousands of social media posts per minute, transcribes audio from videos using Whisper, analyzes sentiment using Google's Gemini 2.0 Flash, and applies institutional-grade risk management using the Kelly Criterion for position sizing and Value at Risk calculations.
+    
+    What makes PolyLens truly novel is its ability to quantify and trade on cultural zeitgeist - for instance, detecting when a TikTok about a specific stock goes viral, correlating that with Reddit discussion sentiment, YouTube influencer mentions, and Twitter momentum, then executing trades based on the aggregate signal strength while maintaining strict risk controls. This "social alpha" approach recognizes that in today's interconnected world, information cascades through social media before reaching traditional financial channels, and by positioning itself at the intersection of social virality and market dynamics, PolyLens captures inefficiencies that pure quantitative strategies miss.`,
+    highlights: [
+      'Processes 10,000+ social media posts per minute across 5 platforms',
+      'Multi-agent AI architecture with specialized trading agents',
+      'Real-time sentiment analysis using Gemini 2.0 Flash',
+      'Institutional-grade risk management with Kelly Criterion and VaR',
+      'Whisper integration for video/audio content transcription',
+      'Redis-based message bus for agent communication',
+      'Interactive Brokers integration for live paper trading'
+    ],
+    techStack: ['Python 3.11', 'FastAPI', 'PostgreSQL', 'TimescaleDB', 'Next.js 14', 'Redis', 'Whisper', 'Gemini 2.0', 'Interactive Brokers API', 'Docker', 'Kubernetes'],
+    year: 2025,
+    featured: true,
+    status: 'in-progress'
+  },
+  {
+    id: 'dinogo',
+    title: 'DinoGo - Autonomous ML Dinosaur Runner',
+    categories: ['ml-ai', 'software', 'physics'],
+    shortDescription: 'Low-power 8-bit microcontroller running real-time ML for autonomous gameplay',
+    longDescription: `DinoGo is a re-creation of the Google Chrome "Dino" endless runner game, developed for a resource-constrained 8-bit microcontroller. The primary goal was to demonstrate that a low-power microcontroller could simultaneously handle demanding graphical gameplay and real-time machine learning (ML) for autonomous control.
+    
+    Built entirely from the ground up in low-level PIC18 assembly code, the project overcame significant hardware limitations including only 4KB of RAM and a slow 128x64 GLCD display. The system implements a 3-8-3 feedforward neural network with fixed-point arithmetic (Q8.8) and ReLU activation for efficient inference on the 8-bit MCU.
+    
+    The key innovation was a partial screen redraw strategy that achieved an 8.7x speedup over full-screen clearing, resulting in a screen response rate of 191 FPS. The ML model processes obstacle distance, type/height, and dinosaur state to make real-time jump/duck decisions with 34.1ms inference time. Despite hardware constraints, the system successfully validates the feasibility of running graphically demanding games with real-time AI on ultra-low-resource microcontrollers.`,
+    highlights: [
+      'Achieved 191 FPS screen response rate on 8-bit MCU',
+      '8.7x rendering speedup through partial redraw optimization',
+      'Neural network inference in 34.1ms with only 4KB RAM',
+      'Total RAM usage kept to 15.1% (620 bytes)',
+      'Built entirely in assembly for maximum performance',
+      'Real-time ML decision making for autonomous gameplay'
+    ],
+    techStack: ['PIC18 Assembly', 'C', '8-bit MCU', 'GLCD', 'Neural Networks', 'Fixed-Point Math', 'Embedded Systems'],
+    pdf: '/assets/dinogo_research_paper.pdf',
+    video: '/assets/dinogo_demo.mp4',
+    year: 2024,
+    featured: true,
+    status: 'completed'
+  },
+  {
     id: 'enhanced-black-scholes',
     title: 'Enhanced Black-Scholes with Adaptive Volatility',
     categories: ['quant', 'ml-ai', 'software', 'math-stats'],
@@ -36,6 +85,7 @@ export const projects: Project[] = [
       'Outperformed traditional models during 2023 volatility spikes'
     ],
     techStack: ['Python', 'QuantLib', 'TensorFlow', 'LSTM', 'GAN', 'GARCH', 'Monte Carlo'],
+    pdf: '/assets/enhanced_black_scholes.pdf',
     year: 2024,
     featured: true,
     status: 'in-progress'
@@ -56,7 +106,6 @@ export const projects: Project[] = [
     ],
     techStack: ['Python', 'C++', 'NumPy', 'SciPy', 'GSL', 'Optimization'],
     pdf: '/assets/comp_phys_NLL_minimisations.pdf',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Neutrino%20Oscillations',
     year: 2024,
     featured: true,
     status: 'completed'
@@ -118,7 +167,6 @@ export const projects: Project[] = [
       'Deployed in production handling 1M+ ticks/second'
     ],
     techStack: ['Python', 'LSTM', 'ARIMA', 'Reinforcement Learning', 'Time-Series Analysis'],
-    pdf: '/assets/feed_data_report.pdf',
     year: 2024,
     featured: false,
     status: 'completed'
@@ -139,7 +187,6 @@ export const projects: Project[] = [
     ],
     techStack: ['Python', 'NumPy', 'SciPy', 'Matplotlib', 'Monte Carlo'],
     pdf: '/assets/Higgs%20paper.pdf',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Higgs%20Boson%20Discovery',
     year: 2024,
     featured: false,
     status: 'completed'
@@ -180,7 +227,6 @@ export const projects: Project[] = [
     techStack: ['Python', 'NumPy', 'Matplotlib', 'SciPy', 'Physics Simulation'],
     pdf: '/assets/Thermo%20paper.pdf',
     video: '/assets/screen%20rec%20mbs%20-%20thermosnooker.mov',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Thermodynamics%20Snooker%20Simulation',
     year: 2023,
     featured: false,
     status: 'completed'
@@ -201,7 +247,6 @@ export const projects: Project[] = [
     ],
     techStack: ['Python', 'C++', 'Arduino', 'MPU-6050', 'Lagrangian Mechanics'],
     pdf: '/assets/stabilization%20theory.pdf',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/GYROSCOPIC%20STABILIZATION',
     year: 2023,
     featured: false,
     status: 'completed'
@@ -243,7 +288,6 @@ export const projects: Project[] = [
     ],
     techStack: ['Python', 'Pygame', 'Physics Engine', 'AI'],
     pdf: '/assets/porj%20motion%20documentation.pdf',
-    github: 'https://github.com/zippyg/Zain_Projects/tree/main/Projectile%20Motion%20Tutorial%20and%20Game',
     year: 2022,
     featured: false,
     status: 'completed'

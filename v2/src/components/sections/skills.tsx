@@ -5,6 +5,7 @@ import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useSmoothScrollAnimation, scrollAnimationVariants, getStaggerDelay } from "@/hooks/use-smooth-scroll-animation";
 
 interface Skill {
   name: string;
@@ -220,14 +221,18 @@ export function SkillsSection() {
   const topCategories = ['quantFinance', 'software'];
   const bottomCategories = ['physics', 'mathematics', 'machineLearning'];
 
-  const renderCategoryTile = (key: string, category: typeof skillCategories[string], index: number, isTopRow: boolean) => (
-    <motion.div
-      key={key}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.15 }}
-      onMouseEnter={(e) => {
+  const renderCategoryTile = (key: string, category: typeof skillCategories[string], index: number, isTopRow: boolean) => {
+    const { ref, isInView } = useSmoothScrollAnimation({ threshold: 0.3 });
+    
+    return (
+      <motion.div
+        ref={ref}
+        key={key}
+        initial="hidden"
+        animate={isInView ? "visible" : "hidden"}
+        variants={scrollAnimationVariants.fadeInUp}
+        transition={{ delay: getStaggerDelay(index, 0.12) }}
+        onMouseEnter={(e) => {
         setHoveredCategory(key);
         e.currentTarget.style.borderColor = 
           key === 'quantFinance' ? 'rgba(34, 197, 94, 0.5)' :
@@ -356,16 +361,17 @@ export function SkillsSection() {
         })}
       </div>
     </motion.div>
-  );
+    );
+  };
 
   return (
     <Section id="skills" className="relative">
       <Container>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          variants={scrollAnimationVariants.fadeIn}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
             Technical <span className="text-primary">Skills</span>

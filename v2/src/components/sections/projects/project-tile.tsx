@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Project } from "@/types/project";
+import { useSmoothScrollAnimation, scrollAnimationVariants, getStaggerDelay } from "@/hooks/use-smooth-scroll-animation";
 
 interface ProjectTileProps {
   project: Project;
@@ -27,13 +28,16 @@ const categoryLabels = {
 };
 
 export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
+  const { ref, isInView } = useSmoothScrollAnimation({ threshold: 0.2 });
+
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -5 }}
+      ref={ref}
+      initial="hidden"
+      animate={isInView ? "visible" : "hidden"}
+      variants={scrollAnimationVariants.fadeInUp}
+      transition={{ delay: getStaggerDelay(index) }}
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
       onClick={onClick}
       className={`group relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 cursor-pointer transition-all duration-300 shadow-sm ${
         project.status === 'completed' 
