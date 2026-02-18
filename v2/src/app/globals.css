@@ -2,9 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* KaTeX styles for equation rendering */
-@import "katex/dist/katex.min.css";
-
 /* Animation optimizations */
 @import '../styles/animations.css';
 

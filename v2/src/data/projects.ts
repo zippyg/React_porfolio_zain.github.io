@@ -2,6 +2,81 @@ import { Project } from '@/types/project';
 
 export const projects: Project[] = [
   {
+    id: 'witness-ai',
+    title: 'WITNESS - AI Eyewitness Reconstruction',
+    categories: ['ml-ai', 'software'],
+    shortDescription: 'AI-powered forensic tool transforming witness descriptions into photorealistic suspect images, mugshots, video, and 3D models',
+    longDescription: `Built in 24 hours at the FLUX.2 HACK London, WITNESS tackles a real problem in criminal justice: 70% of wrongful convictions stem from eyewitness misidentification. Witnesses know what they saw but can't draw it.
+
+The app conducts cognitive interviews via voice or text using Claude Sonnet 4, following the Enhanced Cognitive Interview technique from forensic psychology — it never suggests details, only reflects what the witness describes. Once enough detail is gathered, FLUX.2 generates a photorealistic reconstruction that the witness iteratively refines through natural conversation ("make the jaw sharper", "he had stubble").
+
+The full output pipeline includes: iterative image refinements ($0.004/preview), a final high-quality render, four-angle forensic mugshots via FLUX.1 Kontext Pro, a 5-second motion video via Seedance, a rotatable 3D head model via Trellis (viewable in-browser with Three.js), and a court-ready PDF case report. Total cost per session: ~$0.45 vs $200-500+ for a traditional forensic sketch.`,
+    highlights: [
+      'Integrates 7 distinct AI APIs into a single coherent pipeline',
+      'Two interview modes: text chat or full voice conversation with ElevenLabs TTS',
+      'Tiered image generation: cheap previews for iteration, expensive finals for quality',
+      'Four-angle forensic mugshots with consistent facial identity across views',
+      'Court-ready PDF case reports with full interview transcript',
+      '~$0.45 per complete session vs $200-500+ traditional forensic sketch'
+    ],
+    techStack: ['Next.js 14', 'TypeScript', 'Claude Sonnet 4', 'FLUX.2', 'Three.js', 'ElevenLabs', 'Framer Motion', 'Tailwind CSS', 'jsPDF'],
+    live: 'https://witness-tawny.vercel.app/',
+    video: 'https://youtu.be/TdfEae6VyM8',
+    year: 2026,
+    featured: true,
+    status: 'completed'
+  },
+  {
+    id: 'degenduel',
+    title: 'DegenDuel - PvP Prediction Duels on Flare',
+    categories: ['software', 'quant'],
+    shortDescription: 'On-chain PvP price prediction duels with trustless settlement via Flare\'s enshrined oracle protocols',
+    longDescription: `Built at ETH Oxford 2026, DegenDuel lets two players bet on whether an asset price goes up or down, with the smart contract auto-settling using Flare's native on-chain oracle data — no external oracles needed.
+
+The 435-line Solidity contract handles duel creation, stake matching, price direction bets, deadline enforcement, and settlement by reading live prices from Flare's FTSO v2 (100+ data providers). A random 2x bonus mechanic uses Flare's on-chain RNG for fair randomness. The full-stack dApp features a live price ticker, active duel dashboard, AI "hint" card via Flock.io, leaderboard, and win confetti.
+
+Also solo-completed all 4 Sui blockchain CTF challenges at the hackathon (Moving Window, Merchant, Lootboxes, Staking) — capturing every flag.`,
+    highlights: [
+      'Fully trustless settlement using Flare\'s enshrined FTSO v2 price feeds',
+      'Smart contract with on-chain RNG for random 2x bonus mechanic',
+      'Full-stack dApp with live price tracking and real-time duel updates',
+      'AI price prediction hints via Flock.io integration',
+      'Solo-completed all 4 Sui CTF challenges (4/4 flags captured)',
+      'Effect-TS for type-safe functional backend services'
+    ],
+    techStack: ['Solidity', 'Next.js 14', 'TypeScript', 'Scaffold-ETH 2', 'Hardhat', 'Flare FTSO v2', 'Effect-TS', 'Framer Motion', 'Tailwind CSS'],
+    github: 'https://github.com/zippyg/ETH-Oxford-DegenDuel',
+    live: 'https://degenduel-zains-projects-5be3a7a8.vercel.app',
+    video: 'https://www.youtube.com/watch?v=EYm-Qh244Xk',
+    year: 2026,
+    featured: true,
+    status: 'completed'
+  },
+  {
+    id: 'sde-pricing-engine',
+    title: 'SDE Pricing Dashboard',
+    categories: ['quant', 'software', 'math-stats'],
+    shortDescription: 'Interactive derivatives pricing engine with 15+ SDE models, built in Rust/WASM with a Bloomberg-inspired UI',
+    longDescription: `A browser-based dashboard for exploring stochastic differential equation models used in quantitative finance. The entire pricing engine runs client-side via WebAssembly — no backend needed.
+
+The Rust core (~15,800 lines) implements 15+ SDE models including GBM, Heston, SABR, Merton Jump Diffusion, Bates, Variance Gamma, Kou, Local Volatility, CIR, Vasicek, and more. Pricing methods span Black-Scholes analytical, Heston semi-analytical (Fourier), Monte Carlo, Quasi-Monte Carlo (Sobol), American (binomial/LSM), Bermudan, Asian, and barrier options. Full Greeks computation via finite differences and risk metrics (VaR, Expected Shortfall).
+
+The Next.js frontend features a Bloomberg-style dark theme with amber accents, real-time Monte Carlo path visualization, interactive parameter sliders, volatility surface rendering, and KaTeX-rendered mathematical formulations alongside every chart.`,
+    highlights: [
+      '15+ SDE models implemented from scratch in Rust',
+      'Runs entirely in-browser via WebAssembly — no server needed',
+      '~15,800 lines of Rust for the pricing core',
+      'Monte Carlo, Quasi-Monte Carlo, analytical, and tree-based pricing',
+      'Bloomberg-inspired dark UI with real-time parameter exploration',
+      'Greeks, IV surfaces, VaR, and Expected Shortfall computation'
+    ],
+    techStack: ['Rust', 'WebAssembly', 'Next.js 15', 'TypeScript', 'Tailwind CSS', 'Recharts', 'KaTeX', 'Turborepo'],
+    live: 'https://sde-pricing-engine-web.vercel.app',
+    year: 2026,
+    featured: true,
+    status: 'completed'
+  },
+  {
     id: 'finllm-halo',
     title: 'FinLLM-HALO-500',
     categories: ['quant', 'ml-ai', 'software'],

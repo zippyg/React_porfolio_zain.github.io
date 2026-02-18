@@ -192,13 +192,11 @@ export function MouseGlow({ className }: MouseGlowProps) {
       // Show visual feedback for clicks when torch is on
       if (torchEnabledRef.current) {
         setClickFeedback({ count: consecutiveClickCountRef.current, show: true });
-        
+
         // Hide feedback after a delay
         setTimeout(() => {
           setClickFeedback(prev => ({ ...prev, show: false }));
         }, 2000);
-        
-        console.log(`Click count: ${consecutiveClickCountRef.current}`);
       }
       
       // Wait to see if more clicks are coming
@@ -208,7 +206,6 @@ export function MouseGlow({ className }: MouseGlowProps) {
         // Process based on final click count
         if (finalClickCount === 1) {
           // Single click - toggle torch
-          console.log('Single click - toggling torch');
           setTorchEnabled(prev => {
             const newValue = !prev;
             torchEnabledRef.current = newValue;
@@ -242,7 +239,6 @@ export function MouseGlow({ className }: MouseGlowProps) {
             timestamp: Date.now()
           });
           
-          console.log(`Applied ${randomEffect} effect!`);
           discoverEgg(EASTER_EGGS.DOUBLE_CLICK_WARP);
           
           if (clickEffectsRef.current.length > 5) {
@@ -291,10 +287,40 @@ export function MouseGlow({ className }: MouseGlowProps) {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Pre-rendered static grid (offscreen canvas, only redrawn on resize)
+    let gridCanvas: OffscreenCanvas | HTMLCanvasElement;
+    let gridCtx: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D | null;
+
+    const renderStaticGrid = (w: number, h: number) => {
+      try {
+        gridCanvas = new OffscreenCanvas(w, h);
+      } catch {
+        gridCanvas = document.createElement("canvas");
+        gridCanvas.width = w;
+        gridCanvas.height = h;
+      }
+      gridCtx = gridCanvas.getContext("2d");
+      if (!gridCtx) return;
+      const gridSize = 50;
+      gridCtx.strokeStyle = "rgba(34, 197, 94, 0.03)";
+      gridCtx.lineWidth = 1;
+      gridCtx.beginPath();
+      for (let x = 0; x < w; x += gridSize) {
+        gridCtx.moveTo(x, 0);
+        gridCtx.lineTo(x, h);
+      }
+      for (let y = 0; y < h; y += gridSize) {
+        gridCtx.moveTo(0, y);
+        gridCtx.lineTo(w, y);
+      }
+      gridCtx.stroke();
+    };
+
     const handleResize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
       pageHeightRef.current = document.body.scrollHeight;
+      renderStaticGrid(canvas.width, canvas.height);
     };
 
     handleResize();
@@ -302,7 +328,12 @@ export function MouseGlow({ className }: MouseGlowProps) {
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
+      // Draw cached static grid
+      if (gridCanvas) {
+        ctx.drawImage(gridCanvas as any, 0, 0);
+      }
+
       // Update page height and scroll in case they changed
       scrollYRef.current = window.scrollY;
       pageHeightRef.current = document.body.scrollHeight;
@@ -310,57 +341,54 @@ export function MouseGlow({ className }: MouseGlowProps) {
       const mouseX = mouseRef.current.x;
       const mouseY = mouseRef.current.y;
       const gridSize = 50;
-      
+
       // Update scanline position based on time (relative to full page height)
       const elapsed = Date.now() - startTimeRef.current;
-      const scanlineSpeed = 0.12; // pixels per millisecond (tripled from original)
+      const scanlineSpeed = 0.12;
       const pageHeight = pageHeightRef.current || canvas.height;
-      const scanlineHeight = 500; // Increased from 300px
-      
+      const scanlineHeight = 500;
+
       // Calculate position relative to full page
       const pagePosition = (elapsed * scanlineSpeed) % (pageHeight + scanlineHeight);
-      
+
       // Adjust for current scroll position to get screen position
       const scanlineY = pagePosition - scrollYRef.current - (scanlineHeight / 2);
 
-      // First, draw the base grid very faintly (always visible)
+      // Only draw enhanced grid lines near the scanline band (skip full grid redraw)
+      const scanlineTop = Math.max(0, scanlineY - 250);
+      const scanlineBottom = Math.min(canvas.height, scanlineY + 250);
+
       ctx.lineWidth = 1;
-      
-      // Draw all vertical lines with scanline enhancement
-      for (let x = 0; x < canvas.width; x += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
-        
-        // Check if near scanline
-        let baseOpacity = 0.03;
-        for (let y = 0; y < canvas.height; y += 50) {
-          const distToScanline = Math.abs(y - scanlineY);
-          if (distToScanline < 250) {
-            const scanlineIntensity = Math.pow(1 - distToScanline / 250, 2); // Smoother falloff
-            baseOpacity = Math.max(baseOpacity, 0.03 + scanlineIntensity * 0.4); // Brighter
-          }
+
+      // Draw scanline-enhanced horizontal lines (only lines within the band)
+      for (let y = Math.floor(scanlineTop / gridSize) * gridSize; y <= scanlineBottom; y += gridSize) {
+        if (y < 0) continue;
+        const distToScanline = Math.abs(y - scanlineY);
+        if (distToScanline < 250) {
+          const scanlineIntensity = Math.pow(1 - distToScanline / 250, 2);
+          const opacity = 0.03 + scanlineIntensity * 0.4;
+          ctx.strokeStyle = `rgba(34, 197, 94, ${opacity})`;
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(canvas.width, y);
+          ctx.stroke();
         }
-        
-        ctx.strokeStyle = `rgba(34, 197, 94, ${baseOpacity})`;
-        ctx.stroke();
       }
 
-      // Draw all horizontal lines with scanline enhancement
-      for (let y = 0; y < canvas.height; y += gridSize) {
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
-        
-        // Check if near scanline
-        const distToScanline = Math.abs(y - scanlineY);
-        let opacity = 0.03;
-        if (distToScanline < 250) {
-          const scanlineIntensity = Math.pow(1 - distToScanline / 250, 2); // Smoother falloff
-          opacity = 0.03 + scanlineIntensity * 0.4; // Brighter
-        }
-        
+      // Draw scanline-enhanced vertical lines (only in the scanline band)
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        // Only enhance the portion of vertical line within scanline band
+        const distToScanline = Math.min(
+          Math.abs(scanlineTop - scanlineY),
+          Math.abs(scanlineBottom - scanlineY)
+        );
+        // Use the peak intensity for this vertical segment
+        const scanlineIntensity = Math.pow(1 - distToScanline / 250, 2);
+        const opacity = 0.03 + scanlineIntensity * 0.4;
         ctx.strokeStyle = `rgba(34, 197, 94, ${opacity})`;
+        ctx.beginPath();
+        ctx.moveTo(x, Math.max(0, scanlineTop));
+        ctx.lineTo(x, Math.min(canvas.height, scanlineBottom));
         ctx.stroke();
       }
 
@@ -489,27 +517,23 @@ export function MouseGlow({ className }: MouseGlowProps) {
       // Redraw grid lines with effects
       ctx.strokeStyle = "#22c55e";
       
-      // Brighten vertical lines with effects
+      // Brighten vertical lines with effects (only near torch or click effects)
       for (let x = 0; x < canvas.width; x += gridSize) {
-        // Check if this line is within torch or scanline influence
         const distToLine = Math.abs(x - mouseX);
         let shouldProcessLine = false;
-        
-        // Check if we should process this line based on any effect
+
         if (isFunMode && torchEnabledRef.current && distToLine < torchRadius) {
           shouldProcessLine = true;
         }
         if (clickEffectsRef.current.length > 0) {
           shouldProcessLine = true;
         }
-        // Always check all vertical lines for scanline since it moves horizontally
-        shouldProcessLine = true;
-        
+
         if (shouldProcessLine) {
-          // Draw segments of the line with varying brightness and effects
-          for (let y = 0; y < canvas.height; y += 20) {
+          // Draw segments at grid-aligned intervals (not 20px sub-segments)
+          for (let y = 0; y < canvas.height; y += gridSize) {
             let point1 = { x, y };
-            let point2 = { x, y: Math.min(y + 20, canvas.height) };
+            let point2 = { x, y: Math.min(y + gridSize, canvas.height) };
             
             // Apply all active click effects
             clickEffectsRef.current.forEach(effect => {
@@ -563,19 +587,15 @@ export function MouseGlow({ className }: MouseGlowProps) {
         }
       }
       
-      // Brighten horizontal lines with effects
+      // Brighten horizontal lines with effects (only near torch or click effects)
       for (let y = 0; y < canvas.height; y += gridSize) {
-        // Check if this line is within torch or scanline influence
         const distToLine = Math.abs(y - mouseY);
-        const distToScanline = Math.abs(y - scanlineY);
-        
-        if ((torchEnabledRef.current && distToLine < torchRadius) || 
-            clickEffectsRef.current.length > 0 ||
-            distToScanline < 250) {
-          // Draw segments of the line with varying brightness and effects
-          for (let x = 0; x < canvas.width; x += 20) {
+
+        if ((isFunMode && torchEnabledRef.current && distToLine < torchRadius) ||
+            clickEffectsRef.current.length > 0) {
+          for (let x = 0; x < canvas.width; x += gridSize) {
             let point1 = { x, y };
-            let point2 = { x: Math.min(x + 20, canvas.width), y };
+            let point2 = { x: Math.min(x + gridSize, canvas.width), y };
             
             // Apply all active click effects
             clickEffectsRef.current.forEach(effect => {

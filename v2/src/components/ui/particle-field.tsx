@@ -52,11 +52,11 @@ export function ParticleField({ className }: { className?: string }) {
     <div className={className}>
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
         style={{ background: "transparent" }}
       >
         <ambientLight intensity={0.5} />
-        <ParticleCloud count={800} />
+        <ParticleCloud count={400} />
       </Canvas>
     </div>
   );

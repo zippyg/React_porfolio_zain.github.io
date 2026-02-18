@@ -113,7 +113,7 @@ export function OptimizedParticles({
           minPoolSize: 30
         });
         await equationPoolRef.current.initialize();
-        console.log('Equation pool initialized with', equationPoolRef.current.getTotalCount(), 'equations');
+        // Pool initialized
       } catch (error) {
         console.error('Failed to initialize equation pool:', error);
       }
@@ -163,11 +163,9 @@ export function OptimizedParticles({
     if (equationPoolRef.current) {
       try {
         const equation = await equationPoolRef.current.getNext();
-        console.log('Loading equation:', equation); // Debug log
         if (equation) {
           particle.equation = equation;
           const img = await loadEquationImage(equation);
-          console.log('Loaded image:', img.width, 'x', img.height); // Debug log
           particle.image = img;
           
           // Dynamic scaling based on complexity - make complex equations bigger
@@ -218,12 +216,9 @@ export function OptimizedParticles({
     
     // Prevent double initialization
     if (isInitializedRef.current && particlesRef.current.length > 0) {
-      console.log('[OptimizedParticles] Skipping initialization - particles already exist');
       return;
     }
-    
-    // Debug log to track when particles are reinitialized
-    console.log('[OptimizedParticles] Initializing particles');
+
     isInitializedRef.current = true;
 
     setIsLoading(true);
@@ -495,10 +490,7 @@ export function OptimizedParticles({
       frameCountRef.current = 0;
       lastFpsUpdateRef.current = currentTime;
       
-      // Log performance if it drops below 30 FPS
-      if (fpsRef.current < 30 && enableMouseCollision) {
-        console.warn(`Low FPS detected: ${fpsRef.current} FPS with mouse collision enabled`);
-      }
+      // FPS tracking for internal monitoring only
     }
 
     // Clear canvas
@@ -522,8 +514,12 @@ export function OptimizedParticles({
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Draw connection lines BEFORE particles so they appear behind
-    const connectionDistance = 200; // Increased for more connections
-    const dots = particlesRef.current.filter(p => p.type === "dot");
+    const connectionDistance = 200;
+    // Collect dot references without allocating a new filtered array each frame
+    const dots: Particle[] = [];
+    for (let i = 0; i < particlesRef.current.length; i++) {
+      if (particlesRef.current[i].type === "dot") dots.push(particlesRef.current[i]);
+    }
     
     ctx.save();
     for (let i = 0; i < dots.length; i++) {
@@ -727,26 +723,12 @@ export function OptimizedParticles({
       ctx.save();
       ctx.globalAlpha = particle.opacity + mouseEffect * 0.2; // Brighten near mouse
       
-      // Debug large particles
-      if (particle.type === "symbol" && (particle as SymbolParticle).fontSize > 16) {
-        console.warn("Large symbol detected:", (particle as SymbolParticle).fontSize);
-      }
-
       switch (particle.type) {
         case "dot":
-          const dotParticle = particle as DotParticle;
-          // Draw dots with fixed size
           ctx.fillStyle = `rgba(34, 197, 94, ${particle.opacity})`;
           ctx.beginPath();
-          ctx.arc(particle.x, particle.y, 1.5, 0, Math.PI * 2); // Fixed 1.5px radius
+          ctx.arc(particle.x, particle.y, 1.5, 0, Math.PI * 2);
           ctx.fill();
-          
-          // Add a glow effect to make dots more visible
-          const glowGradient = ctx.createRadialGradient(particle.x, particle.y, 0, particle.x, particle.y, 4);
-          glowGradient.addColorStop(0, `rgba(34, 197, 94, ${particle.opacity * 0.3})`);
-          glowGradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
-          ctx.fillStyle = glowGradient;
-          ctx.fillRect(particle.x - 4, particle.y - 4, 8, 8);
           break;
 
         case "symbol":
