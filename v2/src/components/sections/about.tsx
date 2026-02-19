@@ -108,27 +108,25 @@ export function AboutSection() {
 
             <div className="space-y-4 text-muted-foreground">
               <motion.p variants={paragraphItem} className="text-lg leading-relaxed">
-                I am the most un-physicist physics student you'll ever meet.
-                A simple, raw blend of curiosity, ability, and exposure has taken me a long way and
-                will continue to drive me.
+                Probably the most un-physicist physics student you&apos;ll ever meet. I don&apos;t sit
+                around deriving Lagrangians for fun. I build things. Trading bots that actually make
+                money, AI tools that reconstruct faces from witness descriptions, pricing engines that
+                run in your browser. If there&apos;s math behind it, I&apos;ve probably tried to code it.
               </motion.p>
 
               <motion.p variants={paragraphItem} className="leading-relaxed">
-                Practical programming skills unlock every barrier that has stood in my path so far,
-                implementing math and physics into algorithms and even quantitative deployable algorithms
-                at full scale. From simulating particle physics phenomena to deploying algorithmic trading
-                models successfully and profitably. I, for some reason, find enjoyment in transforming
-                seemingly abstract mathematical concepts into practical, profitable, high-performance
-                solutions that other people - and even myself at some points - struggle to understand.
+                The thread that connects everything I do is taking stupidly complex problems like
+                stochastic calculus, neural network optimisation, and financial derivatives, then turning
+                them into something that actually works and ships. I&apos;ve deployed models that trade
+                live markets, built hackathon projects that won prizes, and I&apos;m currently finishing
+                my MSci at Imperial while targeting publications in ML and computational finance.
               </motion.p>
 
               <motion.p variants={paragraphItem} className="leading-relaxed">
-                My work isn't just physics - it goes into research, machine learning, quant finance,
-                full-stack development. Without hyping myself up too much, I am a jack of all trades,
-                but a specialized one. Currently focused on machine learning applications in financial
-                markets, advanced risk modeling, and actually deployable pipelines within this niche.
-                As well as advanced mathematical techniques to reshape how the world really looks at
-                irregular data.
+                I&apos;m not neatly one thing. Quant researcher, full-stack developer, ML engineer,
+                physics student. I&apos;m all of them, and none of them fully describe what I do.
+                Currently obsessed with: rough path theory in neural networks, LLM hallucination
+                benchmarks for finance, and making Rust do things it probably shouldn&apos;t.
               </motion.p>
             </div>
 

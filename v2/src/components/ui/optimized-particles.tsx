@@ -503,12 +503,16 @@ export function OptimizedParticles({
     // Update previous mouse position for next frame
     prevMouseRef.current = { ...mouseRef.current };
     
-    // Create radial gradient for mouse glow
-    const glowRadius = 200;
+    // Create radial gradient for mouse glow with cycling color
+    const glowRadius = 300;
+    const hue = (currentTime * 0.02) % 360;
+    const glowCenter = `hsla(${hue}, 70%, 50%, 0.15)`;
+    const glowMid = `hsla(${hue}, 70%, 50%, 0.07)`;
+    const glowEdge = `hsla(${hue}, 70%, 50%, 0)`;
     const gradient = ctx.createRadialGradient(mouseX, mouseY, 0, mouseX, mouseY, glowRadius);
-    gradient.addColorStop(0, 'rgba(34, 197, 94, 0.1)');
-    gradient.addColorStop(0.5, 'rgba(34, 197, 94, 0.05)');
-    gradient.addColorStop(1, 'rgba(34, 197, 94, 0)');
+    gradient.addColorStop(0, glowCenter);
+    gradient.addColorStop(0.5, glowMid);
+    gradient.addColorStop(1, glowEdge);
     
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -831,21 +835,20 @@ export function OptimizedParticles({
     };
   }, [initializeParticles]);
 
-  // Start animation
+  // Start animation — defer by 3s so page content paints first
   useEffect(() => {
     let mounted = true;
-    
-    const startAnimation = async () => {
+
+    const timerId = setTimeout(async () => {
       if (!mounted) return;
       await initializeParticles();
       if (!mounted) return;
       animate();
-    };
-
-    startAnimation();
+    }, 3000);
 
     return () => {
       mounted = false;
+      clearTimeout(timerId);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
@@ -855,8 +858,8 @@ export function OptimizedParticles({
   return (
     <>
       {isLoading && (
-        <div className="fixed inset-0 flex items-center justify-center pointer-events-none">
-          <div className="text-primary/50 text-sm">Loading equations...</div>
+        <div className="fixed bottom-4 right-4 pointer-events-none">
+          <div className="text-primary/50 text-sm font-mono">Loading equations...</div>
         </div>
       )}
       <canvas

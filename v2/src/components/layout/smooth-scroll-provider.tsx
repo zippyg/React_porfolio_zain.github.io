@@ -1,47 +1,82 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useRef, useCallback } from "react";
 import Lenis from "lenis";
+
+interface LenisContextValue {
+  stop: () => void;
+  start: () => void;
+}
+
+const LenisContext = createContext<LenisContextValue>({
+  stop: () => {},
+  start: () => {},
+});
+
+export const useLenis = () => useContext(LenisContext);
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
+  const stop = useCallback(() => {
+    lenisRef.current?.stop();
+  }, []);
+
+  const start = useCallback(() => {
+    lenisRef.current?.start();
+  }, []);
+
   useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.1,
-      duration: 1.2,
-      smoothWheel: true,
-    });
-    lenisRef.current = lenis;
+    // Defer Lenis initialization so the page paints first
+    const timerId = setTimeout(() => {
+      const lenis = new Lenis({
+        lerp: 0.12,
+        duration: 0.9,
+        smoothWheel: true,
+      });
+      lenisRef.current = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
+      function raf(time: number) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+      }
       requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
 
-    // Allow programmatic scrollTo to work with Lenis
-    const handleAnchorClick = (e: Event) => {
-      const target = e.target as HTMLElement;
-      const anchor = target.closest('a[href^="#"]');
-      if (anchor) {
-        const href = anchor.getAttribute("href");
-        if (href && href.startsWith("#")) {
-          const el = document.querySelector(href);
-          if (el) {
-            e.preventDefault();
-            lenis.scrollTo(el as HTMLElement);
+      // Allow programmatic scrollTo to work with Lenis
+      const handleAnchorClick = (e: Event) => {
+        const target = e.target as HTMLElement;
+        const anchor = target.closest('a[href^="#"]');
+        if (anchor) {
+          const href = anchor.getAttribute("href");
+          if (href && href.startsWith("#")) {
+            const el = document.querySelector(href);
+            if (el) {
+              e.preventDefault();
+              lenis.scrollTo(el as HTMLElement);
+            }
           }
         }
-      }
-    };
-    document.addEventListener("click", handleAnchorClick);
+      };
+      document.addEventListener("click", handleAnchorClick);
+
+      // Store cleanup ref
+      (lenisRef as any)._cleanup = () => {
+        document.removeEventListener("click", handleAnchorClick);
+        lenis.destroy();
+      };
+    }, 100);
 
     return () => {
-      document.removeEventListener("click", handleAnchorClick);
-      lenis.destroy();
+      clearTimeout(timerId);
+      if ((lenisRef as any)._cleanup) {
+        (lenisRef as any)._cleanup();
+      }
     };
   }, []);
 
-  return <>{children}</>;
+  return (
+    <LenisContext.Provider value={{ stop, start }}>
+      {children}
+    </LenisContext.Provider>
+  );
 }

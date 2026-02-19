@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFunMode } from '@/contexts/fun-mode-context';
 import { useTheme } from '@/contexts/theme-context';
 import { useEasterEggs, EASTER_EGGS } from '@/contexts/easter-egg-context';
+import { terminalCommands, CommandContext } from '@/lib/terminal-commands';
 
 interface Command {
   id: string;
@@ -29,7 +30,7 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
       setInternalIsOpen(value);
     }
   };
-  
+
   const [input, setInput] = useState('');
   const [filteredCommands, setFilteredCommands] = useState<Command[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -38,97 +39,44 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
   const { theme, toggleTheme } = useTheme();
   const { discoverEgg } = useEasterEggs();
 
-  // Define available commands
-  const commands: Command[] = [
-    {
-      id: 'about',
-      name: '/about',
-      description: 'Navigate to About section',
-      action: () => {
-        document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      aliases: ['about', 'bio', 'me']
+  // Build commands from shared registry
+  const ctx: CommandContext = useMemo(() => ({
+    scrollTo: (id: string) => {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     },
-    {
-      id: 'projects',
-      name: '/projects',
-      description: 'Navigate to Projects section',
-      action: () => {
-        document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      aliases: ['project', 'work', 'portfolio']
-    },
-    {
-      id: 'skills',
-      name: '/skills',
-      description: 'Navigate to Skills section',
-      action: () => {
-        document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      aliases: ['skills', 'tech', 'technologies', 'expertise']
-    },
-    {
-      id: 'research',
-      name: '/research',
-      description: 'Navigate to Research section',
-      action: () => {
-        document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      aliases: ['research', 'papers', 'publications']
-    },
-    {
-      id: 'contact',
-      name: '/contact',
-      description: 'Navigate to Contact section',
-      action: () => {
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-        setIsOpen(false);
-      },
-      aliases: ['contact', 'email', 'reach']
-    },
-    {
-      id: 'resume',
-      name: '/resume',
-      description: 'Download resume/CV',
-      action: () => {
-        // Open resume PDF in new tab
-        window.open('/assets/Zain%20Mughal%20resume%20Quant.pdf', '_blank');
-        setIsOpen(false);
-      },
-      aliases: ['cv', 'curriculum', 'download']
-    },
-    {
-      id: 'fun',
-      name: '/fun',
-      description: isFunMode ? '🎮 Disable fun mode' : '🎮 Enable fun mode (easter egg!)',
-      action: () => {
-        toggleFunMode();
-        setIsOpen(false);
-        
-        // Show a fun animation or effect when toggling
-        if (!isFunMode) {
-          // Trigger a particle burst or something fun
-          console.log('🎉 Fun mode activated!');
-          discoverEgg(EASTER_EGGS.FUN_MODE);
-        }
-      },
-      aliases: ['easter', 'egg', 'play', 'game']
-    },
-    {
-      id: 'theme',
-      name: '/theme',
-      description: theme === 'dark' ? '🌞 Switch to light theme' : '🌙 Switch to dark theme',
-      action: () => {
-        toggleTheme();
-        setIsOpen(false);
-      },
-      aliases: ['dark', 'light', 'mode', 'toggle']
-    }
-  ];
+    toggleTheme,
+    toggleFunMode,
+    isFunMode,
+    theme,
+    discoverEgg,
+  }), [toggleTheme, toggleFunMode, isFunMode, theme, discoverEgg]);
+
+  // Only show navigational + utility commands in palette (skip jokes/unix)
+  const paletteCommandNames = ['about', 'projects', 'skills', 'research', 'contact', 'resume', 'fun', 'theme'];
+
+  const commands: Command[] = useMemo(() => {
+    return terminalCommands
+      .filter((cmd) => paletteCommandNames.includes(cmd.name))
+      .map((cmd) => {
+        let description = cmd.description;
+        if (cmd.name === 'fun') description = isFunMode ? 'Disable fun mode' : 'Enable fun mode (easter egg!)';
+        if (cmd.name === 'theme') description = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+        return {
+          id: cmd.name,
+          name: `/${cmd.name}`,
+          description,
+          aliases: cmd.aliases,
+          action: () => {
+            cmd.handler([], ctx);
+            if (cmd.name === 'fun' && !isFunMode) {
+              discoverEgg(EASTER_EGGS.FUN_MODE);
+            }
+            setIsOpen(false);
+          },
+        };
+      });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFunMode, theme, ctx]);
 
   // Filter commands based on input
   useEffect(() => {

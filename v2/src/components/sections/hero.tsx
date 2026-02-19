@@ -2,14 +2,13 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Container } from "@/components/ui/container";
-import { Button } from "@/components/ui/button";
-import { GlitchText } from "@/components/ui/animated-text";
 import { MotionDiv } from "@/components/ui/motion";
 import { EasterEggCounter } from "@/components/ui/easter-egg-counter";
 import { useFunMode } from "@/contexts/fun-mode-context";
 import { BlackHoleEffect } from "@/components/ui/black-hole-effect";
 import { gsap } from "@/lib/gsap-config";
 import { useGSAP } from "@gsap/react";
+import { InteractiveTerminal } from "@/components/ui/interactive-terminal";
 
 export function Hero() {
   const [mounted, setMounted] = useState(false);
@@ -22,8 +21,9 @@ export function Hero() {
   const lastClickTimeRef = useRef(0);
   const clickPositionRef = useRef({ x: 0, y: 0 });
   const taglineRef = useRef<HTMLParagraphElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+  const zainRef = useRef<HTMLSpanElement>(null);
+  const mughalRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -33,11 +33,28 @@ export function Hero() {
     }
   }, [isFunMode]);
 
-  // GSAP text scramble on tagline
+  // GSAP text scramble on tagline + name typewriter
   useGSAP(() => {
     if (!mounted) return;
 
-    // Scramble the tagline text
+    // Name typewriter: type "Zain" then "Mughal"
+    const tl = gsap.timeline();
+    if (zainRef.current) {
+      tl.to(zainRef.current, {
+        text: "Zain",
+        duration: 0.8,
+        ease: "none",
+      });
+    }
+    if (mughalRef.current) {
+      tl.to(mughalRef.current, {
+        text: " Mughal",
+        duration: 1.0,
+        ease: "none",
+      }, "+=0.1");
+    }
+
+    // Scramble the tagline text (starts at 0.8s)
     if (taglineRef.current) {
       const span = taglineRef.current.querySelector('.scramble-target');
       if (span) {
@@ -53,10 +70,10 @@ export function Hero() {
       }
     }
 
-    // Blur-to-clear on CTA buttons
+    // Blur-to-clear on CTA links
     if (ctaRef.current) {
-      const buttons = ctaRef.current.querySelectorAll('button, a');
-      gsap.fromTo(buttons,
+      const items = ctaRef.current.querySelectorAll('.cta-item');
+      gsap.fromTo(items,
         { filter: "blur(8px)", opacity: 0, y: 10 },
         {
           filter: "blur(0px)",
@@ -77,7 +94,6 @@ export function Hero() {
       if (isFunMode) {
         const saved = localStorage.getItem('torchEnabled');
         const newState = saved === 'true';
-        console.log('Torch state update in hero:', newState);
         setTorchEnabled(newState);
       }
     };
@@ -107,22 +123,8 @@ export function Hero() {
     };
   }, [isFunMode]);
 
-  // Debug trigger state
-  useEffect(() => {
-    if (triggerBlackHole) {
-      console.log('🚨 triggerBlackHole is now TRUE in hero component!');
-    }
-  }, [triggerBlackHole]);
-
   const handleZainClick = (e: React.MouseEvent) => {
-    console.log('=== Zain Click Debug ===');
-    console.log('Fun mode:', isFunMode);
-    console.log('Torch enabled:', torchEnabled);
-
-    if (!isFunMode || !torchEnabled) {
-      console.log('Click ignored - fun mode or torch not enabled');
-      return;
-    }
+    if (!isFunMode || !torchEnabled) return;
 
     e.preventDefault();
     e.stopPropagation();
@@ -141,7 +143,6 @@ export function Hero() {
       clickCountRef.current = 1;
     }
 
-    console.log(`Zain click count: ${clickCountRef.current}, time since last: ${timeSinceLastClick}ms`);
     lastClickTimeRef.current = currentTime;
     clickPositionRef.current = { x: e.clientX, y: e.clientY };
 
@@ -149,14 +150,9 @@ export function Hero() {
 
     clickTimeoutRef.current = setTimeout(() => {
       const finalCount = clickCountRef.current;
-      console.log(`Final Zain click count: ${finalCount}`);
 
       if (finalCount >= 6) {
-        console.log('🌌 BLACK HOLE SHOULD TRIGGER NOW!');
-        console.log('Setting triggerBlackHole to true...');
         setTriggerBlackHole(true);
-      } else {
-        console.log(`Not enough clicks: ${finalCount} < 6`);
       }
       clickCountRef.current = 0;
       setShowClickCount(0);
@@ -167,86 +163,91 @@ export function Hero() {
     <section id="hero" className="min-h-[calc(100vh-2rem)] relative overflow-hidden flex items-center pt-8">
 
       <Container className="relative z-10 px-4 sm:px-6">
-        <div className="text-center mb-8 sm:mb-12">
-          <MotionDiv
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h1 className="text-5xl md:text-7xl font-bold mb-4 font-display">
-              <span
-                onClick={handleZainClick}
-                className={`cursor-pointer inline-block relative ${torchEnabled ? 'hover:scale-105 transition-transform' : ''}`}
-                style={{ userSelect: torchEnabled ? 'none' : 'auto' }}
-              >
-                <GlitchText text="Zain" className="text-primary glow-green" />
-                {showClickCount > 0 && torchEnabled && (
-                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-green-500 font-mono">
-                    {showClickCount} / 6
-                  </span>
-                )}
-              </span>{" "}
-              <GlitchText text="Mughal" className="text-foreground" />
-            </h1>
-          </MotionDiv>
-
-          {/* Tagline with GSAP text scramble */}
-          <p ref={taglineRef} className="text-xl text-muted-foreground mb-4 font-mono">
-            <span className="text-primary scramble-target"></span>
-          </p>
-
-          {/* Subtitle — replaced from generic to concrete */}
-          <MotionDiv
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <p ref={subtitleRef} className="text-lg text-muted-foreground/80 mb-8">
-              Physics MSci · Imperial College London · Quantitative Research
-            </p>
-          </MotionDiv>
-        </div>
-
-        {/* CTA Buttons — stagger in with blur-to-clear via GSAP */}
-        <div ref={ctaRef} className="flex gap-4 justify-center mb-16 flex-wrap">
-          <Button
-            variant="terminal"
-            size="lg"
-            className="group bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-green-600 dark:border-green-500/30 text-green-600 dark:text-green-500 hover:bg-green-600/10 dark:hover:bg-green-500/10 hover:text-green-700 dark:hover:text-green-400 hover:border-green-700 dark:hover:border-green-400/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-all duration-300 opacity-0"
-            onClick={() => {
-              const target = document.querySelector("#projects");
-              target?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            View Projects
-            <span className="ml-2 transition-transform group-hover:translate-y-0.5">↓</span>
-          </Button>
-          <a
-            href="/assets/Zain%20Mughal%20resume%20Quant.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="opacity-0"
-          >
-            <Button
-              variant="outline"
-              size="lg"
-              className="group bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-cyan-600 dark:border-cyan-500/30 text-cyan-600 dark:text-cyan-500 hover:bg-cyan-600/10 dark:hover:bg-cyan-500/10 hover:text-cyan-700 dark:hover:text-cyan-400 hover:border-cyan-700 dark:hover:border-cyan-400/50 hover:shadow-[0_0_20px_rgba(6,182,212,0.3)] transition-all duration-300"
+        {/* Split layout: left text, right terminal */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-center mb-16">
+          {/* Left side — 60% */}
+          <div className="lg:col-span-3 text-left">
+            <MotionDiv
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              Resume
-              <span className="ml-2 transition-transform group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span>
-            </Button>
-          </a>
-          <Button
-            variant="outline"
-            size="lg"
-            className="bg-background/40 dark:bg-black/40 backdrop-blur-sm border border-purple-600 dark:border-purple-500/30 text-purple-600 dark:text-purple-500 hover:bg-purple-600/10 dark:hover:bg-purple-500/10 hover:text-purple-700 dark:hover:text-purple-400 hover:border-purple-700 dark:hover:border-purple-400/50 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all duration-300 opacity-0"
-            onClick={() => {
-              const target = document.querySelector("#contact");
-              target?.scrollIntoView({ behavior: "smooth" });
-            }}
-          >
-            Contact Me
-          </Button>
+              <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-4 font-display">
+                <span
+                  onClick={handleZainClick}
+                  className={`cursor-pointer inline-block relative ${torchEnabled ? 'hover:scale-105 transition-transform' : ''}`}
+                  style={{ userSelect: torchEnabled ? 'none' : 'auto' }}
+                >
+                  <span ref={zainRef} className="text-primary glow-green"></span>
+                  {showClickCount > 0 && torchEnabled && (
+                    <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-xs text-green-500 font-mono">
+                      {showClickCount} / 6
+                    </span>
+                  )}
+                </span>
+                <span ref={mughalRef} className="text-foreground"></span>
+              </h1>
+            </MotionDiv>
+
+            {/* Tagline with GSAP text scramble */}
+            <p ref={taglineRef} className="text-xl text-muted-foreground mb-4 font-mono">
+              <span className="text-primary scramble-target"></span>
+            </p>
+
+            {/* Subtitle */}
+            <MotionDiv
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <p className="text-lg text-muted-foreground/80 mb-8">
+                Physics MSci · Imperial College London · Quantitative Research
+              </p>
+            </MotionDiv>
+
+            {/* CTA Links — minimal text with dividers */}
+            <div ref={ctaRef} className="flex items-center gap-3 font-mono text-sm">
+              <span
+                className="cta-item cursor-pointer text-green-600 dark:text-green-500 hover:drop-shadow-[0_0_8px_rgba(34,197,94,0.6)] hover:scale-105 transition-all duration-300 opacity-0"
+                onClick={() => {
+                  const target = document.querySelector("#projects");
+                  target?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                View Projects
+              </span>
+              <span className="cta-item text-muted-foreground/30 opacity-0 select-none">|</span>
+              <a
+                href="/assets/Zain%20Mughal%20resume%20Quant.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-item cursor-pointer text-cyan-600 dark:text-cyan-500 hover:drop-shadow-[0_0_8px_rgba(6,182,212,0.6)] hover:scale-105 transition-all duration-300 opacity-0"
+              >
+                Resume
+              </a>
+              <span className="cta-item text-muted-foreground/30 opacity-0 select-none">|</span>
+              <span
+                className="cta-item cursor-pointer text-purple-600 dark:text-purple-500 hover:drop-shadow-[0_0_8px_rgba(168,85,247,0.6)] hover:scale-105 transition-all duration-300 opacity-0"
+                onClick={() => {
+                  const target = document.querySelector("#contact");
+                  target?.scrollIntoView({ behavior: "smooth" });
+                }}
+              >
+                Contact Me
+              </span>
+            </div>
+          </div>
+
+          {/* Right side — 40% interactive terminal */}
+          <div className="lg:col-span-2">
+            <MotionDiv
+              initial={{ opacity: 0, x: 40 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <InteractiveTerminal initialDelay={500} />
+            </MotionDiv>
+          </div>
         </div>
       </Container>
 
@@ -299,7 +300,6 @@ export function Hero() {
           trigger={triggerBlackHole}
           position={clickPositionRef.current}
           onComplete={() => {
-            console.log('Black hole animation complete');
             setTriggerBlackHole(false);
             clickCountRef.current = 0;
           }}

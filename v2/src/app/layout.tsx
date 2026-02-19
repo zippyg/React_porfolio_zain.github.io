@@ -13,7 +13,6 @@ import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { ScrollToTopOnMount } from "@/components/layout/scroll-to-top-on-mount";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
 import { Analytics } from "@vercel/analytics/react";
-import "@/lib/gsap-config";
 import "./globals.css";
 
 const ibmPlexSans = IBM_Plex_Sans({

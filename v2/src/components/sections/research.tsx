@@ -10,8 +10,8 @@ const smoothEase = [0.22, 1, 0.36, 1] as const;
 const publications = [
   {
     title: "FinLLM-HALO-500: A Financial Q&A Benchmark with Novel Metrics for Evaluating and Mitigating LLM Hallucinations",
-    venue: "ACL 2025 (Target)",
-    year: 2025,
+    venue: "EMNLP 2026 (Target)",
+    year: 2026,
     type: "In Progress",
     abstract: "Manually curated and open-sourced FinHALO-500, a 500-pair SEC finance Q&A benchmark and mitigation library, introducing two novel evaluation metrics: NIWH (materiality-weighted errors) and BAHE (cost-performance optimisation). Developed end-to-end mitigation pipeline combining RAG with QLoRA fine-tuning, reducing GPT-4o hallucinations by >20pp on SEC filing numeric tasks while slashing inference costs by 78%."
   },

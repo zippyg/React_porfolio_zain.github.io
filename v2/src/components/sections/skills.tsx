@@ -32,20 +32,32 @@ const skillCategories: SkillCategory[] = [
       "TypeScript",
       "Rust",
       "Solidity",
-      "CUDA / GPU",
       "Docker",
+      "Git",
     ],
   },
   {
-    title: "ML & Physics",
+    title: "Machine Learning",
     accentColor: "border-l-purple-500",
     skills: [
       "PyTorch",
       "JAX",
       "Deep Learning",
       "NLP",
+      "Transformers",
+      "RAG",
+    ],
+  },
+  {
+    title: "Physics & Mathematics",
+    accentColor: "border-l-amber-500",
+    skills: [
       "Quantum Mechanics",
       "Statistical Mechanics",
+      "Differential Equations",
+      "Probability Theory",
+      "Numerical Methods",
+      "Linear Algebra",
     ],
   },
 ];
@@ -80,8 +92,8 @@ export function SkillsSection() {
             Technical <span className="text-primary">Skills</span>
           </h2>
 
-          {/* 3 Columns */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8">
+          {/* 4 Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 md:gap-8">
             {skillCategories.map((category, catIdx) => (
               <motion.div
                 key={category.title}

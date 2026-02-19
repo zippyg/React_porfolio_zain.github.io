@@ -8,7 +8,7 @@ import * as THREE from "three";
 
 function ParticleCloud({ count = 500 }: { count?: number }) {
   const ref = useRef<THREE.Points>(null);
-  
+
   // Generate random particle positions
   const particles = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -24,11 +24,11 @@ function ParticleCloud({ count = 500 }: { count?: number }) {
   // Animate particles
   useFrame((state, delta) => {
     if (!ref.current) return;
-    
+
     // Rotate the entire particle system
     ref.current.rotation.x -= delta * 0.05;
     ref.current.rotation.y -= delta * 0.075;
-    
+
     // Add wave-like motion
     const time = state.clock.getElapsedTime();
     ref.current.position.y = Math.sin(time * 0.5) * 0.1;

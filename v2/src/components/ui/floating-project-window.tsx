@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Github, ExternalLink, Calendar, CheckCircle, FileText, Video } from "lucide-react";
 import { Project } from "@/types/project";
 import { useEffect, useState } from "react";
+import { useLenis } from "@/components/layout/smooth-scroll-provider";
 
 const categoryColors = {
   physics: "text-blue-600 dark:text-blue-400 border-blue-600/30 dark:border-blue-400/20 bg-blue-600/10 dark:bg-blue-400/10",
@@ -29,6 +30,7 @@ interface FloatingProjectWindowProps {
 
 export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProjectWindowProps) {
   const [isMobile, setIsMobile] = useState(false);
+  const lenis = useLenis();
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -37,7 +39,7 @@ export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProj
     return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Handle ESC key
+  // Handle ESC key + stop Lenis scroll when open
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -46,13 +48,15 @@ export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProj
     if (isOpen) {
       document.addEventListener("keydown", handleEsc);
       document.body.style.overflow = "hidden";
+      lenis.stop();
     }
 
     return () => {
       document.removeEventListener("keydown", handleEsc);
       document.body.style.overflow = "unset";
+      lenis.start();
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, lenis]);
 
   if (!project) return null;
 

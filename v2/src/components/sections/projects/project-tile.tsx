@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Project } from "@/types/project";
@@ -27,7 +28,23 @@ const categoryLabels = {
   'math-stats': "Math/Stats",
 };
 
+const hoverColors = [
+  { border: "rgba(34,197,94,0.6)", shadow: "rgba(34,197,94,0.15)" },
+  { border: "rgba(59,130,246,0.6)", shadow: "rgba(59,130,246,0.15)" },
+  { border: "rgba(168,85,247,0.6)", shadow: "rgba(168,85,247,0.15)" },
+  { border: "rgba(236,72,153,0.6)", shadow: "rgba(236,72,153,0.15)" },
+  { border: "rgba(245,158,11,0.6)", shadow: "rgba(245,158,11,0.15)" },
+  { border: "rgba(6,182,212,0.6)", shadow: "rgba(6,182,212,0.15)" },
+];
+
 export function ProjectTile({ project, index, isFeatured, onClick }: ProjectTileProps) {
+  // Stable random hover color per tile
+  const hoverColor = useMemo(
+    () => hoverColors[Math.floor(Math.random() * hoverColors.length)],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  );
+
   // Alternating slide direction: even from left, odd from right
   const slideX = index % 2 === 0 ? -30 : 30;
 
@@ -42,15 +59,31 @@ export function ProjectTile({ project, index, isFeatured, onClick }: ProjectTile
         ease: [0.22, 1, 0.36, 1],
       }}
       onClick={onClick}
+      style={{
+        ["--hover-border" as string]: hoverColor.border,
+        ["--hover-shadow" as string]: hoverColor.shadow,
+        ...(isFeatured ? { borderTopColor: hoverColor.border } : {}),
+      }}
       className={`group relative bg-card/50 backdrop-blur-sm border rounded-lg p-6 cursor-pointer transition-all duration-300 shadow-sm
-        ${isFeatured ? 'col-span-12 md:col-span-6 min-h-[220px] border-l-2 border-l-primary border-t-border/50 border-r-border/50 border-b-border/50' : 'col-span-12 md:col-span-6 lg:col-span-4 border-border/50'}
-        hover:border-primary/60 hover:shadow-[0_0_30px_rgba(34,197,94,0.1)]
+        ${isFeatured
+          ? 'col-span-12 md:col-span-6 min-h-[220px] border-t-2 ring-1 ring-primary/10 border-border/50'
+          : 'col-span-12 md:col-span-6 lg:col-span-4 border-border/50'}
+        hover:shadow-[0_0_50px_var(--hover-shadow)]
       `}
+      whileHover={{
+        borderColor: hoverColor.border,
+      }}
     >
-      {/* Index number */}
-      <span className="absolute top-3 right-4 font-mono text-xs text-muted-foreground/40 select-none">
-        {String(index + 1).padStart(2, '0')}
-      </span>
+      {/* Featured badge or index number */}
+      {isFeatured ? (
+        <span className="absolute top-3 right-4 font-mono text-[10px] uppercase tracking-wider text-primary/70 select-none">
+          Featured
+        </span>
+      ) : (
+        <span className="absolute top-3 right-4 font-mono text-xs text-muted-foreground/40 select-none">
+          {String(index + 1).padStart(2, '0')}
+        </span>
+      )}
 
       <div className="relative space-y-4">
         {/* Header */}
