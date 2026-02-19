@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { IBM_Plex_Sans, JetBrains_Mono } from "next/font/google";
 import { MotionProvider } from "@/components/providers/motion-provider";
 import { FunModeProvider } from "@/contexts/fun-mode-context";
 import { ThemeProvider } from "@/contexts/theme-context";
@@ -11,12 +11,15 @@ import { CommandPalette } from "@/components/ui/command-palette";
 import { EasterEggHint } from "@/components/ui/easter-egg-hint";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 import { ScrollToTopOnMount } from "@/components/layout/scroll-to-top-on-mount";
+import { SmoothScrollProvider } from "@/components/layout/smooth-scroll-provider";
 import { Analytics } from "@vercel/analytics/react";
+import "@/lib/gsap-config";
 import "./globals.css";
 
-const inter = Inter({
+const ibmPlexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-ibm-plex",
   display: "swap",
 });
 
@@ -90,23 +93,25 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground font-sans`}
+        className={`${ibmPlexSans.variable} ${jetbrainsMono.variable} antialiased bg-background text-foreground font-sans`}
       >
         <ThemeProvider>
           <MotionProvider>
             <FunModeProvider>
               <EasterEggProvider>
-                <ScrollToTopOnMount />
-                <CommandPalette />
-                <EasterEggHint />
-                <ScrollToTop />
-                <BackgroundEffects />
-                <Navigation />
-                <div className="flex flex-col min-h-screen relative overflow-x-hidden">
-                  <main className="flex-grow">{children}</main>
-                  <Footer />
-                </div>
-                <Analytics />
+                <SmoothScrollProvider>
+                  <ScrollToTopOnMount />
+                  <CommandPalette />
+                  <EasterEggHint />
+                  <ScrollToTop />
+                  <BackgroundEffects />
+                  <Navigation />
+                  <div className="flex flex-col min-h-screen relative overflow-x-hidden">
+                    <main className="flex-grow">{children}</main>
+                    <Footer />
+                  </div>
+                  <Analytics />
+                </SmoothScrollProvider>
               </EasterEggProvider>
             </FunModeProvider>
           </MotionProvider>

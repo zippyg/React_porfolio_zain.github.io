@@ -3,44 +3,9 @@
 import { Section } from "@/components/ui/section";
 import { Container } from "@/components/ui/container";
 import { motion } from "framer-motion";
-import { FileText, TrendingUp, Brain, Atom } from "lucide-react";
-import { useSmoothScrollAnimation, scrollAnimationVariants, getStaggerDelay } from "@/hooks/use-smooth-scroll-animation";
+import { FileText } from "lucide-react";
 
-function ResearchCard({ pub, index }: { pub: typeof publications[0]; index: number }) {
-  const { ref, isInView } = useSmoothScrollAnimation({ threshold: 0.3 });
-  
-  return (
-    <motion.article
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={scrollAnimationVariants.fadeInUp}
-      transition={{ delay: getStaggerDelay(index, 0.1) }}
-      className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 shadow-sm group"
-    >
-      {/* Orange glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg" />
-      <div className="relative z-10">
-        <div className="flex items-start justify-between mb-3">
-          <div>
-            <h4 className="text-lg font-semibold text-foreground mb-1">{pub.title} - Coming Soon</h4>
-            <p className="text-sm text-muted-foreground">
-              {pub.venue} • {pub.year}
-            </p>
-          </div>
-          <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20 whitespace-nowrap">
-            {pub.type}
-          </span>
-        </div>
-        <p className="text-sm text-muted-foreground mb-4">{pub.abstract}</p>
-        <motion.div className="flex items-center text-sm text-orange-500 font-medium group-hover:translate-x-1 transition-transform">
-          <FileText className="w-4 h-4 mr-1" />
-          Manuscript in preparation
-        </motion.div>
-      </div>
-    </motion.article>
-  );
-}
+const smoothEase = [0.22, 1, 0.36, 1] as const;
 
 const publications = [
   {
@@ -66,16 +31,75 @@ const publications = [
   }
 ];
 
+function WordRevealTitle({ text, delay = 0 }: { text: string; delay?: number }) {
+  const words = text.split(" ");
+  return (
+    <span>
+      {words.map((word, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{
+            delay: delay + i * 0.04,
+            duration: 0.3,
+            ease: smoothEase,
+          }}
+          className="inline-block mr-[0.3em]"
+        >
+          {word}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
+function ResearchCard({ pub, index }: { pub: typeof publications[0]; index: number }) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ delay: index * 0.12, duration: 0.6, ease: smoothEase }}
+      className="relative bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg p-6 hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] transition-all duration-300 shadow-sm group"
+    >
+      {/* Orange glow effect */}
+      <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-lg" />
+      <div className="relative z-10">
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h4 className="text-lg font-semibold text-foreground mb-1">
+              <WordRevealTitle text={`${pub.title} - Coming Soon`} delay={index * 0.15} />
+            </h4>
+            <p className="text-sm text-muted-foreground">
+              {pub.venue} • {pub.year}
+            </p>
+          </div>
+          <span className="px-3 py-1 text-xs bg-orange-500/10 text-orange-500 rounded-full border border-orange-500/20 whitespace-nowrap">
+            {pub.type}
+          </span>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">{pub.abstract}</p>
+        <motion.div className="flex items-center text-sm text-orange-500 font-medium group-hover:translate-x-1 transition-transform">
+          <FileText className="w-4 h-4 mr-1" />
+          Manuscript in preparation
+        </motion.div>
+      </div>
+    </motion.article>
+  );
+}
+
 export function ResearchSection() {
   return (
     <Section id="research" className="relative">
       <Container>
         {/* Header */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, margin: "-100px" }}
-          variants={scrollAnimationVariants.fadeInUp}
+          transition={{ duration: 0.6, ease: smoothEase }}
           className="text-center mb-12"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -100,11 +124,10 @@ export function ResearchSection() {
 
         {/* Call to Action */}
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 20, filter: "blur(4px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, margin: "-50px" }}
-          variants={scrollAnimationVariants.fadeInUp}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.3, duration: 0.6, ease: smoothEase }}
           className="mt-12 text-center"
         >
           <p className="text-muted-foreground mb-4">

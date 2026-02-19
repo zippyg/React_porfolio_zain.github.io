@@ -6,6 +6,8 @@ import { Container } from "@/components/ui/container";
 import { motion } from "framer-motion";
 import { GitBranch, GitCommit, Star, GitPullRequest } from "lucide-react";
 
+const smoothEase = [0.22, 1, 0.36, 1] as const;
+
 interface ContributionDay {
   date: string;
   count: number;
@@ -28,6 +30,24 @@ interface GitHubStats {
   };
 }
 
+const statsContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.03,
+    },
+  },
+};
+
+const statsItemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.4, ease: smoothEase },
+  },
+};
+
 export function GitHubContributionsSection() {
   const [stats, setStats] = useState<GitHubStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -37,46 +57,41 @@ export function GitHubContributionsSection() {
   useEffect(() => {
     const fetchGitHubContributions = async () => {
       try {
-        // Using public GitHub contributions API
         const username = 'zippyg';
         const response = await fetch(`https://github-contributions-api.jogruber.de/v4/${username}`);
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch contributions');
         }
 
         const data = await response.json();
-        
-        // Process the data to match our format
+
         const processedWeeks = [];
         const contributionData = data.contributions;
-        
-        // Log to debug the actual total
+
         console.log('GitHub API data:', data);
-        
-        // Get exactly 52 weeks of data ending today
+
         const today = new Date();
-        today.setHours(23, 59, 59, 999); // End of today
+        today.setHours(23, 59, 59, 999);
         const startDate = new Date(today);
-        startDate.setDate(startDate.getDate() - 364); // 52 weeks ago
-        
+        startDate.setDate(startDate.getDate() - 364);
+
         let totalContributions = 0;
-        
-        // Group contributions by week
+
         for (let w = 0; w < 52; w++) {
           const contributionDays = [];
           for (let d = 0; d < 7; d++) {
             const currentDate = new Date(startDate);
             currentDate.setDate(currentDate.getDate() + (w * 7 + d));
             const dateStr = currentDate.toISOString().split('T')[0];
-            
+
             const dayData = contributionData.find((c: any) => c.date === dateStr);
             const count = dayData ? dayData.count : 0;
             const color = dayData ? dayData.color : 'transparent';
             const level = dayData ? dayData.level : 0;
-            
+
             totalContributions += count;
-            
+
             contributionDays.push({
               date: dateStr,
               count,
@@ -87,19 +102,17 @@ export function GitHubContributionsSection() {
           processedWeeks.push({ contributionDays });
         }
 
-        // Fetch additional stats from public API
         const userResponse = await fetch(`https://api.github.com/users/${username}`);
         const userData = await userResponse.json();
-        
+
         const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100`);
         const reposData = await reposResponse.json();
-        
+
         const totalStars = reposData.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0);
 
-        // Use the API's total if available, otherwise use our calculated total
         const currentYear = new Date().getFullYear();
         const apiTotal = data.total?.[currentYear] || data.total?.['lastYear'] || totalContributions;
-        
+
         setStats({
           totalContributions: apiTotal,
           weeks: processedWeeks,
@@ -119,17 +132,15 @@ export function GitHubContributionsSection() {
   }, []);
 
   const getLevelColor = (level: number) => {
-    // For zero contributions, show very faint background with border
     if (level === 0) {
       return 'bg-gray-100/70 dark:bg-gray-800/50 border border-gray-300/40 dark:border-gray-600/40';
     }
-    
-    // Green gradient for contributions
+
     const colors = {
       light: [
         '',
         'bg-green-200/70',
-        'bg-green-300/80', 
+        'bg-green-300/80',
         'bg-green-400/90',
         'bg-green-500'
       ],
@@ -152,14 +163,17 @@ export function GitHubContributionsSection() {
     <Section className="relative">
       <Container>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          variants={statsContainerVariants}
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-8 text-center">
+          <motion.h2
+            variants={statsItemVariants}
+            className="text-3xl md:text-4xl font-bold mb-8 text-center"
+          >
             GitHub <span className="text-primary">Activity</span>
-          </h2>
+          </motion.h2>
 
           {loading ? (
             <div className="flex items-center justify-center h-48">
@@ -170,62 +184,37 @@ export function GitHubContributionsSection() {
               <div className="text-muted-foreground">{error}</div>
             </div>
           ) : stats && (
-            <div className="bg-gray-100/40 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-6 space-y-6 shadow-sm">
-              {/* Stats Summary */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  className="bg-gray-100/60 dark:bg-gray-900/40 rounded-lg p-4 text-center backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 shadow-sm hover:border-primary/30 transition-colors"
-                >
-                  <div className="text-2xl font-bold text-primary">{stats.totalContributions}</div>
-                  <div className="text-sm text-muted-foreground">Total Contributions</div>
-                </motion.div>
-                
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2 }}
-                  className="bg-gray-100/60 dark:bg-gray-900/40 rounded-lg p-4 text-center backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 shadow-sm hover:border-primary/30 transition-colors"
-                >
-                  <div className="text-2xl font-bold flex items-center justify-center gap-2">
-                    <GitCommit className="w-5 h-5" />
-                    {stats.totalCommitContributions}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Commits</div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.3 }}
-                  className="bg-gray-100/60 dark:bg-gray-900/40 rounded-lg p-4 text-center backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 shadow-sm hover:border-primary/30 transition-colors"
-                >
-                  <div className="text-2xl font-bold flex items-center justify-center gap-2">
-                    <GitPullRequest className="w-5 h-5" />
-                    {stats.totalPullRequestContributions}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Pull Requests</div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.4 }}
-                  className="bg-gray-100/60 dark:bg-gray-900/40 rounded-lg p-4 text-center backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 shadow-sm hover:border-primary/30 transition-colors"
-                >
-                  <div className="text-2xl font-bold flex items-center justify-center gap-2">
-                    <Star className="w-5 h-5" />
-                    {stats.totalStars}
-                  </div>
-                  <div className="text-sm text-muted-foreground">Stars Earned</div>
-                </motion.div>
-              </div>
+            <motion.div
+              variants={statsItemVariants}
+              className="bg-gray-100/40 dark:bg-gray-900/30 backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 rounded-lg p-6 space-y-6 shadow-sm"
+            >
+              {/* Stats Summary - row-by-row cascade */}
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={statsContainerVariants}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+              >
+                {[
+                  { value: stats.totalContributions, label: "Total Contributions", icon: null },
+                  { value: stats.totalCommitContributions, label: "Commits", icon: GitCommit },
+                  { value: stats.totalPullRequestContributions, label: "Pull Requests", icon: GitPullRequest },
+                  { value: stats.totalStars, label: "Stars Earned", icon: Star },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    variants={statsItemVariants}
+                    className="bg-gray-100/60 dark:bg-gray-900/40 rounded-lg p-4 text-center backdrop-blur-sm border border-gray-300/30 dark:border-gray-700/30 shadow-sm hover:border-primary/30 transition-colors"
+                  >
+                    <div className="text-2xl font-bold text-primary flex items-center justify-center gap-2">
+                      {stat.icon && <stat.icon className="w-5 h-5" />}
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
 
               {/* Contributions Graph */}
               <div className="relative w-full">
@@ -242,17 +231,17 @@ export function GitHubContributionsSection() {
                       {stats.weeks.length > 0 && (() => {
                         const monthLabels: { month: string; weekIndex: number }[] = [];
                         let currentMonth = -1;
-                        
+
                         stats.weeks.forEach((week, weekIndex) => {
                           const firstDay = new Date(week.contributionDays[0].date);
                           const month = firstDay.getMonth();
-                          
+
                           if (month !== currentMonth) {
                             currentMonth = month;
                             monthLabels.push({ month: months[month], weekIndex });
                           }
                         });
-                        
+
                         return (
                           <>
                             {stats.weeks.map((_, weekIndex) => {
@@ -288,7 +277,7 @@ export function GitHubContributionsSection() {
                                 initial={{ opacity: 0, scale: 0 }}
                                 whileInView={{ opacity: 1, scale: 1 }}
                                 viewport={{ once: true }}
-                                transition={{ 
+                                transition={{
                                   delay: weekIndex * 0.002,
                                   duration: 0.3
                                 }}
@@ -301,7 +290,7 @@ export function GitHubContributionsSection() {
                                     getLevelColor(day.level)
                                   } ${day.count > 0 ? 'group-hover:scale-125 group-hover:ring-2 group-hover:ring-primary/50' : 'group-hover:border-primary/50'}`}
                                 />
-                                
+
                                 {/* Tooltip */}
                                 {hoveredDay === day && (
                                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 dark:bg-white/90 text-white dark:text-black text-xs rounded whitespace-nowrap z-10">
@@ -341,7 +330,7 @@ export function GitHubContributionsSection() {
                   Live data from @zippyg • Including private contributions
                 </span>
               </p>
-            </div>
+            </motion.div>
           )}
         </motion.div>
       </Container>

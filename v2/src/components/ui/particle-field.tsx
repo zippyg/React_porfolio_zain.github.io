@@ -3,6 +3,7 @@
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Points, PointMaterial } from "@react-three/drei";
+import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import * as THREE from "three";
 
 function ParticleCloud({ count = 500 }: { count?: number }) {
@@ -57,6 +58,9 @@ export function ParticleField({ className }: { className?: string }) {
       >
         <ambientLight intensity={0.5} />
         <ParticleCloud count={400} />
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} intensity={0.4} />
+        </EffectComposer>
       </Canvas>
     </div>
   );

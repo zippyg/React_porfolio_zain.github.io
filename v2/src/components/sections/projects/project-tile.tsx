@@ -3,11 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Calendar } from "lucide-react";
 import { Project } from "@/types/project";
-import { useSmoothScrollAnimation, scrollAnimationVariants, getStaggerDelay } from "@/hooks/use-smooth-scroll-animation";
 
 interface ProjectTileProps {
   project: Project;
   index: number;
+  isFeatured: boolean;
   onClick: () => void;
 }
 
@@ -27,34 +27,34 @@ const categoryLabels = {
   'math-stats': "Math/Stats",
 };
 
-export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
-  const { ref, isInView } = useSmoothScrollAnimation({ threshold: 0.2 });
+export function ProjectTile({ project, index, isFeatured, onClick }: ProjectTileProps) {
+  // Alternating slide direction: even from left, odd from right
+  const slideX = index % 2 === 0 ? -30 : 30;
 
   return (
     <motion.article
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={scrollAnimationVariants.fadeInUp}
-      transition={{ delay: getStaggerDelay(index) }}
-      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+      initial={{ opacity: 0, x: slideX, filter: "blur(4px)" }}
+      whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{
+        duration: 0.6,
+        delay: Math.min(index * 0.06, 0.4),
+        ease: [0.22, 1, 0.36, 1],
+      }}
       onClick={onClick}
-      className={`group relative bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 cursor-pointer transition-all duration-300 shadow-sm ${
-        project.status === 'completed' 
-          ? 'hover:border-green-500/50 hover:shadow-[0_0_20px_rgba(34,197,94,0.15)]' 
-          : 'hover:border-orange-500/50 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)]'
-      }`}
+      className={`group relative bg-card/50 backdrop-blur-sm border rounded-lg p-6 cursor-pointer transition-all duration-300 shadow-sm
+        ${isFeatured ? 'col-span-12 md:col-span-6 min-h-[220px] border-l-2 border-l-primary border-t-border/50 border-r-border/50 border-b-border/50' : 'col-span-12 md:col-span-6 lg:col-span-4 border-border/50'}
+        hover:border-primary/60 hover:shadow-[0_0_30px_rgba(34,197,94,0.1)]
+      `}
     >
-      {/* Glow effect on hover */}
-      <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl ${
-        project.status === 'completed'
-          ? 'bg-gradient-to-r from-green-500/0 via-green-500/5 to-green-500/0'
-          : 'bg-gradient-to-r from-orange-500/0 via-orange-500/5 to-orange-500/0'
-      }`} />
-      
+      {/* Index number */}
+      <span className="absolute top-3 right-4 font-mono text-xs text-muted-foreground/40 select-none">
+        {String(index + 1).padStart(2, '0')}
+      </span>
+
       <div className="relative space-y-4">
         {/* Header */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between pr-6">
           <div className="space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
               {project.categories.map((category) => (
@@ -62,37 +62,26 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
                   {categoryLabels[category]}
                 </span>
               ))}
-              {project.featured && (
-                <span className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20">
-                  Featured
-                </span>
-              )}
             </div>
-            
-            <h3 className={`text-lg font-semibold text-foreground transition-colors ${
-              project.status === 'completed' 
-                ? 'group-hover:text-green-500' 
-                : 'group-hover:text-orange-500'
+
+            <h3 className={`font-semibold text-foreground transition-colors group-hover:text-primary ${
+              isFeatured ? 'text-xl' : 'text-lg'
             }`}>
               {project.title}
             </h3>
           </div>
-          
-          <ArrowUpRight className={`w-5 h-5 text-muted-foreground transition-colors ${
-            project.status === 'completed' 
-              ? 'group-hover:text-green-500' 
-              : 'group-hover:text-orange-500'
-          }`} />
+
+          <ArrowUpRight className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors flex-shrink-0 mt-1" />
         </div>
-        
+
         {/* Description */}
-        <p className="text-sm text-muted-foreground line-clamp-2">
+        <p className={`text-sm text-muted-foreground ${isFeatured ? 'line-clamp-3' : 'line-clamp-2'}`}>
           {project.shortDescription}
         </p>
-        
+
         {/* Tech Stack Preview */}
         <div className="flex flex-wrap gap-2">
-          {project.techStack.slice(0, 4).map((tech) => (
+          {project.techStack.slice(0, isFeatured ? 6 : 4).map((tech) => (
             <span
               key={tech}
               className="px-2 py-1 text-xs bg-muted/50 text-muted-foreground rounded border border-border/50 shadow-sm"
@@ -100,13 +89,13 @@ export function ProjectTile({ project, index, onClick }: ProjectTileProps) {
               {tech}
             </span>
           ))}
-          {project.techStack.length > 4 && (
+          {project.techStack.length > (isFeatured ? 6 : 4) && (
             <span className="px-2 py-1 text-xs text-muted-foreground">
-              +{project.techStack.length - 4} more
+              +{project.techStack.length - (isFeatured ? 6 : 4)} more
             </span>
           )}
         </div>
-        
+
         {/* Footer */}
         <div className="flex items-center justify-between text-xs text-muted-foreground">
           <span className="flex items-center gap-1">

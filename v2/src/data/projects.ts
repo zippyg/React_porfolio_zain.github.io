@@ -88,7 +88,7 @@ The Next.js frontend features a Bloomberg-style dark theme with amber accents, r
       'Reduced GPT-4o hallucinations by >20 percentage points on SEC filing numeric tasks',
       'Slashed inference costs by 78% while maintaining accuracy',
       'Developed novel NIWH and BAHE evaluation metrics',
-      'Peer-reviewed and slated for ACL 2025 publication',
+      'Peer-reviewed and targeting EMNLP 2026 submission',
       'Commercial release planned with major financial institutions'
     ],
     techStack: ['Python', 'PyTorch', 'JAX', 'CUDA', 'OpenAI API', 'Google Gemini', 'GCP', 'SLURM', 'NVIDIA H100', 'RAG', 'QLoRA', 'Transformers'],

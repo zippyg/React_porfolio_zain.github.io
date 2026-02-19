@@ -7,6 +7,27 @@ import { motion } from "framer-motion";
 import { Mail, Github, Linkedin, Send, CheckCircle, AlertCircle } from "lucide-react";
 import emailjs from '@emailjs/browser';
 
+const smoothEase = [0.22, 1, 0.36, 1] as const;
+
+const formContainer = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const formItem = {
+  hidden: { opacity: 0, y: 30, filter: "blur(4px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.5, ease: smoothEase },
+  },
+};
+
 export function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,8 +39,7 @@ export function ContactSection() {
     type: 'success' | 'error' | null;
     message: string;
   }>({ type: null, message: '' });
-  
-  // Initialize EmailJS once when component mounts
+
   useEffect(() => {
     if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY) {
       emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
@@ -28,11 +48,10 @@ export function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     setIsSubmitting(true);
     setSubmitStatus({ type: null, message: '' });
 
-    // Ensure EmailJS is initialized
     if (process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY) {
       emailjs.init(process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY);
     }
@@ -42,7 +61,7 @@ export function ContactSection() {
         from_name: formData.name,
         from_email: formData.email,
         message: formData.message,
-        to_name: 'Zain', // Your name
+        to_name: 'Zain',
         sent_at: new Date().toLocaleString('en-US', {
           dateStyle: 'full',
           timeStyle: 'short'
@@ -60,8 +79,7 @@ export function ContactSection() {
           type: 'success',
           message: 'Message sent successfully! I\'ll get back to you soon.'
         });
-        
-        // Reset form
+
         setTimeout(() => {
           setFormData({ name: "", email: "", message: "" });
           setSubmitStatus({ type: null, message: '' });
@@ -86,36 +104,36 @@ export function ContactSection() {
   };
 
   return (
-    <Section id="contact" className="relative">
+    <Section id="contact" className="relative pt-24 lg:pt-32">
       <Container>
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.6, ease: smoothEase }}
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Let's <span className="text-primary">Connect</span>
             </h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Whether you're interested in research collaboration, have a challenging problem to solve, 
+              Whether you're interested in research collaboration, have a challenging problem to solve,
               or just want to say hi – I'd love to hear from you
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Contact Form */}
+            {/* Contact Form - staggered fields */}
             <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              variants={formContainer}
             >
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
+                <motion.div variants={formItem}>
                   <label htmlFor="name" className="block text-sm font-medium text-muted-foreground mb-2">
                     Name
                   </label>
@@ -129,9 +147,9 @@ export function ContactSection() {
                     className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground shadow-sm"
                     placeholder="Your name"
                   />
-                </div>
+                </motion.div>
 
-                <div>
+                <motion.div variants={formItem}>
                   <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
                     Email
                   </label>
@@ -145,9 +163,9 @@ export function ContactSection() {
                     className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors text-foreground shadow-sm"
                     placeholder="your.email@example.com"
                   />
-                </div>
+                </motion.div>
 
-                <div>
+                <motion.div variants={formItem}>
                   <label htmlFor="message" className="block text-sm font-medium text-muted-foreground mb-2">
                     Message
                   </label>
@@ -161,22 +179,24 @@ export function ContactSection() {
                     className="w-full px-4 py-3 bg-card/60 border border-border/50 rounded-lg focus:outline-none focus:border-primary/50 transition-colors resize-none text-foreground shadow-sm"
                     placeholder="Tell me about your project or idea..."
                   />
-                </div>
+                </motion.div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 dark:bg-primary text-white dark:text-black font-medium rounded-lg hover:bg-green-600 dark:hover:bg-primary/90 disabled:opacity-50 transition-all"
-                >
-                  {isSubmitting ? (
-                    <span>Sending...</span>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>Send Message</span>
-                    </>
-                  )}
-                </button>
+                <motion.div variants={formItem}>
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-green-500 dark:bg-primary text-white dark:text-black font-medium rounded-lg hover:bg-green-600 dark:hover:bg-primary/90 disabled:opacity-50 transition-all"
+                  >
+                    {isSubmitting ? (
+                      <span>Sending...</span>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Send Message</span>
+                      </>
+                    )}
+                  </button>
+                </motion.div>
 
                 {/* Status Message */}
                 {submitStatus.type && (
@@ -184,8 +204,8 @@ export function ContactSection() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     className={`flex items-start gap-2 p-4 rounded-lg ${
-                      submitStatus.type === 'success' 
-                        ? 'bg-green-500/10 text-green-400' 
+                      submitStatus.type === 'success'
+                        ? 'bg-green-500/10 text-green-400'
                         : 'bg-red-500/10 text-red-400'
                     }`}
                   >
@@ -202,10 +222,10 @@ export function ContactSection() {
 
             {/* Contact Info */}
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30, filter: "blur(4px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.6, delay: 0.2, ease: smoothEase }}
               className="space-y-8"
             >
               {/* Direct Contact */}
