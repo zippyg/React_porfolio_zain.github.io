@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Container } from "@/components/ui/container";
 import { MotionDiv } from "@/components/ui/motion";
 import { EasterEggCounter } from "@/components/ui/easter-egg-counter";
@@ -16,6 +16,7 @@ export function Hero() {
   const [torchEnabled, setTorchEnabled] = useState(false);
   const [triggerBlackHole, setTriggerBlackHole] = useState(false);
   const [showClickCount, setShowClickCount] = useState(0);
+  const [heroVisible, setHeroVisible] = useState(true);
   const clickCountRef = useRef(0);
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastClickTimeRef = useRef(0);
@@ -24,6 +25,7 @@ export function Hero() {
   const ctaRef = useRef<HTMLDivElement>(null);
   const zainRef = useRef<HTMLSpanElement>(null);
   const mughalRef = useRef<HTMLSpanElement>(null);
+  const heroSectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -32,6 +34,22 @@ export function Hero() {
       setTorchEnabled(saved === 'true');
     }
   }, [isFunMode]);
+
+  // IntersectionObserver to track hero visibility
+  useEffect(() => {
+    const el = heroSectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setHeroVisible(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   // GSAP text scramble on tagline + name typewriter
   useGSAP(() => {
@@ -160,7 +178,7 @@ export function Hero() {
   };
 
   return (
-    <section id="hero" className="min-h-[calc(100vh-2rem)] relative overflow-hidden flex items-center pt-8">
+    <section ref={heroSectionRef} id="hero" className="min-h-[calc(100vh-2rem)] relative overflow-hidden flex items-center pt-8">
 
       <Container className="relative z-10 px-4 sm:px-6">
         {/* Split layout: left text, right terminal */}
@@ -238,14 +256,14 @@ export function Hero() {
             </div>
           </div>
 
-          {/* Right side — 40% interactive terminal */}
-          <div className="lg:col-span-2">
+          {/* Right side — 40% interactive terminal (hidden on mobile) */}
+          <div className="hidden lg:block lg:col-span-2">
             <MotionDiv
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <InteractiveTerminal initialDelay={500} />
+              <InteractiveTerminal initialDelay={500} heroVisible={heroVisible} />
             </MotionDiv>
           </div>
         </div>

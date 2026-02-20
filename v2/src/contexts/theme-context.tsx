@@ -13,18 +13,17 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
 
-  // Load theme from localStorage on mount
+  // Sync React state with the theme class already set by the inline <script> in layout.tsx.
+  // The inline script runs before paint, so the correct CSS vars are always active —
+  // no need to block rendering with a mounted guard.
   useEffect(() => {
-    setMounted(true);
     const savedTheme = localStorage.getItem("theme") as Theme | null;
     if (savedTheme) {
       setTheme(savedTheme);
       document.documentElement.classList.remove("dark", "light");
       document.documentElement.classList.add(savedTheme);
     } else {
-      // Default to dark theme
       document.documentElement.classList.add("dark");
     }
   }, []);
@@ -36,11 +35,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.classList.remove("dark", "light");
     document.documentElement.classList.add(newTheme);
   };
-
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return null;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>

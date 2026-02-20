@@ -59,9 +59,21 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
       };
       document.addEventListener("click", handleAnchorClick);
 
+      // Pause Lenis when tab is hidden to prevent scroll-jump on return
+      const handleVisibilityChange = () => {
+        if (document.hidden) {
+          lenis.stop();
+        } else {
+          // Small delay lets the browser settle before resuming
+          setTimeout(() => lenis.start(), 50);
+        }
+      };
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+
       // Store cleanup ref
       (lenisRef as any)._cleanup = () => {
         document.removeEventListener("click", handleAnchorClick);
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
         lenis.destroy();
       };
     }, 100);

@@ -1,93 +1,112 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import { Container } from "@/components/ui/container";
 import { navigationItems, socialLinks } from "@/config/navigation";
-import { cn } from "@/lib/utils";
 import { useFunMode } from "@/contexts/fun-mode-context";
 import { useTheme } from "@/contexts/theme-context";
+import { useEasterEggs } from "@/contexts/easter-egg-context";
+import { useTerminal } from "@/contexts/terminal-context";
+import { executeCommand, CommandContext } from "@/lib/terminal-commands";
+
+const FOOTER_COLOR_MAP: Record<string, string> = {
+  green: "text-green-600 dark:text-green-400",
+  cyan: "text-cyan-600 dark:text-cyan-400",
+  yellow: "text-yellow-600 dark:text-yellow-400",
+  red: "text-red-600 dark:text-red-400",
+  magenta: "text-pink-600 dark:text-pink-400",
+  blue: "text-blue-600 dark:text-blue-400",
+  white: "text-foreground",
+  gray: "text-gray-500",
+};
+
+function renderFooterLine(text: string): React.ReactNode {
+  const regex = /\{\{(\w+):([^}]*)\}\}/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  let key = 0;
+
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(<span key={key++}>{text.slice(lastIndex, match.index)}</span>);
+    }
+    parts.push(
+      <span key={key++} className={FOOTER_COLOR_MAP[match[1]] || ""}>
+        {match[2]}
+      </span>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(<span key={key++}>{text.slice(lastIndex)}</span>);
+  }
+
+  return parts.length > 0 ? <>{parts}</> : text;
+}
 
 export function Footer() {
   const [command, setCommand] = useState("");
-  const [output, setOutput] = useState("");
-  const [showOutput, setShowOutput] = useState(false);
   const currentYear = new Date().getFullYear();
   const { toggleFunMode, isFunMode } = useFunMode();
   const { theme, toggleTheme } = useTheme();
+  const { discoverEgg } = useEasterEggs();
+  const { addToHistory, lines, addLine, clearLines } = useTerminal();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
-    
-    // Handle commands
-    if (trimmedCmd === "/about" || trimmedCmd === "about") {
-      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
-      setOutput("Navigating to About section...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
+    const trimmedCmd = cmd.trim();
+    if (!trimmedCmd) return;
+
+    const normalized = trimmedCmd.startsWith("/") ? trimmedCmd.slice(1) : trimmedCmd;
+
+    addLine("prompt", `$ ${normalized}`);
+    addToHistory(normalized);
+
+    const ctx: CommandContext = {
+      scrollTo: (id: string) => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      },
+      toggleTheme,
+      toggleFunMode,
+      isFunMode,
+      theme,
+      discoverEgg,
+    };
+
+    const result = executeCommand(normalized, ctx);
+
+    if (result.command === "clear") {
+      clearLines();
       setCommand("");
-    } else if (trimmedCmd === "/projects" || trimmedCmd === "projects") {
-      document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-      setOutput("Navigating to Projects section...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/skills" || trimmedCmd === "skills") {
-      document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
-      setOutput("Navigating to Skills section...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/research" || trimmedCmd === "research") {
-      document.getElementById('research')?.scrollIntoView({ behavior: 'smooth' });
-      setOutput("Navigating to Research section...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/contact" || trimmedCmd === "contact") {
-      document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-      setOutput("Navigating to Contact section...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/resume" || trimmedCmd === "resume") {
-      window.open('/assets/Zain%20Mughal%20resume%20Quant.pdf', '_blank');
-      setOutput("Opening resume...");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/fun" || trimmedCmd === "fun") {
-      toggleFunMode();
-      setOutput(isFunMode ? "🎮 Fun mode disabled" : "🎮 Fun mode activated!");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "/theme" || trimmedCmd === "theme") {
-      toggleTheme();
-      setOutput(theme === 'dark' ? "☀️ Switched to light theme" : "🌙 Switched to dark theme");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
-      setCommand("");
-    } else if (trimmedCmd === "sudo make me a sandwich") {
-      setOutput("🥪 Okay.");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 3000);
-      setCommand("");
-    } else if (trimmedCmd === "help" || trimmedCmd === "/help") {
-      setOutput("Available commands: /about, /projects, /skills, /research, /contact, /resume, /fun, /theme");
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 4000);
-      setCommand("");
-    } else if (trimmedCmd === "clear") {
-      setCommand("");
-      setOutput("");
-      setShowOutput(false);
-    } else if (trimmedCmd !== "") {
-      setOutput(`Command not found: ${cmd}`);
-      setShowOutput(true);
-      setTimeout(() => setShowOutput(false), 2000);
+      return;
     }
+
+    for (const line of result.output) {
+      if (line === "__HISTORY__") {
+        // Skip history in footer — just show message
+        addLine("output", "(see main terminal for history)");
+      } else if (line.startsWith("__OPEN__:")) {
+        const url = line.slice("__OPEN__:".length);
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        const pretty = url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+        addLine("output", `opening ${pretty}...`);
+      } else if (line === "__TMUX_TOGGLE__" || line === "__TMUX_KILL__") {
+        addLine("output", "(tmux only available in main terminal)");
+      } else {
+        addLine("output", line);
+      }
+    }
+
+    setCommand("");
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -112,12 +131,32 @@ export function Footer() {
               <span className="inline-block w-3 h-5 bg-primary animate-terminal-blink" />
             </div>
             <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-              Aspiring Quant Researcher, Part-Time Physicist, Part-Time Full-Stack Developer, 
+              Aspiring Quant Researcher, Part-Time Physicist, Part-Time Full-Stack Developer,
               Full-Time Dreamer, and Incoming Startup Founder.
             </p>
-            
+
             {/* Terminal */}
             <div className="relative">
+              {/* Recent output (last 3 lines from shared session) */}
+              {lines.length > 0 && (
+                <div className="max-h-20 overflow-y-auto mb-2 text-xs font-mono space-y-0.5" data-lenis-prevent>
+                  {lines.slice(-3).map((line) => (
+                    <div
+                      key={line.id}
+                      className={
+                        line.type === "command" || line.type === "prompt"
+                          ? "text-green-700 dark:text-green-400"
+                          : line.text === ""
+                            ? "h-2"
+                            : "text-gray-600 dark:text-gray-400"
+                      }
+                    >
+                      {/\{\{\w+:[^}]*\}\}/.test(line.text) ? renderFooterLine(line.text) : line.text}
+                    </div>
+                  ))}
+                </div>
+              )}
+
               <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
                 <span className="text-primary">$</span>
                 <input
@@ -125,17 +164,12 @@ export function Footer() {
                   type="text"
                   value={command}
                   onChange={(e) => setCommand(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onKeyDown={handleKeyPress}
                   placeholder="type a command..."
                   className="bg-transparent outline-none flex-1 text-muted-foreground placeholder:text-muted-foreground/50"
                   spellCheck={false}
                 />
               </div>
-              {showOutput && (
-                <div className="absolute top-full mt-2 text-xs font-mono text-primary animate-fade-in whitespace-nowrap">
-                  {output}
-                </div>
-              )}
             </div>
           </div>
 
@@ -182,7 +216,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="py-6 border-t border-border/30">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-muted-foreground">
-            <p>© {currentYear} Zain Mughal. All rights reserved.</p>
+            <p>&copy; {currentYear} Zain Mughal. All rights reserved.</p>
             <div className="flex items-center gap-6">
               <Link href="/privacy" className="hover:text-primary transition-colors">
                 Privacy
@@ -193,7 +227,7 @@ export function Footer() {
               <span className="font-mono">
                 <span className="text-muted-foreground">Built with</span>{" "}
                 <span className="text-primary">React</span>{" "}
-                <span className="text-muted-foreground">&</span>{" "}
+                <span className="text-muted-foreground">&amp;</span>{" "}
                 <span className="text-primary">Next.js</span>
               </span>
             </div>
@@ -221,7 +255,7 @@ export function Footer() {
           background-size: 100px 100px;
           animation: matrix-move 20s linear infinite;
         }
-        
+
         @keyframes matrix-move {
           0% {
             transform: translate(0, 0);

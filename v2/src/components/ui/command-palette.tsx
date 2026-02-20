@@ -5,7 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFunMode } from '@/contexts/fun-mode-context';
 import { useTheme } from '@/contexts/theme-context';
 import { useEasterEggs, EASTER_EGGS } from '@/contexts/easter-egg-context';
-import { terminalCommands, CommandContext } from '@/lib/terminal-commands';
+import { useTerminal } from '@/contexts/terminal-context';
+import { terminalCommands, executeCommand, CommandContext } from '@/lib/terminal-commands';
 
 interface Command {
   id: string;
@@ -38,8 +39,9 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
   const { toggleFunMode, isFunMode } = useFunMode();
   const { theme, toggleTheme } = useTheme();
   const { discoverEgg } = useEasterEggs();
+  const { addLine, addToHistory, clearLines } = useTerminal();
 
-  // Build commands from shared registry
+  // Build command context
   const ctx: CommandContext = useMemo(() => ({
     scrollTo: (id: string) => {
       document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
@@ -51,40 +53,77 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
     discoverEgg,
   }), [toggleTheme, toggleFunMode, isFunMode, theme, discoverEgg]);
 
-  // Only show navigational + utility commands in palette (skip jokes/unix)
-  const paletteCommandNames = ['about', 'projects', 'skills', 'research', 'contact', 'resume', 'fun', 'theme'];
+  // Process command output: pipe to shared session + handle special tokens
+  const processOutput = useCallback((output: string[]) => {
+    for (const line of output) {
+      if (line === "__HISTORY__") {
+        addLine("output", "(see terminal for history)");
+      } else if (line.startsWith("__OPEN__:")) {
+        const url = line.slice("__OPEN__:".length);
+        const a = document.createElement("a");
+        a.href = url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        const pretty = url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+        addLine("output", `opening ${pretty}...`);
+      } else if (line === "__TMUX_TOGGLE__" || line === "__TMUX_KILL__") {
+        addLine("output", "(tmux only available in main terminal)");
+      } else {
+        addLine("output", line);
+      }
+    }
+  }, [addLine]);
 
+  // Execute a raw command string through the shared terminal system
+  const executeRawCommand = useCallback((cmdString: string) => {
+    const trimmed = cmdString.trim().replace(/^\//, '');
+    if (!trimmed) return;
+
+    addLine("prompt", `$ ${trimmed}`);
+    addToHistory(trimmed);
+
+    const result = executeCommand(trimmed, ctx);
+
+    if (result.command === "clear") {
+      clearLines();
+    } else {
+      processOutput(result.output);
+    }
+
+    if (trimmed === 'fun' && !isFunMode) {
+      discoverEgg(EASTER_EGGS.FUN_MODE);
+    }
+
+    setIsOpen(false);
+  }, [ctx, addLine, addToHistory, clearLines, processOutput, isFunMode, discoverEgg]);
+
+  // Build palette commands from ALL terminal commands
   const commands: Command[] = useMemo(() => {
-    return terminalCommands
-      .filter((cmd) => paletteCommandNames.includes(cmd.name))
-      .map((cmd) => {
-        let description = cmd.description;
-        if (cmd.name === 'fun') description = isFunMode ? 'Disable fun mode' : 'Enable fun mode (easter egg!)';
-        if (cmd.name === 'theme') description = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
-        return {
-          id: cmd.name,
-          name: `/${cmd.name}`,
-          description,
-          aliases: cmd.aliases,
-          action: () => {
-            cmd.handler([], ctx);
-            if (cmd.name === 'fun' && !isFunMode) {
-              discoverEgg(EASTER_EGGS.FUN_MODE);
-            }
-            setIsOpen(false);
-          },
-        };
-      });
+    return terminalCommands.map((cmd) => {
+      let description = cmd.description;
+      if (cmd.name === 'fun') description = isFunMode ? 'Disable fun mode' : 'Enable fun mode (easter egg!)';
+      if (cmd.name === 'theme') description = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+      return {
+        id: cmd.name,
+        name: `/${cmd.name}`,
+        description,
+        aliases: cmd.aliases,
+        action: () => executeRawCommand(cmd.name),
+      };
+    });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFunMode, theme, ctx]);
+  }, [isFunMode, theme, executeRawCommand]);
 
   // Filter commands based on input
   useEffect(() => {
     if (input.length === 0) {
       setFilteredCommands(commands);
     } else {
-      const query = input.toLowerCase().replace('/', '');
-      const filtered = commands.filter(cmd => 
+      const query = input.toLowerCase().replace(/^\//, '');
+      const filtered = commands.filter(cmd =>
         cmd.name.toLowerCase().includes(query) ||
         cmd.description.toLowerCase().includes(query) ||
         cmd.aliases?.some(alias => alias.toLowerCase().includes(query))
@@ -92,31 +131,44 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
       setFilteredCommands(filtered);
     }
     setSelectedIndex(0);
-  }, [input, isFunMode, theme]); // Re-filter when fun mode or theme changes
+  }, [input, commands]);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev + 1) % filteredCommands.length);
+      setSelectedIndex(prev =>
+        filteredCommands.length > 0 ? (prev + 1) % filteredCommands.length : 0
+      );
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setSelectedIndex(prev => (prev - 1 + filteredCommands.length) % filteredCommands.length);
+      setSelectedIndex(prev =>
+        filteredCommands.length > 0 ? (prev - 1 + filteredCommands.length) % filteredCommands.length : 0
+      );
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (filteredCommands[selectedIndex]) {
-        filteredCommands[selectedIndex].action();
+      if (filteredCommands.length > 0 && filteredCommands[selectedIndex]) {
+        // If input has args beyond the matched command, execute as raw
+        const query = input.trim().replace(/^\//, '');
+        const matchedName = filteredCommands[selectedIndex].id;
+        if (query.toLowerCase() !== matchedName && query.includes(' ')) {
+          // User typed something like "open linkedin" — execute raw
+          executeRawCommand(query);
+        } else {
+          filteredCommands[selectedIndex].action();
+        }
+      } else {
+        // No filtered matches — try executing input as a raw command
+        executeRawCommand(input);
       }
     } else if (e.key === 'Escape') {
       setIsOpen(false);
     }
-  }, [filteredCommands, selectedIndex]);
+  }, [filteredCommands, selectedIndex, input, executeRawCommand]);
 
   // Global keyboard listener for CMD+Z (Mac) or CTRL+Z (Windows/Linux)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // Check for CMD+Z (Mac) or CTRL+Z (Windows/Linux)
-      // Ignore on mobile devices
       const isMobile = window.innerWidth < 768;
       if (!isMobile && (e.metaKey || e.ctrlKey) && e.key === 'z' && !e.shiftKey) {
         e.preventDefault();
@@ -141,7 +193,7 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
   // Handle clicking outside
   useEffect(() => {
     if (!isOpen) return;
-    
+
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       if (!target.closest('.command-palette')) {
@@ -157,15 +209,15 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop - less blur, more transparent */}
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-background/30 backdrop-blur-sm z-50"
           />
-          
-          {/* Command Palette - PROPERLY centered using transform */}
+
+          {/* Command Palette */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -191,7 +243,7 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
                   />
                 </div>
               </div>
-              
+
               {/* Commands */}
               <div className="flex-1 overflow-y-auto" style={{ maxHeight: "calc(60vh - 8rem)" }}>
                 {filteredCommands.length > 0 ? (
@@ -222,12 +274,13 @@ export function CommandPalette({ isOpen: externalIsOpen, onClose }: CommandPalet
                     ))}
                   </ul>
                 ) : (
-                  <div className="px-4 py-8 text-center text-muted-foreground">
-                    No commands found
+                  <div className="px-4 py-6 text-center">
+                    <p className="text-muted-foreground text-sm mb-2">No matching commands</p>
+                    <p className="text-muted-foreground/60 text-xs">Press Enter to run as terminal command</p>
                   </div>
                 )}
               </div>
-              
+
               {/* Footer hint */}
               <div className="px-4 py-2 border-t border-primary/10 text-xs text-muted-foreground flex justify-between">
                 <span>↑↓ Navigate</span>

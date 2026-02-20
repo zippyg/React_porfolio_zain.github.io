@@ -4,6 +4,7 @@ import { MotionProvider } from "@/components/providers/motion-provider";
 import { FunModeProvider } from "@/contexts/fun-mode-context";
 import { ThemeProvider } from "@/contexts/theme-context";
 import { EasterEggProvider } from "@/contexts/easter-egg-context";
+import { TerminalProvider } from "@/contexts/terminal-context";
 import { Navigation } from "@/components/layout/navigation";
 import { Footer } from "@/components/layout/footer";
 import { BackgroundEffects } from "@/components/layout/background-effects";
@@ -98,6 +99,7 @@ export default function RootLayout({
           <MotionProvider>
             <FunModeProvider>
               <EasterEggProvider>
+                <TerminalProvider>
                 <SmoothScrollProvider>
                   <ScrollToTopOnMount />
                   <CommandPalette />
@@ -111,6 +113,7 @@ export default function RootLayout({
                   </div>
                   <Analytics />
                 </SmoothScrollProvider>
+                </TerminalProvider>
               </EasterEggProvider>
             </FunModeProvider>
           </MotionProvider>

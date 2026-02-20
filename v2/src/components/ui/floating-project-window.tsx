@@ -49,6 +49,9 @@ export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProj
       document.addEventListener("keydown", handleEsc);
       document.body.style.overflow = "hidden";
       lenis.stop();
+    } else {
+      document.body.style.overflow = "unset";
+      lenis.start();
     }
 
     return () => {
@@ -150,7 +153,7 @@ function WindowContent({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto p-6" data-lenis-prevent>
         <div className="space-y-6">
           {/* Header info */}
           <div>

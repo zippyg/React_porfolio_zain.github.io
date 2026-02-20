@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/ui/container";
@@ -12,14 +12,18 @@ import { MotionDiv } from "@/components/ui/motion";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { CommandPalette } from "@/components/ui/command-palette";
 
+const SECTION_IDS = ["hero", "about", "projects", "skills", "research", "contact"];
+
 export function Navigation() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMac, setIsMac] = useState(true); // Default to Mac
   const [showCommandPalette, setShowCommandPalette] = useState(false);
   const [heroInView, setHeroInView] = useState(true);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const { scrolled } = useScroll();
   const pathname = usePathname();
-  
+  const visibleSectionsRef = useRef(new Set<string>());
+
   // Detect OS for keyboard shortcut display
   useEffect(() => {
     const userAgent = navigator.userAgent.toLowerCase();
@@ -27,21 +31,51 @@ export function Navigation() {
     setIsMac(isMacOS);
   }, []);
 
-  // Track hero section visibility
+  // Track section visibility with IntersectionObserver
   useEffect(() => {
-    const handleScroll = () => {
-      const heroSection = document.getElementById('hero');
-      if (heroSection) {
-        const rect = heroSection.getBoundingClientRect();
-        // Consider hero in view if any part of it is visible
-        setHeroInView(rect.bottom > 100);
-      }
-    };
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          const id = entry.target.id;
+          if (entry.isIntersecting) {
+            visibleSectionsRef.current.add(id);
+          } else {
+            visibleSectionsRef.current.delete(id);
+          }
+        }
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial check
-    
-    return () => window.removeEventListener('scroll', handleScroll);
+        // Update heroInView
+        setHeroInView(visibleSectionsRef.current.has("hero"));
+
+        // Pick the topmost visible section
+        const visible = visibleSectionsRef.current;
+        if (visible.size === 0) return;
+
+        // Find the section closest to the top of viewport among visible ones
+        let best: string | null = null;
+        let bestTop = Infinity;
+        Array.from(visible).forEach((id) => {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < bestTop) {
+              bestTop = rect.top;
+              best = id;
+            }
+          }
+        });
+        setActiveSection(best);
+      },
+      { rootMargin: "-10% 0px -60% 0px", threshold: 0 }
+    );
+
+    // Observe all sections
+    for (const id of SECTION_IDS) {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    }
+
+    return () => observer.disconnect();
   }, []);
 
   // Close mobile menu on route change
@@ -84,21 +118,33 @@ export function Navigation() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-8">
-              {navigationItems.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    const target = document.querySelector(item.href);
-                    target?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                  className="relative text-sm font-medium text-muted-foreground hover:text-foreground transition-colors group cursor-pointer"
-                >
-                  {item.name}
-                  <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-primary transition-all duration-300 group-hover:w-full" />
-                </a>
-              ))}
+              {navigationItems.map((item) => {
+                const sectionId = item.href.replace("#", "");
+                const isActive = activeSection === sectionId;
+                return (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      const target = document.querySelector(item.href);
+                      target?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                    className={cn(
+                      "relative text-sm font-medium transition-colors group cursor-pointer",
+                      isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {item.name}
+                    <span
+                      className={cn(
+                        "absolute -bottom-1 left-0 h-[1px] bg-primary transition-all duration-300",
+                        isActive ? "w-full" : "w-0 group-hover:w-full"
+                      )}
+                    />
+                  </a>
+                );
+              })}
             </div>
 
             {/* Desktop CTA */}
@@ -165,7 +211,7 @@ export function Navigation() {
         }}
         transition={{ type: "spring", damping: 20, stiffness: 300 }}
         className={cn(
-          "fixed inset-0 z-[99] bg-background/95 backdrop-blur-lg md:hidden",
+          "fixed inset-0 z-[999] bg-background/95 backdrop-blur-lg md:hidden",
           !isOpen && "pointer-events-none"
         )}
       >
@@ -192,7 +238,10 @@ export function Navigation() {
                   }}
                   className="block cursor-pointer"
                 >
-                  <span className="text-3xl font-bold text-foreground hover:text-primary transition-colors">
+                  <span className={cn(
+                    "text-3xl font-bold transition-colors",
+                    activeSection === item.href.replace("#", "") ? "text-primary" : "text-foreground hover:text-primary"
+                  )}>
                     {item.name}
                   </span>
                   <span className="text-sm text-muted-foreground mt-1 block">
