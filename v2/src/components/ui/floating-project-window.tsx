@@ -41,22 +41,19 @@ export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProj
 
   // Handle ESC key + stop Lenis scroll when open
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
 
-    if (isOpen) {
-      document.addEventListener("keydown", handleEsc);
-      document.body.style.overflow = "hidden";
-      lenis.stop();
-    } else {
-      document.body.style.overflow = "unset";
-      lenis.start();
-    }
+    document.addEventListener("keydown", handleEsc);
+    document.body.style.overflow = "hidden";
+    lenis.stop();
 
     return () => {
       document.removeEventListener("keydown", handleEsc);
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = "";
       lenis.start();
     };
   }, [isOpen, onClose, lenis]);
