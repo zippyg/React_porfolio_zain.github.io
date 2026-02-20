@@ -1,93 +1,109 @@
-import { Container } from "@/components/ui/container";
-import { Section } from "@/components/ui/section";
-import { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Terms of Service | Zain Mughal",
-  description: "Terms of Service for Zain Mughal's portfolio website",
-};
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { ArrowLeft, ScrollText } from "lucide-react";
 
 export default function TermsPage() {
   return (
-    <Section className="pt-20">
-      <Container className="max-w-4xl">
-        <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
-        
-        <div className="prose prose-gray dark:prose-invert max-w-none">
-          <p className="text-muted-foreground mb-6">
-            Last updated: {new Date().toLocaleDateString('en-GB', { year: 'numeric', month: 'long', day: 'numeric' })}
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 relative overflow-hidden">
+      {/* Animated background glow */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-1/3 right-1/3 w-[300px] h-[300px] bg-yellow-500/5 rounded-full blur-[80px] animate-pulse" style={{ animationDelay: "1.5s" }} />
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="relative z-10 max-w-2xl text-center space-y-8"
+      >
+        {/* Icon */}
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.2 }}
+          className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 border border-primary/20 mx-auto"
+        >
+          <ScrollText className="w-10 h-10 text-primary" />
+        </motion.div>
+
+        {/* Main heading with glow */}
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight"
+        >
+          <span className="bg-gradient-to-r from-primary via-green-400 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient-shift_3s_ease-in-out_infinite]">
+            Terms of Service
+          </span>
+        </motion.h1>
+
+        {/* The joke */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+          className="space-y-4"
+        >
+          <p className="text-2xl sm:text-3xl font-semibold text-foreground/90">
+            You thought we had terms?
           </p>
+          <p className="text-xl sm:text-2xl text-muted-foreground">
+            What do you <span className="text-primary font-mono font-bold glow-green">expect</span> from me?
+          </p>
+          <motion.p
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.2, type: "spring", stiffness: 300, damping: 20 }}
+            className="text-lg sm:text-xl text-muted-foreground/70 italic"
+          >
+            It&apos;s a portfolio, not a Fortune 500.
+          </motion.p>
+        </motion.div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
-            <p className="text-muted-foreground">
-              By accessing and using this website, you accept and agree to be bound by the terms and provision of this agreement.
-            </p>
-          </section>
+        {/* Subtext */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.6 }}
+          className="text-sm text-muted-foreground/60 font-mono"
+        >
+          (the only term: enjoy the site.)
+        </motion.p>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">2. Use License</h2>
-            <p className="text-muted-foreground mb-4">
-              Permission is granted to temporarily view the materials on this website for personal, non-commercial use only. This is the grant of a license, not a transfer of title, and under this license you may not:
-            </p>
-            <ul className="list-disc pl-6 text-muted-foreground space-y-2">
-              <li>Modify or copy the materials</li>
-              <li>Use the materials for any commercial purpose or public display</li>
-              <li>Attempt to reverse engineer any software contained on the website</li>
-              <li>Remove any copyright or proprietary notations from the materials</li>
-            </ul>
-          </section>
+        {/* Decorative terminal line */}
+        <motion.div
+          initial={{ opacity: 0, width: 0 }}
+          animate={{ opacity: 1, width: "100%" }}
+          transition={{ delay: 1.0, duration: 0.8 }}
+          className="mx-auto max-w-md border-t border-primary/20"
+        />
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">3. Intellectual Property</h2>
-            <p className="text-muted-foreground">
-              All content on this website, including but not limited to text, graphics, logos, images, audio clips, and software, is the property of Zain Mughal and is protected by international copyright laws.
-            </p>
-          </section>
+        {/* Back link */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.8, duration: 0.5 }}
+        >
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-mono text-primary hover:text-primary/80 border border-primary/30 hover:border-primary/60 rounded-lg transition-all hover:shadow-[0_0_20px_rgba(34,197,94,0.15)] group"
+          >
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            back to safety
+          </Link>
+        </motion.div>
+      </motion.div>
 
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">4. Disclaimer</h2>
-            <p className="text-muted-foreground">
-              The materials on this website are provided on an 'as is' basis. We make no warranties, expressed or implied, and hereby disclaim and negate all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">5. Limitations</h2>
-            <p className="text-muted-foreground">
-              In no event shall Zain Mughal or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on this website, even if we have been notified orally or in writing of the possibility of such damage.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">6. Links</h2>
-            <p className="text-muted-foreground">
-              This website may contain links to external websites. We have not reviewed all of these third-party sites and do not control and are not responsible for any of these sites or their content. The inclusion of any link does not imply endorsement by us of the site.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">7. Modifications</h2>
-            <p className="text-muted-foreground">
-              We may revise these terms of service at any time without notice. By using this website, you are agreeing to be bound by the current version of these terms of service.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">8. Governing Law</h2>
-            <p className="text-muted-foreground">
-              These terms and conditions are governed by and construed in accordance with the laws of the United Kingdom, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
-            </p>
-          </section>
-
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">9. Contact Information</h2>
-            <p className="text-muted-foreground">
-              If you have any questions about these Terms of Service, please contact us through the contact form on this website.
-            </p>
-          </section>
-        </div>
-      </Container>
-    </Section>
+      <style jsx global>{`
+        @keyframes gradient-shift {
+          0%, 100% { background-position: 0% center; }
+          50% { background-position: 200% center; }
+        }
+      `}</style>
+    </div>
   );
 }

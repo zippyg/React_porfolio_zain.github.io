@@ -718,7 +718,7 @@ export function InteractiveTerminal({ initialDelay = 500, heroVisible }: Interac
 
   const terminalStyle: React.CSSProperties =
     terminalState === "fullscreen"
-      ? { position: "fixed", top: "5vh", left: "5vw", width: "90vw", height: "90vh", zIndex: 10001 }
+      ? { position: "fixed", top: "5vh", left: "5vw", width: "90vw", height: "90vh", zIndex: 10001, pointerEvents: "auto" as const }
       : terminalState === "floating"
         ? { position: "absolute", left: position.x, top: position.y, width: size.width, height: size.height, zIndex: 10001, pointerEvents: "auto" }
         : {};
@@ -728,7 +728,7 @@ export function InteractiveTerminal({ initialDelay = 500, heroVisible }: Interac
       {/* Fullscreen backdrop */}
       {terminalState === "fullscreen" && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[10000]"
+          className="pointer-events-auto fixed inset-0 bg-black/60 backdrop-blur-sm z-[10000]"
           onClick={() => setTerminalStateWithTracking("floating")}
         />
       )}
