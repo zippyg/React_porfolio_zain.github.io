@@ -97,7 +97,7 @@ export function FloatingProjectWindow({ project, isOpen, onClose }: FloatingProj
               dragElastic={0.1}
               className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
             >
-              <div className="w-full max-w-[900px] max-h-[85vh] pointer-events-auto">
+              <div className="w-full max-w-[900px] max-h-[85vh] pointer-events-auto overflow-hidden">
                 <WindowContent project={project} onClose={onClose} isDraggable />
               </div>
             </motion.div>
@@ -118,7 +118,7 @@ function WindowContent({
   isDraggable?: boolean;
 }) {
   return (
-    <div className="bg-background/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl border border-border/50 rounded-t-xl md:rounded-xl h-full flex flex-col overflow-hidden shadow-2xl">
+    <div className="bg-background/95 dark:bg-[#0a0a0a]/95 backdrop-blur-xl border border-border/50 rounded-t-xl md:rounded-xl h-full md:max-h-[85vh] flex flex-col overflow-hidden shadow-2xl">
       {/* Terminal-style title bar */}
       <div
         className={`flex items-center justify-between px-4 py-3 border-b border-border/30 bg-card/80 ${isDraggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
@@ -150,7 +150,7 @@ function WindowContent({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-6" data-lenis-prevent>
+      <div className="flex-1 min-h-0 overflow-y-auto p-6" data-lenis-prevent>
         <div className="space-y-6">
           {/* Header info */}
           <div>
